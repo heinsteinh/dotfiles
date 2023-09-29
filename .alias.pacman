@@ -1,0 +1,170 @@
+#!/usr/bin/env bash
+
+alias sudo='nocorrect sudo' 
+alias pacman='sudo pacman'
+
+# Pacman alias examples
+alias pacupg='sudo pacman -Syu'		   # Synchronize with repositories and then upgrade packages that are out of date on the local system.
+alias pacdl='pacman -Sw'		       # Download specified package(s) as .tar.xz ball
+alias pacin='sudo pacman -S'		   # Install specific package(s) from the repositories
+alias pacins='sudo pacman -U'		   # Install specific package not from the repositories but from a file
+alias pacre='sudo pacman -R'		   # Remove the specified package(s), retaining its configuration(s) and required dependencies
+alias pacrem='sudo pacman -Rns'		   # Remove the specified package(s), its configuration(s) and unneeded dependencies
+alias pacrep='pacman -Si'		       # Display information about a given package in the repositories
+alias pacreps='pacman -Ss'		       # Search for package(s) in the repositories
+alias pacloc='pacman -Qi'		       # Display information about a given package in the local database
+alias paclocs='pacman -Qs'		       # Search for package(s) in the local database
+alias paclo="pacman -Qdt"		       # List all packages which are orphaned
+alias pacc="sudo pacman -Scc"		   # Clean cache - delete all the package files in the cache
+alias paclf="pacman -Ql"		       # List all files installed by a given package
+alias pacown="pacman -Qo"		       # Show package(s) owning the specified file(s)
+alias pacexpl="pacman -D --asexp"	   # Mark one or more installed packages as explicitly installed
+alias pacimpl="pacman -D --asdep"	   # Mark one or more installed packages as non explicitly installed
+
+# Simplified pacman aliases
+alias pacman-upgrade="sudo pacman -Syu"     # Synchronize with repositories and then upgrade packages that are out of date on the local system.
+alias pacman-download="pacman -Sw"            # Download specified package(s) as .tar.xz ball
+alias pacman-install="sudo pacman -S"        # Install specific package(s) from the repositories
+alias pacman-install-file="sudo pacman -U"       # Install specific package not from the repositories but from a file
+alias pacman-remove="sudo pacman -R"        # Remove the specified package(s), retaining its configuration(s) and required dependencies
+alias pacman-purge="sudo pacman -Rns"     # Remove the specified package(s), its configuration(s) and unneeded dependencies
+alias pacman-repoinfo="pacman -Si"           # Display information about a given package in the repositories
+alias pacman-search="pacman -Ss"          # Search for package(s) in the repositories
+alias pacman-dbinfo="pacman -Qi"           # Display information about a given package in the local database
+alias pacman-dbsearch="pacman -Qs"          # Search for package(s) in the local database
+alias pacman-list-orphaned="pacman -Qdt"           # List all packages which are orphaned
+alias pacman-clean-cache="sudo pacman -Scc"       # Clean cache - delete all the package files in the cache
+alias pacman-list-package-files="pacman -Ql"            # List all files installed by a given package
+alias pacman-provides-="pacman -Qo"           # Show package(s) owning the specified file(s)
+alias pacman-force-installed="pacman -D --asexp"   # Mark one or more installed packages as explicitly installed
+alias pacman-force-uninstalled="pacman -D --asdep"   # Mark one or more installed packages as non explicitly installed
+
+alias pacman-log="tail -n 40 /var/log/pacman.log | ccze -A"
+
+function pacman-news() {
+    sudo find /etc -name '*.pacnew' | sed -e 's|^/etc/||' -e 's/.pacnew$//'
+}
+
+
+
+#us Pacman candy
+alias pac-install="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+alias pac-remove="pacman -Qqe | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
+alias pac-info="pacman -Qq | fzf --multi --preview 'bat <(pacman -Qi {1}) <(pacman -Fl {1} | awk \"{print \$2}\")'"
+
+alias aur-install="yay -Slq --aur | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
+
+# arch keyring
+#alias pacman-key-update='      sudo rm -rf /etc/pacman.d/gnupg ; sudo pacman-key --init; sudo pacman-key --populate archlinux; sudo pacman -S archlinux-keyring ;sudo pacman-key --refresh'
+#alias pacman-key-update-arm='                                    sudo pacman-key --init && sudo pacman-key --populate archlinuxarm  && sudo pacman -S archlinux-keyring && sudo pacman-key --refresh-keys && sudo pacman -Syy'
+alias pacman-key-update="     sudo rm -r /etc/pacman.d/gnupg ; sudo pacman-key --init ; sudo pacman-key --populate archlinux ;    sudo pacman-key --refresh-keys ; sudo pacman -S archlinux-keyring ; sudo pacman -S seahorse ; sudo pacman -Syyu"
+alias pacman-key-update-arm=" sudo rm -r /etc/pacman.d/gnupg ; sudo pacman-key --init ; sudo pacman-key --populate archlinuxarm ; sudo pacman-key --refresh-keys ; sudo pacman -S archlinux-keyring ; sudo pacman -S seahorse ; sudo pacman -Syyu"
+
+# '[r]emove [o]rphans' - recursively remove ALL orphaned packages
+alias pacman-remove-orphan="pacman -Qtdq > /dev/null && sudo pacman -Rns \$(pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
+
+
+alias pacunlock="sudo rm /var/lib/pacman/db.lck"   # Delete the lock file /var/lib/pacman/db.lck
+alias paclock="sudo touch /var/lib/pacman/db.lck"  # Create the lock file /var/lib/pacman/db.lck
+
+
+# update, clean and optimize pacman, rebuild index, free memory
+#alias daily="sudo pacman -Syu; sudo aura -Akua; sudo paccache -rvk3; sudo pacman-optimize; sudo updatedb; ~/bin/freemem"
+alias daily="sudo pacman -Syu; sudo yay -Syu; sudo paccache -rvk3; sudo pacman-optimize; sudo updatedb; ~/bin/freemem"
+alias pacman-maintenace='sudo pacman -Syu; sudo paccache -r; sudo paccache -ruk0;'
+
+#Get fastest mirrors, upgrade packages, remove orphans, clear cache. I run it every weekend.
+alias daily1="sudo reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist; sudo pacman -Syu; sudo pacman -Qtdq | sudo pacman -Rns -; sudo pacman -Scc"
+
+
+
+#alias sdisable=' sudo systemctl disable $@'
+#alias senable='sudo systemctl enable $@'
+#alias srestart='sudo systemctl restart $@'
+#alias sstart='sudo systemctl start $@'
+#alias sstop='sudo systemctl stop $@'
+alias sstatus='sudo systemctl status $@'
+
+#alias sstatus="systemctl status"
+alias sstart="sudo systemctl start"
+alias sstop="sudo systemctl stop"
+alias senable="sudo systemctl enable"
+alias sdisable="sudo systemctl disable"
+alias sreload="sudo systemctl reload"
+alias srestart="sudo systemctl restart"
+alias sdaemonreload="sudo systemctl --system daemon-reload"
+
+
+alias sustatus="systemctl --user status "
+alias sustart=" systemctl --user start "
+alias sustop=" systemctl --user stop "
+alias suenable=" systemctl --user enable "
+alias sudisable=" systemctl --user disable "
+alias sureload=" systemctl --user reload"
+alias surestart=" systemctl --user restart"
+alias sudaemonreload=" systemctl --user daemon-reload"
+
+
+# systemd
+alias ssyslsall='sudo systemctl list-units'
+alias ssyslstim='sudo systemctl list-timers'
+alias ssyslsfail='sudo systemctl --failed'
+alias ssyslog='sudo journalctl -xe'
+
+alias syslsall='systemctl --user list-units'
+alias syslstim='systemctl --user list-timers'
+alias syslsfail='systemctl --user --failed'
+alias syslog='journalctl -xe'
+
+
+
+#arch
+#alias yrt="yaourt -S"
+#alias yrt_update="yaourt -Syua"
+
+# Package manager aliases yaourt and pacman
+#alias y=yaourt
+#alias yrtu="echo yaourt -Syu: Updates database and upgrades packages; yaourt -Syu"
+#alias yrta="echo yaourt -Syua: Updates database and upgrades packages including AUR; yaourt -Syua"
+##alias yrtd="echo yaourt -Syua --devel: Updates database and upgrades packages including AUR and git; yaourt -Syua --devel"
+#alias yrtr="echo yaourt -Rns: Removes package, its configurations + dependencies; yaourt -Rns"
+#alias yrtr="aur-remove-vote"
+#alias yrti="echo yaourt -Qi: Display information about a given package in the local database; yaourt -Qi"
+#alias yrtl="echo yaourt -Qe: List all installed package; yaourt -Qe"
+#alias yrtll="echo yaourt -Ql: List all files installed by a given package; yaourt -Ql"
+#alias yrto="echo yaourt -Qtdq: Check for orphan packages among Arch Linux; yaourt -Qtdq"
+
+alias y="yay -S" #installation.
+alias yn="yay -S --noconfirm" #installation without confirmation.
+alias ygpg="- mflags '--nocheck --skippgpcheck --noconfirm'"  #setting and ignoring the gpg key check.
+alias ys="yay" #search with further selection by digit.
+alias ysn="yay --noconfirm" #search with further selection by digit, without confirmation.
+alias yc="yay -Sc" #partial clearing of the cache.
+alias yy="yay -Syy" #mirror base synchronization.
+alias yu="yay -Syu" #update.
+alias yun="yay -Syu --noconfirm" #update without confirmation.
+alias yr="yay -R" #deletion package (s)
+alias yrn="yay -R --noconfirm" #deleting the package (s) without confirmation.
+
+alias pac-yay-u='yay -Sy'
+alias pac-yay-up='yay -Syu'
+alias pac-yay-i='yay --needed -S'
+alias pac-yay-ii='yay --noconfirm --needed -S'
+alias pac-yay-rm='yay -Rs'
+alias pac-yay-clean='yay -Yc'
+alias pac-yay-search='yay --sortby popularity'
+
+
+alias pac-yay-info='yay -Si'
+alias pac-yay-stats='yay -Ps'
+
+
+
+# pacman: show package dependencies
+#pacdep() { pacman -Qi "$@" | grep Depends }
+
+# pacman: show size of the package
+#pacsize() { pacman -Qi "$@" | grep Size }
+
+# pacman: size of the cache dir
+#paccachesize() { du -hs /var/cache/pacman }

@@ -17,3 +17,27 @@ alias log_sysctrl_units="echo -n Listing Units | pv -qL 10 && systemctl list-uni
 
 
 
+# Fonts
+alias Fonts='fc-cache -vf ~/.fonts'
+alias font-check='echo "\ue0b0 \u00b1 \ue0a0 \u27a6 \u2718 \u26a1 \u2699"'
+
+
+
+
+alias getssh='cat ~/.ssh/id_rsa.pub'
+alias gpga='gpg --recv-keys'
+alias gpge='gpg --edit-key heinsteinh@gmail.com'
+alias gpgl='gpg --list-keys'
+alias gpgls='gpg --list-secret-keys'
+alias size='expac -H M "%m\t%n" | sort -h'
+
+alias startserver='sudo systemctl start nginx && sudo systemctl start php-fpm && sudo systemctl start mysqld'
+alias stopserver='sudo systemctl stop nginx && sudo systemctl stop php-fpm && sudo systemctl stop mys'
+
+
+pathadd() {
+if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+    PATH="${PATH:+"$PATH:"}$1"
+fi
+}
+

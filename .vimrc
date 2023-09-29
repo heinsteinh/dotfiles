@@ -1,101 +1,168 @@
-
-" Don't try to be vi compatible
-set nocompatible
-
-" Helps force plugins to load correctly when it is turned back on below
-filetype off
-
-" TODO: Load plugins here (pathogen or vundle)
-
-" Turn on syntax highlighting
-syntax on
-
-" For plugins to load correctly
-filetype plugin indent on
-
-" TODO: Pick a leader key
-" let mapleader = ","
-
-" Security
-set modelines=0
-
-" Show line numbers
-set number
-
-" Show file stats
-set ruler
-
-" Blink cursor on error instead of beeping (grr)
-set visualbell
-
-" Encoding
+set nocompatible        " Use Vim settings, rather than Vi settings
+set langmenu=en
 set encoding=utf-8
 
-" Whitespace
-set wrap
-set textwidth=79
-set formatoptions=tcqrn1
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set expandtab
-set noshiftround
+set nobackup
+set nowritebackup
+set noswapfile
 
-" Cursor motion
-set scrolloff=3
-set backspace=indent,eol,start
-set matchpairs+=<:> " use % to jump between pairs
-runtime! macros/matchit.vim
 
-" Move up/down editor lines
-nnoremap j gj
-nnoremap k gk
+" " Use commas as leaders
+let mapleader = ','
+" let maplocalleader = ','
+" let g:mapleader = ','
 
-" Allow hidden buffers
-set hidden
+"let mapleader = "\<Space>"
+"let maplocalleader =  "\<Space>"
+"let g:mapleader = "\<Space>"
+"let g:maplocalleader = ','
 
-" Rendering
-set ttyfast
 
-" Status bar
-set laststatus=2
+"{{{ OS Variable initialization and Config Dir
+let g:is_win   = has('win32') || has('win64')
+let g:is_mac   = has('mac') || system('uname') =~? '^darwin'
+let g:is_linux = !g:is_mac && has('unix')
+"}}}
 
-" Last line
-set showmode
-set showcmd
 
-" Searching
-nnoremap / /\v
-vnoremap / /\v
-set hlsearch
-set incsearch
-set ignorecase
-set smartcase
-set showmatch
-map <leader><space> :let @/=''<cr> " clear search
+"{{{ Simple Branch Template Example
+if g:is_win
+elseif g:is_mac
+elseif g:is_linux
+endif
 
-" Remap help key.
-inoremap <F1> <ESC>:set invfullscreen<CR>a
-nnoremap <F1> :set invfullscreen<CR>
-vnoremap <F1> :set invfullscreen<CR>
+if g:is_win
+elseif g:is_linux
+endif
 
-" Textmate holdouts
+let g:unicode = g:is_linux && has("gui_running")
 
-" Formatting
-map <leader>q gqip
 
-" Visualize tabs and newlines
-set listchars=tab:▸\ ,eol:¬
-" Uncomment this to enable by default:
-" set list " To enable by default
-" Or use your leader key + l to toggle on/off
-map <leader>l :set list!<CR> " Toggle tabs and EOL
+if g:is_win
+    :let $VIMFILE_DIR = 'vimfiles'
+else
+    :let $VIMFILE_DIR = '.vim'
+endif
 
-" Color scheme (terminal)
-set t_Co=256
+"echo "Current Hostname :: "
+"echo hostname()
+"echo $HOME
+"echo $VIMFILE_DIR
+
+
+if g:is_win
+
+    "set filetype=dos
+    "set ffs=dos,unix,mac
+    set path=.,C:\DevPath\ag\
+elseif g:is_linux
+
+    "set filetype=unix
+    "set ffs=unix
+    set path=.,/usr/include/,/usr/include/c++/4.7/ "c++ is in /usr/include/c++/
+    " Allows you to enter sudo pass and save the file
+    " " when you forgot to open your file with sudo
+    cmap w!! %!sudo tee > /dev/null %
+endif
+
+
+
+"{{{ Plugin Installation Section
+filetype off                  " required
+if executable('git') &&  empty(glob("$HOME/$VIMFILE_DIR/bundle/Vundle.vim"))
+    silent execute '!git clone https://github.com/VundleVim/Vundle.vim.git  $HOME/$VIMFILE_DI/bundle/Vundle.vim'
+
+    let s:setupvundle=1
+endif
+
+if !empty(glob("$HOME/$VIMFILE_DIR/bundle/Vundle.vim"))
+
+    " set the runtime path to include Vundle and initialize
+    set rtp+=~/.vim/bundle/Vundle.vim
+    call vundle#begin()
+    " alternatively, pass a path where Vundle should install plugins
+    "call vundle#begin('~/some/path/here')
+
+    " let Vundle manage Vundle, required
+    Plugin 'VundleVim/Vundle.vim'
+
+
+    source $HOME/$VIMFILE_DIR/plugins_vimrc.vim
+
+
+    " All of your Plugins must be added before the following line
+    call vundle#end()            " required
+    filetype plugin indent on    " required
+    " To ignore plugin indent changes, instead use:
+
+    " This automatically installs plugins on first time vundle setup
+    " to install plugins manually run $vim +PluginInstall +qa
+    if exists('s:setupvundle') && s:setupvundle
+        unlet s:setupvundle
+        PluginInstall
+        quitall " Close the bundle install window.
+    endif
+
+endif
+
+
+
+" Golden Ratio:
+" This should disable the plugin, use :GoldenRatioToggle to reenable.
+"let g:loaded_golden_ratio=1
+
+" show errors in different Colors
+highlight Errors ctermbg=green guibg=darkred
+
+"}}}
+
+
+
+"{{{ Settings Section
+source $HOME/$VIMFILE_DIR/settings_vimrc.vim
+
+
+
+"{{{ Source architecture config dependency
+if g:is_win
+    if filereadable(expand('$HOME/$VIMFILE_DIR/vimrc.win'))
+        "echo "sourcing win dir
+        source $HOME/$VIMFILE_DIR/vimrc.win
+    endif
+elseif g:is_mac
+    if filereadable(expand("$HOME/$VIMFILE_DIR/vimrc.mac"))
+        source  $HOME/$VIMFILE_DIR/vimrc.mac
+    endif
+elseif g:is_linux
+    if filereadable(expand("$HOME/$VIMFILE_DIR/vimrc.linux"))
+        source  $HOME/$VIMFILE_DIR/vimrc.linux
+    endif
+endif
+"}}}
+"}}}
+
+
 set background=dark
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
-" put https://raw.github.com/altercation/vim-colors-solarized/master/colors/solarized.vim
-" in ~/.vim/colors/ and uncomment:
-" colorscheme solarized
+"set background=light
+"set t_Co=256
+"colorscheme desert " Set nice looking colorscheme
+"colorscheme herald " Set nice looking colorscheme
+"colorscheme oceanic_material
+"colorscheme PaperColor
+colorscheme OceanicNext
+"colorscheme gruvbox
+"colorscheme onedark
+"colorscheme atom
+
+"let g:gruvbox_bold='1'
+"let g:gruvbox_italic='1'
+"let g:gruvbox_transparent_bg='1'
+"let g:gruvbox_italicize_comments='1'
+"autocmd vimenter * ++nested colorscheme gruvbox
+
+"colorscheme neodark
+"colorscheme onedark
+" Vimscript initialization file
+"colorscheme nightfly
+
+

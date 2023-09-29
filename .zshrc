@@ -8,8 +8,8 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-#ZSH_THEME="robbyrussell"
-ZSH_THEME="agnoster"
+ZSH_THEME="robbyrussell"
+#ZSH_THEME="agnoster"
 
 
 # Set list of themes to pick from when loading at random
@@ -102,7 +102,11 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+
+
+
 alias config='/usr/bin/git --git-dir=/home/fkheinstein/dotfiles/ --work-tree=/home/fkheinstein'
+
 
 
 
@@ -111,6 +115,61 @@ if [[ -n $DISPLAY ]]; then
 	setxkbmap de
 	setxkbmap -option ctrl:nocaps       # Make Caps Lock a Control key
 fi
+
+
+export EDITOR=vim
+export VISUAL=vim
+export SUDO_EDITOR=vim
+
+
+# Set ZSH config root to home (which is the default)
+
+# XDG Base Directory specification
+# https://wiki.archlinux.org/index.php/XDG_Base_Directory
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_CACHE_HOME="${HOME}/.cache"
+export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_RUNTIME_DIR="${HOME}/.run"
+[[ "${UID}" -ge 500 && -n "${XDG_CONFIG_HOME}" && ! -d "${XDG_CONFIG_HOME}" ]] && mkdir -p "${XDG_CONFIG_HOME}"
+[[ "${UID}" -ge 500 && -n "${XDG_CACHE_HOME}" && ! -d "${XDG_CACHE_HOME}" ]] && mkdir -p "${XDG_CACHE_HOME}"
+[[ "${UID}" -ge 500 && -n "${XDG_DATA_HOME}" && ! -d "${XDG_DATA_HOME}" ]] && mkdir -p "${XDG_DATA_HOME}"
+[[ "${UID}" -ge 500 && -n "${XDG_RUNTIME_DIR}" && ! -d "${XDG_RUNTIME_DIR}" ]] && mkdir -p "${XDG_RUNTIME_DIR}"
+
+
+# FZF configuration
+export FZF_DEFAULT_COMMAND='rg --files --hidden'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Less doesn't do anything if there's less than one page.
+export LESS="-FRX $LESS"
+
+
+# Language
+# export LANGUAGE=C.UTF-8
+export LANGUAGE=en_US.UTF-8
+# export LANG=C.UTF-8
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+# export LC_ALL=C
+# export LC_ALL=C.UTF-8
+export LC_ALL=en_US.UTF-8
+# export TERM=xterm-256color
+
+export LANG=en_US.UTF-8
+export TERM=xterm-256color
+export COLORTERM=truecolor
+#export FZF_BASE=/usr/local/bin/fzf
+export BAT_STYLE=changes,numbers
+
+
+
+
+
+
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform
+
 
 
 source $HOME/.alias

@@ -1,6 +1,30 @@
 
 #!/usr/bin/env bash
 
+
+alias ls='lsd'
+alias l='lsd -l'
+alias la='lsd -a'
+alias lla='lsd -la'
+alias lt='lsd --tree'
+alias lr='lsd -R'
+
+
+
+#alias lsd='lsd -l --icon never --group-dirs first'
+alias lsd='lsd -l --group-dirs first'
+alias ll='lsd -l --group-dirs first'
+alias lsize='lsd --sizesort'
+alias tree='lsd --tree'
+
+
+alias cp="rsync --archive --human-readable --progress --verbose --whole-file"
+alias scp="rsync --archive --checksum --compress --human-readable --itemize-changes --rsh=ssh --stats --verbose"
+alias scpresume='rsync --partial --progress --rsh=ssh'
+
+
+
+
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
 
 alias cp="rsync --archive --human-readable --progress --verbose --whole-file"
@@ -16,10 +40,145 @@ alias egrep='egrep --color=auto'
  alias c='clear'                              # c:            Clear terminal display
  #alias which='type -all'                     # which:        Find executables
  alias path='echo -e ${PATH//:/\\n}'          # path:         Echo all executable Paths
- alias show_options='shopt'                   # Show_options: display bash options settings
+ 
+ 
+alias h="cd ~/ && ls -a"
+alias d="cd ~/Documents && ls -a"
+alias D="cd ~/Downloads && ls -a"
+alias m="cd ~/Music && ls -a"
+alias pp="cd ~/Pictures && ls -a"
+alias vv="cd ~/Videos && ls -a"
+alias mn="cd /mnt && ls -a"
+
+
+# alias less='less -FSRXc'                   # Preferred 'less' implementation
+ cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
+ alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
+ alias ..='cd ../'                           # Go back 1 directory level
+ alias ...='cd ../../'                       # Go back 2 directory levels
+
 
  
+ # Alias' {{{
+# aliases for Tmux
+alias tmux='tmux -2'
+alias ta='tmux attach -t'
+alias tnew='tmux new -s'
+alias tls='tmux ls'
+alias tkill='tmux kill-session -t'
+
+# vim
+alias vi="vim"
+alias vimt='vim $(date +"%Y-%m-%d")'
+v() { (cd-git-root; vim "$(fzf --query="$(echo $@ | tr ' ' '\ ' )")"); }
+alias vr="vim +:FZFMru"
+
+alias tm='tmux'
+alias tat='tmux new-session -As $(basename "$PWD" | tr . -)' # will attach if session exists, or create a new session
+alias tmxsrc="tmux source-file ~/.tmux.conf"
+alias tmxvsplit='tmux split-window -h && tmux selectp -t 1 && tmux split-window -v && tmux selectp -t 0'
+alias tmxkillall="tmux ls | cut -d : -f 1 | xargs -I {} tmux kill-session -t {}" # tmux kill all sessions
+alias tmxrename='tmux rename-window $(basename $(pwd))'
+alias dotfiles="ls -a | grep '^\.' | grep --invert-match '\.DS_Store\|\.$'"
+# }}}
+
+ 
+ # human readable size and a total amount
+alias dfT='df -Tha --total'
+alias du='du -h'
+alias du1='du -h --max-depth=1 | sort -hr'
+alias du2='du -h --max-depth=2 | sort -hr'
+alias disks='echo "╓───── m o u n t . p o i n t s"; echo "╙────────────────────────────────────── ─ ─ "; lsblk -a; echo ""; echo "╓───── d i s k . u s a g e"; echo "╙────────────────────────────────────── ─ ─ "; df -h; echo ""; echo "╓───── U.U.I.D.s"; echo "╙────────────────────────────────────── ─ ─ "; lsblk -f;'
+alias drives="echo -n '\e[1;32mListing connected drives:\e[0m'  | pv -qL 10 && lsblk -f"     #list hdds, uuids
+
+alias usage='du -ch | grep total'
+
+
+ 
+# Pac-Man C o o o {{{
+
+alias refr='refl; sudo rm -r /var/lib/pacman/db.lck; sudo pacman-key --init; sudo pacman-key --populate archlinux; sudo pacman-key --refresh-keys; sudo pacman-optimize' # Refresh all the things
+alias refl='sudo reflector --verbose --country 'Germany' -l 200 -p http --sort age --fastest 3 --save /etc/pacman.d/mirrorlist; cat /etc/pacman.d/mirrorlist'
+# }}}
+
+
+
+alias dus='du -sckxh * | sort -nr' #directories sorted by size
+alias dirsize='du -sch' # Show size of current directory
+
+
+
+alias weather='curl wttr.in/kerpen'
+
+#n/ankara.tree
+alias treefind="find . -not -wholename '*/.git/*' -not -wholename '*/.bzr/*' -not -name '.bzr' -not -name '.git' -not -name '*.sw?' -not -name '*~' -print | sed -e 's;[^/]*/;|__;g;s;__|; |;g'"
+alias tree="tree -A"
+alias treed="tree -d"
+alias tree1="tree -d -L 1"
+alias tree2="tree -d -L 2"
+alias pstree="pstree -U "$@" | sed '
+	s/[-a-zA-Z]\+/\x1B[32m&\x1B[0m/g
+	s/[{}]/\x1B[31m&\x1B[0m/g
+	s/[─┬─├─└│]/\x1B[34m&\x1B[0m/g'"
+	
+	
+	
+
+
+export TRASH=$HOME/.local/share/Trash/files
+
+# rm is stressful, use the desktop's trash bin
+[ ! -d $TRASH ] && command mkdir -p $TRASH
+
+alias rm='mv -f -t $TRASH'
+alias rmtrash='rrm $TRASH/*'
+alias rrm='command rm -rfv'
+
+alias rml=list_trash
+
+list_trash()
+{
+    echo -e "${TRASH} :\n"
+    ls -l ${TRASH}
+}
+
+
+
+	
+	
+#ssh
+# unsorted / general
+alias ssh='TERM=xterm-256color ssh'
+sshforward() {
+    REMOTEHOST=$1
+    REMOTELOCALPORT=$2
+    LOCALPORT=$3
+    ssh -NL ${LOCALPORT}:localhost:${REMOTELOCALPORT} ${REMOTEHOST}
+}
+
+
+
+alias reload='source ~/.bash_profile'
+
+# Re-scan fonts
+alias refont='sudo fc-cache -fv'
+
+# Re-load .Xresources
+alias xres='xrdb  -merge $HOME/.Xresources'
+alias xresLo='xrdb -merge $HOME/.Xresources.lodpi'
+alias xresHi='xrdb -merge $HOME/.Xresources.hidpi'
+alias redwm='cd ~/dwm; updpkgsums; makepkg -fi --noconfirm; killall dwm'
+
+
+
+
+
 
 source $HOME/.alias.sys
+source $HOME/.alias.application
 source $HOME/.alias.pacman
 source $HOME/.alias.experiment
+
+
+alias config='/usr/bin/git --git-dir=/home/fkheinstein/dotfiles/ --work-tree=/home/fkheinstein'
+
