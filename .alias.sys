@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+
+
+alias log='journalctl -f | ccze -A'  # follow log
+alias log_realtime='journalctl -f -all |  ccze -A'
+alias log0='journalctl -b -0 | ccze -A'  # current log
+alias log1='journalctl -b -1 | ccze -A'  # previous log
+alias log_bootmsg="echo -n Boot Messages | pv -qL 10 && sudo journalctl -b | ccze -A"  #boot messages
+alias log_nginx='sudo tail -f /var/log/nginx/access.log /var/log/nginx/error.log | ccze'
+alias log_jrnlctl_systemdmsg="sudo journalctl /usr/lib/systemd/systemd | ccze -A"
+alias log_jrnlctl_cleansyslog="sudo journalctl --vacuum-time=2d"
+alias log_sysctrl_blame="systemd-analyze blame | ccze -A"
+alias log_sysctrl_units="echo -n Listing Units | pv -qL 10 && systemctl list-units | ccze -A"
+
+
+
+
+
