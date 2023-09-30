@@ -58,8 +58,22 @@ alias mn="cd /mnt && ls -a"
  alias ...='cd ../../'                       # Go back 2 directory levels
 
 
+
+
+# convenience aliases for editing configs
+alias ev='vim ~/.vimrc'
+alias et='vim ~/.tmux.conf'
+alias ez='vim ~/.zshrc'
+alias eb='vim ~/.bashrc'
+alias ep='vim ~/.bash_profile'
+alias ex='vim ~/.Xresources'
+alias ei='vim ~/.config/i3/config'
+alias eh='vim ~/.config/herbstluftwm/autostart'
+
+
+
  
- # Alias' {{{
+# Alias' {{{
 # aliases for Tmux
 alias tmux='tmux -2'
 alias ta='tmux attach -t'
@@ -83,7 +97,7 @@ alias dotfiles="ls -a | grep '^\.' | grep --invert-match '\.DS_Store\|\.$'"
 # }}}
 
  
- # human readable size and a total amount
+# human readable size and a total amount
 alias dfT='df -Tha --total'
 alias du='du -h'
 alias du1='du -h --max-depth=1 | sort -hr'
@@ -94,7 +108,6 @@ alias drives="echo -n '\e[1;32mListing connected drives:\e[0m'  | pv -qL 10 && l
 alias usage='du -ch | grep total'
 
 
- 
 # Pac-Man C o o o {{{
 
 alias refr='refl; sudo rm -r /var/lib/pacman/db.lck; sudo pacman-key --init; sudo pacman-key --populate archlinux; sudo pacman-key --refresh-keys; sudo pacman-optimize' # Refresh all the things
@@ -116,10 +129,10 @@ alias tree="tree -A"
 alias treed="tree -d"
 alias tree1="tree -d -L 1"
 alias tree2="tree -d -L 2"
-alias pstree="pstree -U "$@" | sed '
-	s/[-a-zA-Z]\+/\x1B[32m&\x1B[0m/g
-	s/[{}]/\x1B[31m&\x1B[0m/g
-	s/[─┬─├─└│]/\x1B[34m&\x1B[0m/g'"
+#alias pstree="pstree -U "$@" | sed '
+#	s/[-a-zA-Z]\+/\x1B[32m&\x1B[0m/g
+#	s/[{}]/\x1B[31m&\x1B[0m/g
+#	s/[─┬─├─└│]/\x1B[34m&\x1B[0m/g'"
 	
 	
 	
@@ -168,10 +181,6 @@ alias xres='xrdb  -merge $HOME/.Xresources'
 alias xresLo='xrdb -merge $HOME/.Xresources.lodpi'
 alias xresHi='xrdb -merge $HOME/.Xresources.hidpi'
 alias redwm='cd ~/dwm; updpkgsums; makepkg -fi --noconfirm; killall dwm'
-
-
-
-
 
 
 source $HOME/.alias.sys

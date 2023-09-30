@@ -41,3 +41,43 @@ if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
 fi
 }
 
+
+
+export FZF_DEFAULT_COMMAND="(git ls-files --others --exclude-standard --cached 2> /dev/null || rg --files --no-ignore --hidden --follow --glob '!.git/*' --glob '!node_modules/*' 2>&1)"
+export FZF_DEFAULT_OPTS='--multi --bind=ctrl-k:down,ctrl-l:up'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS"
+export FZF_CTRL_R_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_R_OPTS="$FZF_DEFAULT_OPTS --preview 'echo {}' --preview-window down:3:hidden:wrap:noborder --bind '?:toggle-preview' --bind 'ctrl-y:execute-silent(echo -n {2..} | xsel --clipboard --input)+abort' --header 'Press CTRL-Y to copy command into clipboard' --border"
+#export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+#export FZF_ALT_C_OPTS="$FZF_DEFAULT_OPTS"
+command -v tree > /dev/null && export FZF_ALT_C_OPTS="$FZF_DEFAULT_OPTS --preview 'tree -C {} | head -$LINES' --preview-window 'noborder'"
+
+# fd - cd to selected directory
+fdir() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+# fda - including hidden directories
+fda() {
+  local dir
+  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
+}
+
+
+
+# Use fd (https://github.com/sharkdp/fd) instead of the default find
+# for fzf '**' shell completions.
+# - The first argument to the function ($1) is the base path to start traversal
+_fzf_compgen_path() {
+  command fd --hidden --follow --exclude .git --exclude node_modules . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  command fd --type d --hidden --follow --exclude .git --exclude node_modules . "$1"
+}
+

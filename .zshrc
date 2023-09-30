@@ -72,9 +72,28 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+    git
+    kubectl
+    web-search
+    ssh-agent
+    zsh-navigation-tools
+    fzf
+    fzf-zsh-plugin
+    zsh-completions
+    zsh-history-substring-search
+    zsh-syntax-highlighting
+    zsh-autosuggestions
+)
+
+
+
 
 source $ZSH/oh-my-zsh.sh
+
+#source $ZSH_CUS/plugins/zsh-interactive-cd.plugin.zsh
+
+
 
 # User configuration
 
@@ -102,6 +121,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+
+autoload -U compinit && compinit
+zmodload -i zsh/complist
 
 
 
@@ -162,32 +184,60 @@ export COLORTERM=truecolor
 export BAT_STYLE=changes,numbers
 
 
-env=~/.ssh/agent.env
 
-agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
+# History {{{
+HISTSIZE=10000
+SAVEHIST=9000
+HISTFILE=~/.zsh_history
+# }}}
 
-agent_start () {
-    (umask 077; ssh-agent >| "$env")
-    . "$env" >| /dev/null ; }
+# Set Options {{{
+# ===== Basics
+setopt no_beep # don't beep on error
+setopt interactive_comments # Allow comments even in interactive shells (especially for Muness)
 
-agent_load_env
+# ===== Changing Directories
+setopt auto_cd # If you type foo, and it isn't a command, and it is a directory in your cdpath, go there
+setopt cdablevarS # if argument to cd is the name of a parameter whose value is a valid directory, it will become the current directory
+setopt pushd_ignore_dups # don't push multiple copies of the same directory onto the directory stack
 
-# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2=agent not running
-agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
+# ===== Expansion and Globbing
+setopt extended_glob # treat #, ~, and ^ as part of patterns for filename generation
 
-if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
-    agent_start
-    ssh-add
-elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
-    ssh-add
-fi
+# ===== History
+setopt append_history # Allow multiple terminal sessions to all append to one zsh command history
+setopt extended_history # save timestamp of command and duration
+setopt inc_append_history # Add comamnds as they are typed, don't wait until shell exit
+setopt hist_expire_dups_first # when trimming history, lose oldest duplicates first
+setopt hist_ignore_dups # Do not write events to history that are duplicates of previous events
+setopt hist_ignore_space # remove command line from history list when first character on the line is a space
+setopt hist_find_no_dups # When searching history don't display results already cycled through twice
+setopt hist_reduce_blanks # Remove extra blanks from each command line being added to history
+setopt hist_verify # don't execute, just expand history
+setopt share_history # imports new commands and appends typed commands to history
 
-unset env
+# ===== Completion
+setopt always_to_end # When completing from the middle of a word, move the cursor to the end of the word
+setopt auto_menu # show completion menu on successive tab press. needs unsetop menu_complete to work
+setopt auto_name_dirs # any parameter that is set to the absolute name of a directory immediately becomes a name for that directory
+setopt complete_in_word # Allow completion from within a word/phrase
 
+unsetopt menu_complete # do not autoselect the first completion entry
 
+# ===== Correction
+setopt correct # spelling correction for commands
+setopt correctall # spelling correction for arguments
 
+# ===== Prompt
+setopt prompt_subst # Enable parameter expansion, command substitution, and arithmetic expansion in the prompt
+setopt transient_rprompt # only show the rprompt on the current prompt
 
+# ===== Scripts and Functions
+setopt multios # perform implicit tees or cats when multiple redirections are attempted
+# }}}
 
+#setopt promptsubst
+autoload -U colors && colors # Enable colors in prompt
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/bin/terraform terraform
