@@ -10,12 +10,19 @@
 
 # hlsearch on (H) or off (h):
 ~H
+# Last Search Pattern:
+~MSle0~/\.\.\/
+
 # Last Substitute String:
 $
 
 # Command Line History (newest to oldest):
 :q
-|2,0,1696074883,,"q"
+|2,0,1696082303,,"q"
+:q!
+|2,0,1696077137,,"q!"
+:w
+|2,0,1696075915,,"w"
 :NextColorScheme
 |2,0,1696074832,,"NextColorScheme"
 :PluginUpdate
@@ -28,8 +35,6 @@ $
 |2,0,1696074665,,"e ~/.vim/keymap_vimrc.vim"
 :Buffers 
 |2,0,1696074643,,"Buffers "
-:w
-|2,0,1696074512,,"w"
 :PluginClean
 |2,0,1696073776,,"PluginClean"
 :split ~/.vim/settings_vimrc.vim
@@ -43,7 +48,9 @@ $
 
 # Search String History (newest to oldest):
 ??\a
-|2,1,1696072997,63,"\\a"
+|2,1,1696075957,63,"\\a"
+? \.\.\/
+|2,1,1696075807,,"\\.\\.\\/"
 
 # Expression History (newest to oldest):
 
@@ -52,46 +59,36 @@ $
 # Debug Line History (newest to oldest):
 
 # Registers:
-"0	LINE	0
-	"source $HOME/$VIMFILE_DIR/plugins/settings_programming.vim
-	
-|3,0,0,1,2,0,1696072997,"\"source $HOME/$VIMFILE_DIR/plugins/settings_programming.vim",""
-""1	LINE	0
+""0	LINE	0
 	" Use commas as leaders
-|3,1,1,1,1,0,1696074602,"\" Use commas as leaders"
+|3,1,0,1,1,0,1696075957,"\" Use commas as leaders"
+"1	LINE	0
+	
+|3,0,1,1,1,0,1696075957,""
 "2	LINE	0
 	
-|3,0,2,1,1,0,1696074597,""
+|3,0,2,1,1,0,1696075957,""
 "3	LINE	0
 	
-|3,0,3,1,1,0,1696074596,""
+|3,0,3,1,1,0,1696075796,""
 "4	LINE	0
-	" let g:mapleader = ','
-|3,0,4,1,1,0,1696074596,"\" let g:mapleader = ','"
+	
+|3,0,4,1,1,0,1696075796,""
 "5	LINE	0
-	" let maplocalleader = ','
-|3,0,5,1,1,0,1696074595,"\" let maplocalleader = ','"
+	
+|3,0,5,1,1,0,1696075796,""
 "6	LINE	0
-	let mapleader = ','
-|3,0,6,1,1,0,1696074595,"let mapleader = ','"
-"7	CHAR	0
 	
+|3,0,6,1,1,0,1696075796,""
+"7	LINE	0
 	
+|3,0,7,1,1,0,1696075772,""
+"8	LINE	0
 	
-	
-|3,0,7,0,4,0,1696074257,"","","",""
-"8	CHAR	0
-	
-	" =clipboard
-	" Copy and paste to system clipboard
-	vnoremap <C-c> "+y
-	vnoremap <C-x> "+c
-	
-	
-|3,0,8,0,7,0,1696074249,"","\" =clipboard","\" Copy and paste to system clipboard","vnoremap <C-c> \"+y","vnoremap <C-x> \"+c","",""
+|3,0,8,1,1,0,1696075772,""
 "9	LINE	0
 	
-|3,0,9,1,1,0,1696074198,""
+|3,0,9,1,1,0,1696075772,""
 "-	CHAR	0
 	 
 |3,0,36,0,1,0,1696074599," "
@@ -99,237 +96,237 @@ $
 # global variables:
 
 # File marks:
-'0  98  0  ~/.vimrc
-|4,48,98,0,1696074883,"~/.vimrc"
-'1  98  0  ~/.vimrc
-|4,49,98,0,1696074879,"~/.vimrc"
-'2  95  42  ~/.vim/keymap_vimrc.vim
-|4,50,95,42,1696074753,"~/.vim/keymap_vimrc.vim"
-'3  21  0  ~/.vimrc
-|4,51,21,0,1696074608,"~/.vimrc"
-'4  21  0  ~/.vimrc
-|4,52,21,0,1696074608,"~/.vimrc"
-'5  21  0  ~/.vimrc
-|4,53,21,0,1696074608,"~/.vimrc"
-'6  21  0  ~/.vimrc
-|4,54,21,0,1696074608,"~/.vimrc"
-'7  21  0  ~/.vimrc
-|4,55,21,0,1696074608,"~/.vimrc"
-'8  21  0  ~/.vimrc
-|4,56,21,0,1696074608,"~/.vimrc"
-'9  21  0  ~/.vimrc
-|4,57,21,0,1696074608,"~/.vimrc"
+'0  93  0  ~/.vimrc
+|4,48,93,0,1696082303,"~/.vimrc"
+'1  1  0  ~/.config/termite
+|4,49,1,0,1696081763,"~/.config/termite"
+'2  28  3  /etc/fstab
+|4,50,28,3,1696077137,"/etc/fstab"
+'3  75  48  ~/vimrc.back
+|4,51,75,48,1696076172,"~/vimrc.back"
+'4  1  0  ~/2023-09-30
+|4,52,1,0,1696076045,"~/2023-09-30"
+'5  1  0  ~/2023-09-30
+|4,53,1,0,1696076045,"~/2023-09-30"
+'6  98  0  ~/.vimrc
+|4,54,98,0,1696075778,"~/.vimrc"
+'7  98  0  ~/.vimrc
+|4,55,98,0,1696075778,"~/.vimrc"
+'8  7  0  ~/.ssh/config
+|4,56,7,0,1696075427,"~/.ssh/config"
+'9  98  0  ~/.vimrc
+|4,57,98,0,1696074883,"~/.vimrc"
 
 # Jumplist (newest first):
+-'  93  0  ~/.vimrc
+|4,39,93,0,1696082303,"~/.vimrc"
 -'  98  0  ~/.vimrc
-|4,39,98,0,1696074883,"~/.vimrc"
+|4,39,98,0,1696082296,"~/.vimrc"
+-'  1  0  ~/.config/termite
+|4,39,1,0,1696081763,"~/.config/termite"
+-'  1  0  ~/.config/termite
+|4,39,1,0,1696081763,"~/.config/termite"
+-'  28  3  /etc/fstab
+|4,39,28,3,1696077137,"/etc/fstab"
+-'  28  3  /etc/fstab
+|4,39,28,3,1696077137,"/etc/fstab"
+-'  28  3  /etc/fstab
+|4,39,28,3,1696077137,"/etc/fstab"
+-'  28  3  /etc/fstab
+|4,39,28,3,1696077137,"/etc/fstab"
+-'  1  0  /etc/fstab
+|4,39,1,0,1696077116,"/etc/fstab"
+-'  1  0  /etc/fstab
+|4,39,1,0,1696077116,"/etc/fstab"
+-'  1  0  /etc/fstab
+|4,39,1,0,1696077116,"/etc/fstab"
+-'  1  0  /etc/fstab
+|4,39,1,0,1696077116,"/etc/fstab"
+-'  75  48  ~/vimrc.back
+|4,39,75,48,1696076172,"~/vimrc.back"
+-'  75  48  ~/vimrc.back
+|4,39,75,48,1696076172,"~/vimrc.back"
+-'  75  48  ~/vimrc.back
+|4,39,75,48,1696076172,"~/vimrc.back"
+-'  75  48  ~/vimrc.back
+|4,39,75,48,1696076172,"~/vimrc.back"
+-'  75  48  ~/vimrc.back
+|4,39,75,48,1696076172,"~/vimrc.back"
+-'  75  48  ~/vimrc.back
+|4,39,75,48,1696076172,"~/vimrc.back"
+-'  75  48  ~/vimrc.back
+|4,39,75,48,1696076172,"~/vimrc.back"
+-'  75  48  ~/vimrc.back
+|4,39,75,48,1696076172,"~/vimrc.back"
+-'  1  0  ~/vimrc.back
+|4,39,1,0,1696076153,"~/vimrc.back"
+-'  1  0  ~/vimrc.back
+|4,39,1,0,1696076153,"~/vimrc.back"
+-'  1  0  ~/vimrc.back
+|4,39,1,0,1696076153,"~/vimrc.back"
+-'  1  0  ~/vimrc.back
+|4,39,1,0,1696076153,"~/vimrc.back"
+-'  1  0  ~/vimrc.back
+|4,39,1,0,1696076153,"~/vimrc.back"
+-'  1  0  ~/vimrc.back
+|4,39,1,0,1696076153,"~/vimrc.back"
+-'  1  0  ~/vimrc.back
+|4,39,1,0,1696076153,"~/vimrc.back"
+-'  1  0  ~/vimrc.back
+|4,39,1,0,1696076153,"~/vimrc.back"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
+-'  1  0  ~/2023-09-30
+|4,39,1,0,1696076045,"~/2023-09-30"
 -'  98  0  ~/.vimrc
-|4,39,98,0,1696074879,"~/.vimrc"
--'  26  3  ~/.vimrc
-|4,39,26,3,1696074754,"~/.vimrc"
--'  26  3  ~/.vimrc
-|4,39,26,3,1696074754,"~/.vimrc"
--'  95  42  ~/.vim/keymap_vimrc.vim
-|4,39,95,42,1696074753,"~/.vim/keymap_vimrc.vim"
--'  95  42  ~/.vim/keymap_vimrc.vim
-|4,39,95,42,1696074753,"~/.vim/keymap_vimrc.vim"
--'  95  42  ~/.vim/keymap_vimrc.vim
-|4,39,95,42,1696074753,"~/.vim/keymap_vimrc.vim"
--'  95  42  ~/.vim/keymap_vimrc.vim
-|4,39,95,42,1696074753,"~/.vim/keymap_vimrc.vim"
--'  26  3  ~/.vimrc
-|4,39,26,3,1696074665,"~/.vimrc"
--'  21  0  ~/.vimrc
-|4,39,21,0,1696074610,"~/.vimrc"
--'  21  0  ~/.vimrc
-|4,39,21,0,1696074610,"~/.vimrc"
--'  21  0  ~/.vimrc
-|4,39,21,0,1696074610,"~/.vimrc"
--'  21  0  ~/.vimrc
-|4,39,21,0,1696074608,"~/.vimrc"
--'  57  0  ~/.vim/keymap_vimrc.vim
-|4,39,57,0,1696074558,"~/.vim/keymap_vimrc.vim"
--'  57  0  ~/.vim/keymap_vimrc.vim
-|4,39,57,0,1696074558,"~/.vim/keymap_vimrc.vim"
--'  57  0  ~/.vim/keymap_vimrc.vim
-|4,39,57,0,1696074558,"~/.vim/keymap_vimrc.vim"
--'  57  0  ~/.vim/keymap_vimrc.vim
-|4,39,57,0,1696074558,"~/.vim/keymap_vimrc.vim"
--'  57  0  ~/.vim/keymap_vimrc.vim
-|4,39,57,0,1696074558,"~/.vim/keymap_vimrc.vim"
--'  57  0  ~/.vim/keymap_vimrc.vim
-|4,39,57,0,1696074558,"~/.vim/keymap_vimrc.vim"
--'  57  0  ~/.vim/keymap_vimrc.vim
-|4,39,57,0,1696074558,"~/.vim/keymap_vimrc.vim"
--'  57  0  ~/.vim/keymap_vimrc.vim
-|4,39,57,0,1696074558,"~/.vim/keymap_vimrc.vim"
--'  56  1  ~/.vim/keymap_vimrc.vim
-|4,39,56,1,1696074440,"~/.vim/keymap_vimrc.vim"
--'  56  1  ~/.vim/keymap_vimrc.vim
-|4,39,56,1,1696074440,"~/.vim/keymap_vimrc.vim"
--'  56  1  ~/.vim/keymap_vimrc.vim
-|4,39,56,1,1696074440,"~/.vim/keymap_vimrc.vim"
--'  56  1  ~/.vim/keymap_vimrc.vim
-|4,39,56,1,1696074440,"~/.vim/keymap_vimrc.vim"
--'  56  1  ~/.vim/keymap_vimrc.vim
-|4,39,56,1,1696074440,"~/.vim/keymap_vimrc.vim"
--'  56  1  ~/.vim/keymap_vimrc.vim
-|4,39,56,1,1696074440,"~/.vim/keymap_vimrc.vim"
--'  56  1  ~/.vim/keymap_vimrc.vim
-|4,39,56,1,1696074440,"~/.vim/keymap_vimrc.vim"
--'  56  1  ~/.vim/keymap_vimrc.vim
-|4,39,56,1,1696074440,"~/.vim/keymap_vimrc.vim"
--'  6  0  ~/.vim/keymap_vimrc.vim
-|4,39,6,0,1696074254,"~/.vim/keymap_vimrc.vim"
--'  6  0  ~/.vim/keymap_vimrc.vim
-|4,39,6,0,1696074254,"~/.vim/keymap_vimrc.vim"
--'  6  0  ~/.vim/keymap_vimrc.vim
-|4,39,6,0,1696074254,"~/.vim/keymap_vimrc.vim"
--'  6  0  ~/.vim/keymap_vimrc.vim
-|4,39,6,0,1696074254,"~/.vim/keymap_vimrc.vim"
--'  6  0  ~/.vim/keymap_vimrc.vim
-|4,39,6,0,1696074254,"~/.vim/keymap_vimrc.vim"
--'  6  0  ~/.vim/keymap_vimrc.vim
-|4,39,6,0,1696074254,"~/.vim/keymap_vimrc.vim"
--'  6  0  ~/.vim/keymap_vimrc.vim
-|4,39,6,0,1696074254,"~/.vim/keymap_vimrc.vim"
--'  6  0  ~/.vim/keymap_vimrc.vim
-|4,39,6,0,1696074254,"~/.vim/keymap_vimrc.vim"
--'  262  0  ~/.vimrc
-|4,39,262,0,1696074222,"~/.vimrc"
--'  262  0  ~/.vimrc
-|4,39,262,0,1696074222,"~/.vimrc"
--'  262  0  ~/.vimrc
-|4,39,262,0,1696074222,"~/.vimrc"
--'  262  0  ~/.vimrc
-|4,39,262,0,1696074222,"~/.vimrc"
--'  260  0  ~/.vimrc
-|4,39,260,0,1696074190,"~/.vimrc"
--'  260  0  ~/.vimrc
-|4,39,260,0,1696074190,"~/.vimrc"
--'  260  0  ~/.vimrc
-|4,39,260,0,1696074190,"~/.vimrc"
--'  260  0  ~/.vimrc
-|4,39,260,0,1696074190,"~/.vimrc"
--'  259  0  ~/.vimrc
-|4,39,259,0,1696074188,"~/.vimrc"
--'  259  0  ~/.vimrc
-|4,39,259,0,1696074188,"~/.vimrc"
--'  259  0  ~/.vimrc
-|4,39,259,0,1696074188,"~/.vimrc"
--'  259  0  ~/.vimrc
-|4,39,259,0,1696074188,"~/.vimrc"
--'  284  9  ~/.vimrc
-|4,39,284,9,1696074149,"~/.vimrc"
--'  283  9  ~/.vimrc
-|4,39,283,9,1696074149,"~/.vimrc"
--'  284  9  ~/.vimrc
-|4,39,284,9,1696074149,"~/.vimrc"
--'  283  9  ~/.vimrc
-|4,39,283,9,1696074149,"~/.vimrc"
--'  284  9  ~/.vimrc
-|4,39,284,9,1696074149,"~/.vimrc"
--'  283  9  ~/.vimrc
-|4,39,283,9,1696074149,"~/.vimrc"
--'  284  9  ~/.vimrc
-|4,39,284,9,1696074149,"~/.vimrc"
--'  283  9  ~/.vimrc
-|4,39,283,9,1696074149,"~/.vimrc"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  46  0  ~/.vim/keymap_vimrc.vim
-|4,39,46,0,1696074144,"~/.vim/keymap_vimrc.vim"
--'  97  0  ~/.vim/keymap_vimrc.vim
-|4,39,97,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  78  0  ~/.vim/keymap_vimrc.vim
-|4,39,78,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  97  0  ~/.vim/keymap_vimrc.vim
-|4,39,97,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  78  0  ~/.vim/keymap_vimrc.vim
-|4,39,78,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  97  0  ~/.vim/keymap_vimrc.vim
-|4,39,97,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  78  0  ~/.vim/keymap_vimrc.vim
-|4,39,78,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  97  0  ~/.vim/keymap_vimrc.vim
-|4,39,97,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  78  0  ~/.vim/keymap_vimrc.vim
-|4,39,78,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074134,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074132,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074132,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074132,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074132,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074132,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074132,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074132,"~/.vim/keymap_vimrc.vim"
--'  56  0  ~/.vim/keymap_vimrc.vim
-|4,39,56,0,1696074132,"~/.vim/keymap_vimrc.vim"
--'  1  0  ~/.vim/keymap_vimrc.vim
-|4,39,1,0,1696074058,"~/.vim/keymap_vimrc.vim"
--'  1  0  ~/.vim/keymap_vimrc.vim
-|4,39,1,0,1696074058,"~/.vim/keymap_vimrc.vim"
--'  1  0  ~/.vim/keymap_vimrc.vim
-|4,39,1,0,1696074058,"~/.vim/keymap_vimrc.vim"
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  98  0  ~/.vimrc
+|4,39,98,0,1696075778,"~/.vimrc"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
+-'  7  0  ~/.ssh/config
+|4,39,7,0,1696075427,"~/.ssh/config"
 
 # Buffer list:
-%~/.vimrc	98	0
+%~/.vimrc	93	0
 
 # History of marks within files (newest to oldest):
 
 > ~/.vimrc
-	*	1696074880	0
-	"	98	0
+	*	1696082300	0
+	"	93	0
 	^	12	0
 	.	11	0
 	+	251	0
@@ -349,6 +346,44 @@ $
 	+	11	0
 	+	10	0
 	+	11	0
+
+> ~/.config/termite
+	*	1696081761	0
+	"	1	0
+
+> /etc/fstab
+	*	1696077136	0
+	"	28	3
+	^	28	4
+	.	28	3
+	+	28	3
+
+> ~/vimrc.back
+	*	1696076171	0
+	"	75	48
+
+> ~/2023-09-30
+	*	1696076042	0
+	"	1	0
+
+> ~/notes/09-30-23.md
+	*	1696076039	0
+	"	5	0
+	^	4	9
+	.	4	8
+	+	8	0
+	+	3	0
+	+	4	8
+
+> ~/NERD_tree_1
+	*	1696075819	0
+	"	15	0
+	.	1	0
+	+	1	0
+
+> ~/.ssh/config
+	*	1696075423	0
+	"	7	0
 
 > ~/.vim/keymap_vimrc.vim
 	*	1696074752	0
@@ -387,10 +422,6 @@ $
 	+	9	0
 	+	10	0
 	+	42	0
-
-> ~/2023-09-30
-	*	1696073005	0
-	"	1	0
 
 > ~/.vim/2023-09-30
 	*	1696072864	0
