@@ -6,8 +6,8 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
 
 
-Plugin 'bfrg/vim-cpp-modern'
-Plugin 'octol/vim-cpp-enhanced-highlight'
+"Plugin 'bfrg/vim-cpp-modern'
+"Plugin 'octol/vim-cpp-enhanced-highlight'
 " Provides a command to close a buffer but keep its window.
 Plugin 'qpkorr/vim-bufkill'
 

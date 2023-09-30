@@ -7,10 +7,11 @@ set nowritebackup
 set noswapfile
 
 
-" " Use commas as leaders
+" Use commas as leaders
 let mapleader = ','
-" let maplocalleader = ','
-" let g:mapleader = ','
+let maplocalleader = ','
+let g:mapleader = ','
+
 
 "let mapleader = "\<Space>"
 "let maplocalleader =  "\<Space>"
@@ -254,6 +255,8 @@ source $HOME/$VIMFILE_DIR/plugins/automkdir.vim
 source $HOME/$VIMFILE_DIR/plugins/diminactive.vim
 source $HOME/$VIMFILE_DIR/plugins/settings_fzf.vim
 
+
+source $HOME/$VIMFILE_DIR/keymap_vimrc.vim
 
 
 
