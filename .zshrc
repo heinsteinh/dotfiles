@@ -8,15 +8,26 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
-#ZSH_THEME="agnoster"
+#ZSH_THEME="robbyrussell"
 
+ZSH_THEME="agnoster"
+#ZSH_THEME="random"
+#ZSH_THEME="fino-time"
+#ZSH_THEME="jispwoso"
+#ZSH_THEME="random"
+#ZSH_THEME="jonathan"
+ZSH_THEME="rkj"
+#ZSH_THEME="xiong-chiamiov"
+#ZSH_THEME="gnzh"
+#ZSH_THEME="crcandy"
+#ZSH_THEME="steeef"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+ZSH_THEME_RANDOM_CANDIDATES=( "gallois" "kolo" "mortalscumbag" "agnoster"  "robbyrussell")
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -98,6 +109,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
+export PATH=/usr/local/bin/:$PATH
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -247,3 +259,8 @@ complete -o nospace -C /usr/bin/terraform terraform
 source $HOME/.alias
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit && compinit
+complete -C '/usr/local/bin/aws_completer' aws

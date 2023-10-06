@@ -63,6 +63,23 @@ Plugin 'navarasu/onedark.nvim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'sainnhe/everforest'
 
+Plugin 'fatih/vim-go'
+
+" Go syntax highlighting
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_operators = 1
+
+" Auto formatting and importing
+let g:go_fmt_autosave = 1
+let g:go_fmt_command = "goimports"
+
+" Status line types/signatures
+let g:go_auto_type_info = 1
+
+
 "set background=dark
 "set t_Co=256
 "let g:gruvbox_bold='1'
@@ -71,3 +88,27 @@ Plugin 'sainnhe/everforest'
 "let g:gruvbox_italicize_comments='1'
 "autocmd vimenter * ++nested colorscheme gruvbox
 
+Plugin 'rust-lang/rust.vim'
+Plugin 'ycm-core/YouCompleteMe'
+
+
+" youcompleteme
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
+
+" YCM LSP
+let g:ycm_language_server = [
+			\  {
+			\   'name': 'python',
+			\   'cmdline': ['pyls'],
+			\   'filetypes': ['python']
+			\  },
+			\  {
+			\   'name': 'rust',
+			\   'cmdline': ['rls'],
+			\   'filetypes': ['rust']
+			\  }
+\ ]
+
+"Plugin 'davidhalter/jedi-vim
+
+"Plugin 'jlanzarotta/bufexplorer'

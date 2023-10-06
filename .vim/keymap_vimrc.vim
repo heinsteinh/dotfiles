@@ -53,7 +53,8 @@ nnoremap g# g#zz
 nnoremap <leader>cp :<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>
 
 
-
+" noh - no highlight
+map <esc> :noh <CR>
 
 " Backspace in normal mode
 nnoremap <bs> d0<Left>
@@ -77,8 +78,6 @@ vnoremap <C-s> <esc>:w!<CR>gv=gv
 
 
 
-" Quick PluginStall
-nnoremap <Leader>pi :source $MYVIMRC<cr>:PluginInstall<cr>
 
 
 "Vimrc quick edit

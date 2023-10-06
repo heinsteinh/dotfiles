@@ -49,7 +49,7 @@ set autoread
 " Better Completion
 set complete=.,w,b,u,t
 set completeopt=longest,menuone,preview
-
+set completeopt-=preview
 
 " Highlights a cross over the cursor.
 " Some highlighting gets a little strange due to my theme.

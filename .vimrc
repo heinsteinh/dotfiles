@@ -349,7 +349,11 @@ if has ('autocmd') " Remain compatible with earlier versaons
     "autocmd BufEnter .vimrc,*.vim,*.cpp,*.c,*.java,*.py :TagbarOpen
     "autocmd BufEnter *.cpp,*.c,*.java,*.py :TagbarOpen
 
-    "autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+    autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+
+    autocmd FileType python map <buffer> <F9> :w<CR>:exec '! clear; python3' shellescape(@%, 1)<CR>
+    autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:exec '!clear; python3' shellescape(@%, 1)<CR>
+
 
     " Automatic rename of tmux window
     " if exists('$TMUX') && !exists('$NORENAME)
@@ -372,7 +376,17 @@ if has ('autocmd') " Remain compatible with earlier versaons
         autocmd FileType vim setlocal foldmethod=marker
         autocmd FileType vim setlocal foldmarker={{{,}}}
         autocmd FileType go setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
+                " File specific hacks
+        autocmd Filetype python set expandtab tabstop=4 shiftwidth=4 softtabstop=4
+        autocmd Filetype htmldjango set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+        autocmd Filetype html set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+        autocmd Filetype yaml set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+        autocmd Filetype javascript set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+        autocmd Filetype markdown set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+
     augroup END
+
+
 
 
     " " Special tab-spacing for C files
