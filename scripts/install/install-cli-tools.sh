@@ -1,22 +1,60 @@
 #!/bin/bash
-# CLI tools installation script
-
-set -euo pipefail
+# Install additional CLI tools
 
 echo "Installing additional CLI tools..."
 
-# Detect package manager and install tools
+# Detect package manager
 if command -v pacman &> /dev/null; then
     # Arch Linux
     sudo pacman -S --needed --noconfirm \
-        neofetch lazygit bottom starship
-elif command -v apt &> /dev/null; then
-    # Ubuntu/Debian
-    sudo apt update
-    sudo apt install -y neofetch
+        ranger \
+        docker docker-compose \
+        httpie \
+        jq \
+        nmap \
+        tldr
+    
+    yay -S --noconfirm \
+        thefuck \
+        neofetch
+        
 elif command -v brew &> /dev/null; then
     # macOS
-    brew install neofetch lazygit bottom starship
+    brew install \
+        ranger \
+        docker docker-compose \
+        httpie \
+        jq \
+        nmap \
+        tldr \
+        thefuck \
+        neofetch
+        
+elif command -v apt &> /dev/null; then
+    # Debian/Ubuntu
+    sudo apt update
+    sudo apt install -y \
+        ranger \
+        docker.io docker-compose \
+        httpie \
+        jq \
+        nmap \
+        tldr \
+        neofetch
 fi
+
+# Install global npm packages
+npm install -g \
+    http-server \
+    json-server \
+    live-server \
+    nodemon
+
+# Install Python packages
+pip3 install \
+    httpie \
+    youtube-dl \
+    speedtest-cli \
+    howdoi
 
 echo "CLI tools installation complete!"

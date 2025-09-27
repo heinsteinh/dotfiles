@@ -1,107 +1,304 @@
 # Cross-Platform Dotfiles
 
-A comprehensive dotfiles configuration that works seamlessly across Linux and macOS, featuring modern CLI tools, enhanced terminal experience, and productive development workflow.
+A comprehensive dotfiles configuration that works seamlessly across Linux (Arch, Ubuntu) and macOS, featuring modern CLI tools, enhanced terminal experience, and productive development workflow.
 
-## ✨ Features
-
-- **🔧 Cross-platform compatibility** (Linux/macOS)
-- **⚡ Automated installation** with OS detection
-- **🛠️ Modern CLI tools** integration (zsh, tmux, vim, git, fzf, bat, ripgrep)
-- **🎨 Beautiful terminal** with Starship prompt
-- **📝 Comprehensive documentation**
-- **🧪 Testing framework**
-- **🔄 Git workflows** and automation
-
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Clone the repository
-git clone https://github.com/heinsteinh/dotfiles.git ~/.dotfiles
+git clone https://github.com/yourusername/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 
-# Make installation script executable and run
-chmod +x install.sh
+# Run installation
+make install
+
+# Or manual installation
 ./install.sh
 ```
 
-## 📦 Included Tools & Configurations
+## Features
 
-### Terminal & Shell
-- **Zsh** with custom aliases and exports
-- **Starship** prompt for a beautiful command line
-- **Tmux** with productivity-focused sessions
-- **Kitty** terminal emulator configuration
+### Core Components
+- **Zsh** with Oh My Zsh and Powerlevel10k theme
+- **Vim** with vim-plug and essential plugins
+- **Tmux** with TPM and productivity plugins
+- **Kitty** terminal with optimized configuration
+- **Git** with sensible defaults and aliases
 
-### Development Tools
-- **Git** configuration with hooks
-- **Vim** with essential plugins
-- **SSH** configuration templates
-- **Modern CLI replacements**:
-  - `bat` (better cat)
-  - `fzf` (fuzzy finder)  
-  - `ripgrep` (better grep)
+### Enhanced Tools
+- **FZF** - Fuzzy finding for files, history, and commands
+- **Exa** - Modern ls replacement with git integration
+- **Bat** - Cat with syntax highlighting
+- **Ripgrep** - Fast text search
+- **Lazygit** - Terminal UI for git
+- **Starship** - Cross-shell prompt
+- **Zoxide** - Smarter cd command
 
-### System Integration
-- **Font management** (FiraCode, Hack, JetBrains Mono, MesloLGS)
-- **Backup utilities** for safe configuration changes
-- **Cross-platform scripts** for Arch Linux and macOS
+## Installation Options
 
-## 📚 Documentation
-
-- [Installation Guide](docs/INSTALLATION.md) - Detailed setup instructions
-- [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
-
-## 🏗️ Project Structure
-
-```
-.dotfiles/
-├── config/           # Application configurations
-│   ├── git/          # Git configuration and hooks
-│   ├── kitty/        # Terminal emulator config
-│   ├── tmux/         # Terminal multiplexer config
-│   ├── vim/          # Vim configuration
-│   └── zsh/          # Zsh shell configuration
-├── scripts/          # Installation and utility scripts
-│   ├── install/      # Component installation scripts
-│   ├── setup/        # OS-specific setup scripts
-│   └── utils/        # Utility and maintenance scripts
-├── fonts/            # Programming fonts
-├── templates/        # Configuration templates
-└── docs/             # Documentation
-```
-
-## 🔧 Customization
-
-1. **Fork this repository** to your GitHub account
-2. **Clone your fork**: `git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/.dotfiles`
-3. **Modify configurations** in the `config/` directory
-4. **Add personal scripts** to `local/scripts/`
-5. **Update documentation** as needed
-
-## 🧪 Testing
-
-Run the test suite to ensure everything is working correctly:
-
+### Complete Setup
 ```bash
-cd ~/.dotfiles
-./tests/test-installation.sh
+make install          # Full installation
+make install-arch     # Arch Linux specific
+make install-macos    # macOS specific
+make install-fonts    # Fonts only
 ```
 
-## 📝 License
+### Manual Steps
+```bash
+# 1. Backup existing configs
+make backup
 
-MIT License - see [LICENSE](LICENSE) for details.
+# 2. Install system packages
+./scripts/setup-arch.sh    # or setup-macos.sh
 
-## 🤝 Contributing
+# 3. Install fonts
+./scripts/install-fonts.sh
+
+# 4. Install CLI tools
+./scripts/install-cli-tools.sh
+
+# 5. Create symlinks
+./install.sh
+```
+
+## Configuration Files
+
+### Zsh Configuration
+- **Main config**: `config/zsh/.zshrc`
+- **Aliases**: Auto-loaded from main config
+- **Functions**: Useful shell functions
+- **OS detection**: Automatic platform-specific settings
+
+Key features:
+- Enhanced history management
+- Smart completion
+- Git integration
+- Package manager aliases
+- Custom functions (mkcd, extract, fkill)
+
+### Vim Configuration
+- **Enhanced search** with FZF integration
+- **File exploration** with NERDTree
+- **Git integration** with fugitive and gitgutter
+- **Code quality** with ALE linting
+- **Modern interface** with airline and devicons
+
+Key bindings (Leader: Space):
+- `<leader>f` - Find files
+- `<leader>n` - Toggle file tree
+- `<leader>rg` - Search in files
+- `<leader>gs` - Git status
+
+### Tmux Configuration
+- **Vim-like navigation** and key bindings
+- **Enhanced status bar** with system info
+- **Plugin management** with TPM
+- **Session persistence** with resurrect
+
+Key bindings (Prefix: Ctrl+a):
+- `Ctrl+a |` - Split vertically
+- `Ctrl+a -` - Split horizontally
+- `h/j/k/l` - Navigate panes
+- `Ctrl+a r` - Reload config
+
+### Kitty Terminal
+- **Gruvbox color scheme**
+- **Nerd Font integration**
+- **Optimized performance** settings
+- **Cross-platform compatibility**
+
+## Essential CLI Tools
+
+### File Management
+```bash
+ll              # Enhanced ls with exa
+fd pattern      # Fast find
+tree            # Directory structure
+bat file.txt    # Syntax highlighted cat
+```
+
+### Text Processing
+```bash
+rg "pattern"    # Fast grep
+fzf             # Interactive finder
+jq '.key'       # JSON processing
+```
+
+### Development
+```bash
+lg              # Lazygit UI
+g s             # Git status (alias)
+d ps            # Docker ps (alias)
+py script.py    # Python3 (alias)
+```
+
+### System Monitoring
+```bash
+htop            # Process monitor
+btop            # Modern system monitor
+df -h           # Disk usage
+ss -tuln        # Network connections
+```
+
+## Customization
+
+### Adding Personal Configurations
+Create these files for local customizations:
+```bash
+~/.zshrc.local      # Local zsh config
+~/.vimrc.local      # Local vim config
+~/.tmux.conf.local  # Local tmux config
+```
+
+### Color Schemes
+Available themes in vim:
+- `gruvbox` (default)
+- `dracula`
+- `nord-vim`
+
+Change in `config/vim/.vimrc`:
+```vim
+colorscheme dracula
+let g:airline_theme = 'dracula'
+```
+
+### Platform-Specific Settings
+The configuration automatically detects:
+- **macOS**: Homebrew paths, macOS-specific aliases
+- **Linux**: Package manager detection, clipboard tools
+- **Arch Linux**: Pacman aliases and AUR support
+
+## Key Bindings Reference
+
+### Zsh
+```bash
+Ctrl+R          # History search with fzf
+Ctrl+T          # File finder
+Alt+C           # Directory finder
+```
+
+### Vim
+```bash
+Space+f         # Find files
+Space+rg        # Search in files
+Space+n         # File tree
+Space+gs        # Git status
+Space+s         # Jump to character (EasyMotion)
+```
+
+### Tmux
+```bash
+Ctrl+a |        # Split vertical
+Ctrl+a -        # Split horizontal
+Ctrl+a h/j/k/l  # Navigate panes
+Ctrl+a [        # Copy mode
+```
+
+### Kitty
+```bash
+Ctrl+Shift+T    # New tab
+Ctrl+Shift+N    # New window
+Ctrl+Shift+C    # Copy
+Ctrl+Shift+V    # Paste
+```
+
+## Font Requirements
+
+The configuration uses Nerd Fonts for proper icon display:
+- **MesloLGS NF** (primary)
+- **FiraCode NF** (alternative)
+- **JetBrains Mono NF** (alternative)
+- **Hack NF** (alternative)
+
+Auto-installed by `install-fonts.sh`
+
+## Backup and Restore
+
+### Backup Existing Configs
+```bash
+make backup
+# Creates backups in ~/.dotfiles-backup/
+```
+
+### Restore
+```bash
+# Manual restore
+cp ~/.dotfiles-backup/.vimrc ~/.vimrc
+cp ~/.dotfiles-backup/.zshrc ~/.zshrc
+# etc.
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Fonts not displaying correctly:**
+```bash
+# Reinstall fonts
+./scripts/install-fonts.sh
+fc-cache -fv  # Linux only
+```
+
+**Zsh plugins not working:**
+```bash
+# Reinstall Oh My Zsh plugins
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+```
+
+**Tmux plugins not loading:**
+```bash
+# Install TPM
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+# In tmux: Ctrl+a + I
+```
+
+**Vim plugins not installing:**
+```bash
+# Open vim and run
+:PlugInstall
+:PlugUpdate
+```
+
+### Performance Issues
+
+**Zsh slow startup:**
+```bash
+# Profile startup time
+zsh -xvs
+# Disable heavy plugins temporarily
+```
+
+**Vim slow with large files:**
+```bash
+# Disable syntax highlighting for large files
+:syntax off
+```
+
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+3. Test on both Linux and macOS
+4. Submit a pull request
 
-## 📞 Support
+## Platform Support
 
-If you encounter any issues:
-1. Check the [Troubleshooting Guide](docs/TROUBLESHOOTING.md)
-2. Search existing [Issues](https://github.com/heinsteinh/dotfiles/issues)
-3. Open a new issue with detailed information
+- **macOS** 10.15+ (Intel/Apple Silicon)
+- **Arch Linux** (latest)
+- **Ubuntu** 20.04+ / Debian 11+
+- **Other Linux**: Partial support
+
+## Dependencies
+
+Auto-installed by setup scripts:
+- Git, Curl, Wget
+- Zsh, Tmux, Vim/Neovim
+- FZF, Ripgrep, Exa, Bat
+- Node.js, Python3
+- Platform-specific package managers
+
+## License
+
+MIT License - feel free to use and modify as needed.
