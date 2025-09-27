@@ -15,7 +15,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # FZF options for better UI
 export FZF_DEFAULT_OPTS="
---height 40%
+--height 60%
 --layout reverse
 --border
 --inline-info
