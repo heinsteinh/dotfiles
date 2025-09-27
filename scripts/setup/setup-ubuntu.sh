@@ -65,7 +65,7 @@ main() {
         ripgrep \
         fd-find \
         bat \
-        exa \
+        eza \
         fzf
 
     # Create symlinks for fd and bat (Ubuntu specific naming)

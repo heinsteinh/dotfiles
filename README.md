@@ -27,7 +27,7 @@ make install
 
 ### Enhanced Tools
 - **FZF** - Fuzzy finding for files, history, and commands
-- **Exa** - Modern ls replacement with git integration
+- **Eza** - Modern ls replacement with git integration (successor to exa)
 - **Bat** - Cat with syntax highlighting
 - **Ripgrep** - Fast text search
 - **Lazygit** - Terminal UI for git
@@ -112,7 +112,7 @@ Key bindings (Prefix: Ctrl+a):
 
 ### File Management
 ```bash
-ll              # Enhanced ls with exa
+ll              # Enhanced ls with eza
 fd pattern      # Fast find
 tree            # Directory structure
 bat file.txt    # Syntax highlighted cat
@@ -295,7 +295,7 @@ zsh -xvs
 Auto-installed by setup scripts:
 - Git, Curl, Wget
 - Zsh, Tmux, Vim/Neovim
-- FZF, Ripgrep, Exa, Bat
+- FZF, Ripgrep, Eza, Bat
 - Node.js, Python3
 - Platform-specific package managers
 

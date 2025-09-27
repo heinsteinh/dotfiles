@@ -14,7 +14,7 @@ fi
 brew install \
     git curl wget \
     zsh tmux vim \
-    fzf ripgrep fd exa bat \
+    fzf ripgrep fd eza bat \
     htop tree
 
 echo "macOS setup complete!"

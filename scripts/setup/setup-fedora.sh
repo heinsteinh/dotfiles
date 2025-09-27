@@ -31,7 +31,7 @@ main() {
     log_info "Installing essential packages..."
     sudo dnf install -y \
         curl wget git vim zsh tmux tree htop neofetch unzip \
-        ripgrep fd-find bat exa fzf starship
+        ripgrep fd-find bat eza fzf starship
 
     # Install development tools
     sudo dnf groupinstall -y "Development Tools"

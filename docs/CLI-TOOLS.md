@@ -6,7 +6,7 @@ A comprehensive reference for all the command-line tools included in this dotfil
 
 | Classic Tool | Modern Replacement | Description |
 |-------------|-------------------|-------------|
-| `ls` | `exa` | Modern replacement with colors and git integration |
+| `ls` | `eza` | Modern replacement with colors and git integration |
 | `cat` | `bat` | Syntax highlighting and git integration |
 | `find` | `fd` | Fast and user-friendly alternative |
 | `grep` | `ripgrep (rg)` | Extremely fast text search |
@@ -16,12 +16,12 @@ A comprehensive reference for all the command-line tools included in this dotfil
 
 ## File and Directory Operations
 
-### exa (Enhanced ls)
+### eza (Enhanced ls)
 ```bash
 # Basic usage
-exa                    # List files
-exa -l                 # Long format
-exa -la                # Include hidden files
+eza                    # List files
+eza -l                 # Long format
+eza -la                # Include hidden files
 exa --tree             # Tree view
 exa --git              # Show git status
 

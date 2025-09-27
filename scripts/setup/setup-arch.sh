@@ -12,7 +12,7 @@ sudo pacman -Syu --noconfirm
 sudo pacman -S --needed --noconfirm \
     base-devel git curl wget \
     zsh tmux vim \
-    fzf ripgrep fd exa bat \
+    fzf ripgrep fd eza bat \
     htop tree unzip
 
 echo "Arch Linux setup complete!"

@@ -19,7 +19,17 @@ alias proj='cd ~/Projects'
 alias dotfiles='cd ~/.dotfiles'
 
 # Enhanced ls (with fallbacks)
-if command -v exa &> /dev/null; then
+if command -v eza &> /dev/null; then
+    alias ls='eza --group-directories-first'
+    alias ll='eza -la --git --group-directories-first'
+    alias la='eza -a --group-directories-first'
+    alias lt='eza --tree --level=2'
+    alias lg='eza -la --git --git-ignore'
+    alias lsd='eza -D'  # directories only
+    alias lsf='eza -f'  # files only
+    alias lss='eza -la --sort=size'
+    alias lst='eza -la --sort=modified'
+elif command -v exa &> /dev/null; then
     alias ls='exa --group-directories-first'
     alias ll='exa -la --git --group-directories-first'
     alias la='exa -a --group-directories-first'
