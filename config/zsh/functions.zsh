@@ -84,7 +84,7 @@ ff() {
     if command -v fd &> /dev/null; then
         selected=$(fd --type f --hidden --follow --exclude .git | fzf --preview 'bat --color=always {}' --preview-window 'right:60%')
     else
-        selected=$(find . -type f | fzf --preview 'cat {}' --preview-window 'right:60%')
+        selected=$(command find . -type f | fzf --preview 'cat {}' --preview-window 'right:60%')
     fi
     [[ -n $selected ]] && echo "$selected"
 }
@@ -93,9 +93,9 @@ ff() {
 fcd() {
     local selected
     if command -v fd &> /dev/null; then
-        selected=$(fd --type d --hidden --follow --exclude .git | fzf --preview 'ls -la {}')
+        selected=$(fd --type d --hidden --follow --exclude .git | fzf --preview 'command ls -la {}')
     else
-        selected=$(find . -type d | fzf --preview 'ls -la {}')
+        selected=$(command find . -type d | fzf --preview 'command ls -la {}')
     fi
     [[ -n $selected ]] && cd "$selected"
 }
@@ -111,7 +111,7 @@ fgrep() {
     if command -v rg &> /dev/null; then
         selected=$(rg --line-number --color=always "$1" | fzf --ansi --delimiter ':' --preview 'bat --color=always {1} --highlight-line {2}' --preview-window 'right:60%')
     else
-        selected=$(grep -rn --color=always "$1" . | fzf --ansi --delimiter ':' --preview 'cat {1}' --preview-window 'right:60%')
+        selected=$(command grep -rn --color=always "$1" . | fzf --ansi --delimiter ':' --preview 'cat {1}' --preview-window 'right:60%')
     fi
     
     if [[ -n $selected ]]; then
@@ -169,7 +169,7 @@ pmon() {
         return 1
     fi
     
-    watch "ps aux | grep '$1' | grep -v grep"
+    watch "ps aux | command grep '$1' | command grep -v grep"
 }
 
 # ============================================================================
@@ -354,7 +354,7 @@ logwatch() {
     if [[ $# -eq 0 ]]; then
         # Interactive log file selection
         local logfile
-        logfile=$(find /var/log -type f -name "*.log" 2>/dev/null | fzf --preview 'tail -20 {}')
+        logfile=$(command find /var/log -type f -name "*.log" 2>/dev/null | fzf --preview 'tail -20 {}')
         [[ -n $logfile ]] && tail -f "$logfile"
     else
         tail -f "$1"
@@ -446,10 +446,10 @@ pkg_search() {
     local package
     
     if command -v pacman &> /dev/null; then
-        package=$(pacman -Ss "$1" | grep -E '^[^[:space:]]' | fzf --preview 'pacman -Si {1}' | awk '{print $1}')
+        package=$(pacman -Ss "$1" | command grep -E '^[^[:space:]]' | fzf --preview 'pacman -Si {1}' | awk '{print $1}')
         [[ -n $package ]] && sudo pacman -S "$package"
     elif command -v apt &> /dev/null; then
-        package=$(apt search "$1" 2>/dev/null | grep -E '^[^[:space:]]' | fzf --preview 'apt show {1}' | awk -F'/' '{print $1}')
+        package=$(apt search "$1" 2>/dev/null | command grep -E '^[^[:space:]]' | fzf --preview 'apt show {1}' | awk -F'/' '{print $1}')
         [[ -n $package ]] && sudo apt install "$package"
     elif command -v brew &> /dev/null; then
         package=$(brew search "$1" | fzf --preview 'brew info {}')
