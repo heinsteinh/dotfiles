@@ -45,52 +45,28 @@ __pycache__/
 *.pyc
 *.pyo
 node_modules/
->>>>>>> 992bdcd (Add initial cross-platform dotfiles setup with installation scripts and configurations)
 
-# Local configurations
-local/
-backups/
-*.local
-*.backup
-*.bak
-*~
+# Build outputs
+dist/
+build/
+target/
+out/
 
-# OS-specific files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# Package managers
+package-lock.json
+yarn.lock
+Gemfile.lock
 
-# Temporary files
-*.tmp
-*.log
-*.swp
-*.swo
+# Testing
+coverage/
+.pytest_cache/
+.tox/
 
-# Environment files
-.env
-.env.local
-.envrc
+# Documentation build
+docs/_build/
+_site/
 
-# SSH keys and sensitive data
-config/ssh/id_*
-config/ssh/known_hosts
-config/ssh/authorized_keys
-!config/ssh/*.example
-
-# Personal directories
-private/
-personal/
-
-# Editor files
-.vscode/
-.idea/
-
-# Cache directories
-__pycache__/
-*.pyc
-*.pyo
-node_modules/
+# Application specific
+.terraform/
+terraform.tfstate*
+.vagrant/
