@@ -93,8 +93,8 @@
 # Wrap long lines instead of using horizontal scrolling
 --wrap=auto
 
-# Set the terminal width (0 means auto-detect)
---terminal-width=0
+# Set the terminal width (0 means auto-detect, commented out to use default)
+# --terminal-width=0
 
 # ============================================================================
 # Advanced Options
