@@ -62,186 +62,14 @@ setopt HIST_IGNORE_SPACE
 setopt HIST_REDUCE_BLANKS
 
 # ============================================================================
-# Aliases
+# Aliases - Loaded from external files
 # ============================================================================
-# Enhanced ls commands
-if command -v exa &> /dev/null; then
-    alias ls='exa'
-    alias ll='exa -la --git'
-    alias la='exa -a'
-    alias lt='exa --tree'
-    alias lg='exa -la --git --git-ignore'
-else
-    alias ll='ls -alF'
-    alias la='ls -A'
-    alias l='ls -CF'
-fi
-
-# Enhanced cat
-if command -v bat &> /dev/null; then
-    alias cat='bat'
-    alias catn='bat --style=plain'
-fi
-
-# Enhanced find
-if command -v fd &> /dev/null; then
-    alias find='fd'
-fi
-
-# Git shortcuts
-alias g='git'
-alias ga='git add'
-alias gc='git commit'
-alias gco='git checkout'
-alias gd='git diff'
-alias gl='git log'
-alias gp='git push'
-alias gpl='git pull'
-alias gs='git status'
-alias gb='git branch'
-alias gm='git merge'
-alias gr='git rebase'
-
-# Git with lazygit
-if command -v lazygit &> /dev/null; then
-    alias lg='lazygit'
-fi
-
-# System shortcuts
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias ~='cd ~'
-alias c='clear'
-alias h='history'
-alias j='jobs'
-
-# Safety aliases
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
-
-# System information
-alias ports='netstat -tulanp'
-alias top='htop'
-if command -v btop &> /dev/null; then
-    alias top='btop'
-fi
-
-# Package management (OS specific)
-if command -v pacman &> /dev/null; then
-    alias pac='sudo pacman -S'
-    alias pacs='pacman -Ss'
-    alias pacu='sudo pacman -Syu'
-    alias pacr='sudo pacman -R'
-elif command -v apt &> /dev/null; then
-    alias apt-i='sudo apt install'
-    alias apt-s='apt search'
-    alias apt-u='sudo apt update && sudo apt upgrade'
-    alias apt-r='sudo apt remove'
-elif command -v brew &> /dev/null; then
-    alias brew-i='brew install'
-    alias brew-s='brew search'
-    alias brew-u='brew update && brew upgrade'
-    alias brew-r='brew uninstall'
-fi
-
-# Docker shortcuts
-alias d='docker'
-alias dc='docker-compose'
-alias dps='docker ps'
-alias dimg='docker images'
-alias dlog='docker logs -f'
-alias dexec='docker exec -it'
-
-# Python/Virtual environments
-alias py='python3'
-alias pip='pip3'
-alias venv='python3 -m venv'
-alias activate='source venv/bin/activate'
-
-# Network
-alias myip='curl ipinfo.io/ip'
-alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
-
-# File operations
-alias mkdir='mkdir -pv'
-alias wget='wget -c'
-alias df='df -H'
-alias du='du -ch'
-
-# Quick edits
-alias zshrc='$EDITOR ~/.zshrc'
-alias vimrc='$EDITOR ~/.vimrc'
-alias tmuxrc='$EDITOR ~/.tmux.conf'
+# Aliases are loaded at the end of this file from ~/.config/zsh/aliases.zsh
 
 # ============================================================================
-# Functions
+# Functions - Loaded from external files
 # ============================================================================
-# Create directory and cd into it
-mkcd() {
-    mkdir -p "$1" && cd "$1"
-}
-
-# Extract any archive
-extract() {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xjf $1     ;;
-            *.tar.gz)    tar xzf $1     ;;
-            *.bz2)       bunzip2 $1     ;;
-            *.rar)       unrar e $1     ;;
-            *.gz)        gunzip $1      ;;
-            *.tar)       tar xf $1      ;;
-            *.tbz2)      tar xjf $1     ;;
-            *.tgz)       tar xzf $1     ;;
-            *.zip)       unzip $1       ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1        ;;
-            *)     echo "'$1' cannot be extracted via extract()" ;;
-        esac
-    else
-        echo "'$1' is not a valid file"
-    fi
-}
-
-# Find process and kill
-fkill() {
-    local pid
-    if [ "$UID" != "0" ]; then
-        pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
-    else
-        pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-    fi
-
-    if [ "x$pid" != "x" ]; then
-        echo $pid | xargs kill -${1:-9}
-    fi
-}
-
-# Git functions
-gclone() {
-    git clone "$1" && cd "$(basename "$1" .git)"
-}
-
-# Quick backup
-backup() {
-    cp "$1"{,.bak}
-}
-
-# Weather function
-weather() {
-    curl -4 http://wttr.in/${1:-}
-}
-
-# URL encode/decode
-urlencode() {
-    python3 -c "import urllib.parse; print(urllib.parse.quote('''$1'''))"
-}
-
-urldecode() {
-    python3 -c "import urllib.parse; print(urllib.parse.unquote('''$1'''))"
-}
+# Functions are loaded at the end of this file from ~/.config/zsh/functions.zsh
 
 # ============================================================================
 # Tool Initializations
@@ -377,7 +205,11 @@ fi
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
+# ============================================================================
 # Load custom configurations
-source ~/.config/zsh/aliases.zsh
-source ~/.config/zsh/functions.zsh
-source ~/.config/zsh/distro.zsh
+# ============================================================================
+# Load modular configuration files with error handling
+[[ -f ~/.config/zsh/exports.zsh ]] && source ~/.config/zsh/exports.zsh
+[[ -f ~/.config/zsh/aliases.zsh ]] && source ~/.config/zsh/aliases.zsh
+[[ -f ~/.config/zsh/functions.zsh ]] && source ~/.config/zsh/functions.zsh
+[[ -f ~/.config/zsh/distro.zsh ]] && source ~/.config/zsh/distro.zsh

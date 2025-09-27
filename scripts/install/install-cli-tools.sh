@@ -50,8 +50,8 @@ npm install -g \
     live-server \
     nodemon
 
-# Install Python packages
-pip3 install \
+# Install Python packages (user-level to avoid system package conflicts)
+pip3 install --user \
     httpie \
     youtube-dl \
     speedtest-cli \

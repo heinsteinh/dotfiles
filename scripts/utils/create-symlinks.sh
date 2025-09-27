@@ -33,6 +33,17 @@ create_symlink "$DOTFILES_DIR/config/tmux/.tmux.conf" "$HOME/.tmux.conf"
 create_symlink "$DOTFILES_DIR/config/zsh/.zshrc" "$HOME/.zshrc"
 create_symlink "$DOTFILES_DIR/config/zsh/.zprofile" "$HOME/.zprofile"
 
+# Zsh modular configuration files
+create_symlink "$DOTFILES_DIR/config/zsh/aliases.zsh" "$HOME/.config/zsh/aliases.zsh"
+create_symlink "$DOTFILES_DIR/config/zsh/functions.zsh" "$HOME/.config/zsh/functions.zsh" 
+create_symlink "$DOTFILES_DIR/config/zsh/exports.zsh" "$HOME/.config/zsh/exports.zsh"
+create_symlink "$DOTFILES_DIR/config/zsh/distro.zsh" "$HOME/.config/zsh/distro.zsh"
+
+# FZF configuration
+if [[ -f "$DOTFILES_DIR/config/fzf/fzf.zsh" ]]; then
+    create_symlink "$DOTFILES_DIR/config/fzf/fzf.zsh" "$HOME/.fzf.zsh"
+fi
+
 # Git
 create_symlink "$DOTFILES_DIR/config/git/.gitconfig" "$HOME/.gitconfig"
 create_symlink "$DOTFILES_DIR/config/git/.gitignore_global" "$HOME/.gitignore_global"
@@ -40,6 +51,16 @@ create_symlink "$DOTFILES_DIR/config/git/.gitignore_global" "$HOME/.gitignore_gl
 # Kitty (if config exists)
 if [[ -f "$DOTFILES_DIR/config/kitty/kitty.conf" ]]; then
     create_symlink "$DOTFILES_DIR/config/kitty/kitty.conf" "$HOME/.config/kitty/kitty.conf"
+fi
+
+# Starship configuration
+if [[ -f "$DOTFILES_DIR/config/starship/starship.toml" ]]; then
+    create_symlink "$DOTFILES_DIR/config/starship/starship.toml" "$HOME/.config/starship.toml"
+fi
+
+# Bat configuration
+if [[ -f "$DOTFILES_DIR/config/bat/config" ]]; then
+    create_symlink "$DOTFILES_DIR/config/bat/config" "$HOME/.config/bat/config"
 fi
 
 echo "Symlinks created successfully!"
