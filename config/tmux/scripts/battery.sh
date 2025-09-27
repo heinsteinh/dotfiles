@@ -65,7 +65,7 @@ main() {
     local battery_level=$(get_battery_status)
     local charging_status=$(get_charging_status)
     local icon=$(get_battery_icon "$battery_level" "$charging_status")
-    
+
     if [[ $battery_level == "N/A" ]]; then
         echo "⚡ N/A"
     else

@@ -222,7 +222,7 @@ fe                     # Edit files with fzf
 fd                     # Change to directory with fzf
 fkill                  # Kill process with fzf
 
-# Git operations  
+# Git operations
 fgb                    # Switch git branch
 fgl                    # Browse git log
 
@@ -383,7 +383,7 @@ ps aux | rg process_name
 
 # Git shortcuts
 gst                    # git status
-gco                    # git checkout  
+gco                    # git checkout
 gcm                    # git commit -m
 gp                     # git push
 ```
@@ -406,7 +406,7 @@ make install
 
 # Install specific categories
 make fonts            # Install fonts only
-make cli-tools        # Install CLI tools only  
+make cli-tools        # Install CLI tools only
 make dev-tools        # Install development tools
 
 # OS-specific setup

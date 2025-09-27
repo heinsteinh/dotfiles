@@ -34,7 +34,7 @@ Host myserver
     Port 22
     IdentityFile ~/.ssh/id_ed25519_server
     ForwardAgent yes
-    
+
 # Development server example
 Host devserver
     HostName dev.company.com
@@ -57,7 +57,7 @@ Host bastion
     User myuser
     IdentityFile ~/.ssh/id_ed25519_bastion
     ForwardAgent yes
-    
+
 # Production server via bastion
 Host production
     HostName prod.internal.company.com

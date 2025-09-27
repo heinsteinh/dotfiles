@@ -324,23 +324,23 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 " ============================================================================
 augroup vimrc_autocmds
   autocmd!
-  
+
   " Remove trailing whitespace on save
   autocmd BufWritePre * %s/\s\+$//e
-  
+
   " Restore cursor position
   autocmd BufReadPost *
     \ if line("'\"") > 1 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
-  
+
   " Auto-close NERDTree if it's the only window left
   autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-  
+
   " Highlight current line only in active window
   autocmd WinEnter * setlocal cursorline
   autocmd WinLeave * setlocal nocursorline
-  
+
 augroup END
 
 " ============================================================================
@@ -348,22 +348,22 @@ augroup END
 " ============================================================================
 augroup filetype_settings
   autocmd!
-  
+
   " Python
   autocmd FileType python setlocal tabstop=4 shiftwidth=4 expandtab
-  
+
   " JavaScript/TypeScript
   autocmd FileType javascript,typescript setlocal tabstop=2 shiftwidth=2 expandtab
-  
+
   " HTML/CSS
   autocmd FileType html,css setlocal tabstop=2 shiftwidth=2 expandtab
-  
+
   " YAML
   autocmd FileType yaml setlocal tabstop=2 shiftwidth=2 expandtab
-  
+
   " Markdown
   autocmd FileType markdown setlocal wrap linebreak
-  
+
 augroup END
 
 " ============================================================================

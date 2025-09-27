@@ -42,11 +42,11 @@ EOF
 collect_user_info() {
     log_info "Let's gather some information about your setup..."
     echo
-    
+
     # Machine name
     read -p "Machine name (default: $(hostname)): " MACHINE_NAME
     MACHINE_NAME=${MACHINE_NAME:-$(hostname)}
-    
+
     # Installation type
     echo
     echo "Choose installation type:"
@@ -54,7 +54,7 @@ collect_user_info() {
     echo "2) Minimal installation (basic configs only)"
     echo "3) Development installation (full + dev tools)"
     echo "4) Custom installation (choose components)"
-    
+
     read -p "Enter choice [1-4]: " choice
     case $choice in
         1) INSTALL_TYPE="full" ;;
@@ -63,13 +63,13 @@ collect_user_info() {
         4) INSTALL_TYPE="custom" ;;
         *) INSTALL_TYPE="full" ;;
     esac
-    
+
     # Git configuration
     echo
     log_info "Git configuration (leave empty to skip):"
     read -p "Your name: " USER_NAME
     read -p "Your email: " USER_EMAIL
-    
+
     # Confirmation
     echo
     log_info "Configuration summary:"
@@ -78,7 +78,7 @@ collect_user_info() {
     echo "  Git name: ${USER_NAME:-<not set>}"
     echo "  Git email: ${USER_EMAIL:-<not set>}"
     echo
-    
+
     if ! confirm "Proceed with installation?"; then
         log_error "Installation cancelled by user"
         exit 1
@@ -88,7 +88,7 @@ collect_user_info() {
 confirm() {
     local message="$1"
     local response
-    
+
     while true; do
         read -p "$message (y/n): " response
         case "$response" in
@@ -117,9 +117,9 @@ detect_os() {
 install_prerequisites() {
     local os
     os=$(detect_os)
-    
+
     log_info "Installing prerequisites for $os..."
-    
+
     case "$os" in
         macos)
             # Install Xcode command line tools
@@ -129,12 +129,12 @@ install_prerequisites() {
                 log_info "Please complete the Xcode installation and run this script again"
                 exit 0
             fi
-            
+
             # Install Homebrew
             if ! command -v brew &> /dev/null; then
                 log_info "Installing Homebrew..."
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-                
+
                 # Add Homebrew to PATH
                 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
                 eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -158,7 +158,7 @@ install_prerequisites() {
 
 run_installation() {
     log_info "Starting $INSTALL_TYPE installation..."
-    
+
     case "$INSTALL_TYPE" in
         minimal)
             run_minimal_installation
@@ -177,41 +177,41 @@ run_installation() {
 
 run_minimal_installation() {
     log_info "Running minimal installation..."
-    
+
     # Core configurations only
     "$DOTFILES_DIR/scripts/utils/create-symlinks.sh" --minimal
-    
+
     # Install essential fonts
     "$DOTFILES_DIR/scripts/install/install-fonts.sh" --essential
 }
 
 run_full_installation() {
     log_info "Running full installation..."
-    
+
     # Run the main install script
     "$DOTFILES_DIR/install.sh"
-    
+
     # Install fonts
     "$DOTFILES_DIR/scripts/install/install-fonts.sh"
-    
+
     # Install CLI tools
     "$DOTFILES_DIR/scripts/install/install-cli-tools.sh"
 }
 
 run_development_installation() {
     log_info "Running development installation..."
-    
+
     # Full installation first
     run_full_installation
-    
+
     # Development tools
     "$DOTFILES_DIR/scripts/install/install-dev-tools.sh"
-    
+
     # Docker (optional)
     if confirm "Install Docker?"; then
         "$DOTFILES_DIR/scripts/install/install-docker.sh"
     fi
-    
+
     # Node.js (optional)
     if confirm "Install Node.js?"; then
         "$DOTFILES_DIR/scripts/install/install-nodejs.sh"
@@ -220,7 +220,7 @@ run_development_installation() {
 
 run_custom_installation() {
     log_info "Running custom installation..."
-    
+
     local components=(
         "Core configurations"
         "Shell configurations (zsh, aliases, functions)"
@@ -233,15 +233,15 @@ run_custom_installation() {
         "Docker"
         "Node.js"
     )
-    
+
     echo "Choose components to install:"
     for i in "${!components[@]}"; do
         echo "$((i+1))) ${components[$i]}"
     done
     echo
-    
+
     read -p "Enter component numbers (e.g., 1,2,3): " selections
-    
+
     # Process selections
     IFS=',' read -ra SELECTED <<< "$selections"
     for selection in "${SELECTED[@]}"; do
@@ -263,13 +263,13 @@ run_custom_installation() {
 setup_git_config() {
     if [[ -n "$USER_NAME" ]] && [[ -n "$USER_EMAIL" ]]; then
         log_info "Setting up Git configuration..."
-        
+
         git config --global user.name "$USER_NAME"
         git config --global user.email "$USER_EMAIL"
-        
+
         # Copy git template
         cp "$DOTFILES_DIR/templates/.gitconfig.template" "$HOME/.gitconfig.local"
-        
+
         log_success "Git configured with name: $USER_NAME, email: $USER_EMAIL"
     fi
 }
@@ -278,13 +278,13 @@ setup_ssh_keys() {
     if [[ ! -f "$HOME/.ssh/id_ed25519" ]]; then
         if confirm "Generate SSH key for Git repositories?"; then
             log_info "Generating SSH key..."
-            
+
             ssh-keygen -t ed25519 -C "$USER_EMAIL" -f "$HOME/.ssh/id_ed25519" -N ""
-            
+
             # Start ssh-agent and add key
             eval "$(ssh-agent -s)"
             ssh-add "$HOME/.ssh/id_ed25519"
-            
+
             log_success "SSH key generated: $HOME/.ssh/id_ed25519.pub"
             log_info "Add this public key to your Git hosting service:"
             echo
@@ -296,17 +296,17 @@ setup_ssh_keys() {
 
 create_local_configs() {
     log_info "Creating local configuration directories..."
-    
+
     # Create local directories
     mkdir -p "$HOME/.local/bin"
     mkdir -p "$HOME/.local/share"
     mkdir -p "$HOME/.config"
-    
+
     # Create dotfiles local directories
     mkdir -p "$DOTFILES_DIR/local/config"
     mkdir -p "$DOTFILES_DIR/local/scripts"
     mkdir -p "$DOTFILES_DIR/local/notes"
-    
+
     # Create machine-specific config
     cat > "$DOTFILES_DIR/local/config/machine.env" << EOF
 # Machine-specific environment variables
@@ -319,19 +319,19 @@ EOF
 
 final_setup() {
     log_info "Performing final setup steps..."
-    
+
     # Set zsh as default shell
     if [[ "$SHELL" != */zsh ]] && command -v zsh &> /dev/null; then
         log_info "Setting zsh as default shell..."
         chsh -s "$(which zsh)"
     fi
-    
+
     # Source configurations
     if [[ -f "$HOME/.zshrc" ]]; then
         log_info "Sourcing zsh configuration..."
         zsh -c "source ~/.zshrc" || true
     fi
-    
+
     # Run health check
     if [[ -x "$DOTFILES_DIR/tools/doctor.sh" ]]; then
         log_info "Running system health check..."
@@ -350,7 +350,7 @@ show_completion_message() {
     ║                                                  ║
     ╚══════════════════════════════════════════════════╝
 EOF
-    
+
     echo
     log_success "Installation completed successfully!"
     echo
@@ -366,7 +366,7 @@ EOF
     echo "  make doctor        - Run health check"
     echo "  make clean         - Clean up temporary files"
     echo
-    
+
     if [[ -n "$USER_EMAIL" ]]; then
         log_info "Your SSH public key (add to Git hosting):"
         echo
@@ -381,7 +381,7 @@ main() {
         log_error "Please run this script from the dotfiles directory"
         exit 1
     fi
-    
+
     welcome_message
     collect_user_info
     install_prerequisites

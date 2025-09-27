@@ -89,7 +89,7 @@ npm run dev
 The dotfiles include several pre-configured themes:
 
 - **Gruvbox**: Warm, retro feel
-- **Dracula**: Dark theme with vibrant colors  
+- **Dracula**: Dark theme with vibrant colors
 - **Nord**: Arctic, north-bluish clean theme
 
 To change themes:
@@ -189,7 +189,7 @@ alias dc='docker-compose'
 alias k='kubectl'
 alias tf='terraform'
 
-# System aliases  
+# System aliases
 alias ll='ls -la'
 alias grep='rg'
 alias cat='bat'

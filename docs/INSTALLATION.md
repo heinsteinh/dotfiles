@@ -132,16 +132,16 @@ graph TD
     B --> C[Essential Tools]
     C --> D[Terminal Tools]
     D --> E[Development Tools]
-    
+
     C --> F[Zsh + Oh My Zsh]
     C --> G[Tmux + TPM]
     C --> H[Vim + vim-plug]
     C --> I[Kitty Terminal]
-    
+
     F --> J[Powerlevel10k]
     G --> K[Tmux Plugins]
     H --> L[Vim Plugins]
-    
+
     J --> M[Nerd Fonts]
     K --> M
     L --> M

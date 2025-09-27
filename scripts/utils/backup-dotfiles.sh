@@ -62,17 +62,17 @@ echo "Restoring dotfiles from: $BACKUP_DIR"
 # Restore files
 for file in "$BACKUP_DIR"/.* "$BACKUP_DIR"/*; do
     filename=$(basename "$file")
-    
+
     # Skip special files
     if [[ "$filename" == "." || "$filename" == ".." || "$filename" == "restore.sh" ]]; then
         continue
     fi
-    
+
     # Skip .config directory (handled separately)
     if [[ "$filename" == ".config" ]]; then
         continue
     fi
-    
+
     if [ -f "$file" ]; then
         echo "Restoring $filename to $HOME/"
         cp "$file" "$HOME/"

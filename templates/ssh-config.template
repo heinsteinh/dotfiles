@@ -45,7 +45,7 @@ Host personal-server
     Port 22
     IdentityFile ~/.ssh/id_ed25519_personal
     ForwardAgent yes
-    
+
 # Work server example
 Host work-server
     HostName work.company.com
@@ -53,14 +53,14 @@ Host work-server
     Port 2222
     IdentityFile ~/.ssh/id_ed25519_work
     ProxyJump bastion.company.com
-    
+
 # Bastion host example
 Host bastion
     HostName bastion.company.com
     User bastion-user
     IdentityFile ~/.ssh/id_ed25519_bastion
     ForwardAgent yes
-    
+
 # Production server via bastion
 Host prod-server
     HostName prod.internal.company.com
@@ -93,7 +93,7 @@ Host aws-*
     IdentityFile ~/.ssh/aws-key.pem
     StrictHostKeyChecking no
 
-# Google Cloud instances  
+# Google Cloud instances
 Host gcp-*
     User your-gcp-user
     IdentityFile ~/.ssh/gcp-key

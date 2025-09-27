@@ -30,7 +30,7 @@ get_load_average() {
 
 get_cpu_icon() {
     local cpu_usage=$1
-    
+
     if [[ $cpu_usage == "N/A" ]]; then
         echo "💻"
     elif (( $(echo "$cpu_usage > 80" | bc -l) )); then
@@ -56,7 +56,7 @@ main() {
     local load_avg=$(get_load_average)
     local icon=$(get_cpu_icon "$cpu_usage")
     local formatted_usage=$(format_cpu_usage "$cpu_usage")
-    
+
     echo "$icon $formatted_usage"
 }
 

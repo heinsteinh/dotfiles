@@ -116,7 +116,7 @@ main() {
 
     # Install Zsh plugins
     local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-    
+
     if [[ ! -d "$zsh_custom/plugins/zsh-autosuggestions" ]]; then
         log_info "Installing zsh-autosuggestions..."
         git clone https://github.com/zsh-users/zsh-autosuggestions "$zsh_custom/plugins/zsh-autosuggestions"

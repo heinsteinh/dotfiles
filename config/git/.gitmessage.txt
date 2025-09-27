@@ -1,5 +1,5 @@
 # Git commit message template
-# 
+#
 # <type>(<scope>): <subject>
 #
 # <body>

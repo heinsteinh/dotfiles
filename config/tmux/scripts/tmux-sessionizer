@@ -13,7 +13,7 @@ else
         "$HOME/.config"
         "$HOME/.local/share"
     )
-    
+
     # Build find command for existing directories
     find_args=()
     for dir in "${search_dirs[@]}"; do
@@ -21,12 +21,12 @@ else
             find_args+=("$dir")
         fi
     done
-    
+
     if [[ ${#find_args[@]} -eq 0 ]]; then
         # Fallback to current directory if no search dirs exist
         find_args=(".")
     fi
-    
+
     selected=$(find "${find_args[@]}" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
 fi
 

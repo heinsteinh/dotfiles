@@ -30,12 +30,12 @@ extract() {
         echo "Usage: extract <archive>"
         return 1
     fi
-    
+
     if [[ ! -f $1 ]]; then
         echo "Error: '$1' is not a valid file"
         return 1
     fi
-    
+
     case $1 in
         *.tar.bz2|*.tbz2) tar xjf "$1" ;;
         *.tar.gz|*.tgz)   tar xzf "$1" ;;
@@ -61,10 +61,10 @@ archive() {
         echo "Supported formats: tar.gz, tar.bz2, tar.xz, zip"
         return 1
     fi
-    
+
     local archive_name="$1"
     shift
-    
+
     case "$archive_name" in
         *.tar.gz|*.tgz)   tar czf "$archive_name" "$@" ;;
         *.tar.bz2|*.tbz2) tar cjf "$archive_name" "$@" ;;
@@ -106,14 +106,14 @@ fsearch() {
         echo "Usage: fsearch <pattern>"
         return 1
     fi
-    
+
     local selected
     if command -v rg &> /dev/null; then
         selected=$(rg --line-number --color=always "$1" | fzf --ansi --delimiter ':' --preview 'bat --color=always {1} --highlight-line {2}' --preview-window 'right:60%')
     else
         selected=$(command grep -rn --color=always "$1" . | fzf --ansi --delimiter ':' --preview 'cat {1}' --preview-window 'right:60%')
     fi
-    
+
     if [[ -n $selected ]]; then
         local file=$(echo "$selected" | cut -d: -f1)
         local line=$(echo "$selected" | cut -d: -f2)
@@ -133,7 +133,7 @@ fkill() {
     else
         pid=$(ps -ef | sed 1d | fzf -m --header='[kill:process]' | awk '{print $2}')
     fi
-    
+
     if [[ -n $pid ]]; then
         echo "Killing process(es): $pid"
         echo $pid | xargs kill -${1:-9}
@@ -146,7 +146,7 @@ ptree() {
         echo "Usage: ptree <process_name>"
         return 1
     fi
-    
+
     local pids=$(pgrep "$1")
     if [[ -n $pids ]]; then
         for pid in $pids; do
@@ -168,7 +168,7 @@ pmon() {
         echo "Usage: pmon <process_name>"
         return 1
     fi
-    
+
     watch "ps aux | command grep '$1' | command grep -v grep"
 }
 
@@ -182,21 +182,21 @@ gclone() {
         echo "Usage: gclone <git_url> [directory]"
         return 1
     fi
-    
+
     local repo_url="$1"
     local dir_name="$2"
-    
+
     if [[ -z $dir_name ]]; then
         dir_name=$(basename "$repo_url" .git)
     fi
-    
+
     git clone "$repo_url" "$dir_name" && cd "$dir_name"
 }
 
 # Create new git repository
 ginit() {
     local repo_name="${1:-$(basename $(pwd))}"
-    
+
     git init
     echo "# $repo_name" > README.md
     echo ".DS_Store\n*.log\n*.tmp\nnode_modules/\n.env" > .gitignore
@@ -214,7 +214,7 @@ gbranch() {
 gadd() {
     local selected
     selected=$(git status --porcelain | fzf -m --ansi --preview 'git diff --color=always {2}' | cut -c4-)
-    
+
     if [[ -n $selected ]]; then
         echo "$selected" | xargs git add
         echo "Added files:"
@@ -230,7 +230,7 @@ gadd() {
 dexec() {
     local container
     container=$(docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}" | fzf --header-lines=1 | awk '{print $1}')
-    
+
     if [[ -n $container ]]; then
         echo "Entering container: $container"
         docker exec -it "$container" ${1:-bash}
@@ -241,7 +241,7 @@ dexec() {
 dlog() {
     local container
     container=$(docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}" | fzf --header-lines=1 | awk '{print $1}')
-    
+
     if [[ -n $container ]]; then
         docker logs -f "$container"
     fi
@@ -267,10 +267,10 @@ portscan() {
         echo "Example: portscan 192.168.1.1 1-1000"
         return 1
     fi
-    
+
     local host="$1"
     local ports="${2:-1-1000}"
-    
+
     if command -v nmap &> /dev/null; then
         nmap -p "$ports" "$host"
     else
@@ -287,10 +287,10 @@ port_check() {
         echo "Usage: port_check <host> <port>"
         return 1
     fi
-    
+
     local host="$1"
     local port="$2"
-    
+
     if timeout 3 bash -c "echo >/dev/tcp/$host/$port" 2>/dev/null; then
         echo "Port $port on $host is open"
         return 0
@@ -330,12 +330,12 @@ service_manage() {
         echo "systemctl not available"
         return 1
     fi
-    
+
     local action="${1:-status}"
     local service
-    
+
     service=$(systemctl list-units --type=service --all | fzf --header="Select service for $action:" | awk '{print $1}')
-    
+
     if [[ -n $service ]]; then
         case $action in
             start|stop|restart|enable|disable|status)
@@ -364,7 +364,7 @@ logwatch() {
 # System resource monitoring
 sysmon() {
     local interval="${1:-2}"
-    
+
     watch -n "$interval" "
     echo '=== CPU Usage ==='
     command grep 'cpu ' /proc/stat | awk '{usage=(\$2+\$4)*100/(\$2+\$3+\$4+\$5)} END {print usage \"%\"}'
@@ -426,10 +426,10 @@ csv_preview() {
         echo "Usage: csv_preview <file.csv> [rows]"
         return 1
     fi
-    
+
     local file="$1"
     local rows="${2:-10}"
-    
+
     if command -v csvkit &> /dev/null; then
         csvlook "$file" | head -$((rows + 3))
     else
@@ -444,7 +444,7 @@ csv_preview() {
 # Interactive package search and install
 pkg_search() {
     local package
-    
+
     if command -v pacman &> /dev/null; then
         package=$(pacman -Ss "$1" | command grep -E '^[^[:space:]]' | fzf --preview 'pacman -Si {1}' | awk '{print $1}')
         [[ -n $package ]] && sudo pacman -S "$package"
@@ -463,7 +463,7 @@ pkg_info() {
         echo "Usage: pkg_info <package_name>"
         return 1
     fi
-    
+
     if command -v pacman &> /dev/null; then
         pacman -Si "$1" 2>/dev/null || pacman -Qi "$1"
     elif command -v apt &> /dev/null; then
@@ -504,7 +504,7 @@ qr() {
         echo "Usage: qr <text>"
         return 1
     fi
-    
+
     if command -v qrencode &> /dev/null; then
         qrencode -t UTF8 "$1"
     else
@@ -516,7 +516,7 @@ qr() {
 genpass() {
     local length="${1:-16}"
     local charset="${2:-a-zA-Z0-9}"
-    
+
     if command -v openssl &> /dev/null; then
         openssl rand -base64 32 | tr -d "=+/" | cut -c1-"$length"
     else
@@ -530,7 +530,7 @@ shorten_url() {
         echo "Usage: shorten_url <url>"
         return 1
     fi
-    
+
     curl -s "http://tinyurl.com/api-create.php?url=$1"
 }
 
@@ -589,15 +589,15 @@ tmux_project() {
         echo "Usage: tmux_project <project_name> [project_path]"
         return 1
     fi
-    
+
     local project_name="$1"
     local project_path="${2:-$HOME/Projects/$project_name}"
-    
+
     if [[ ! -d $project_path ]]; then
         echo "Project path doesn't exist: $project_path"
         return 1
     fi
-    
+
     tmux new-session -d -s "$project_name" -c "$project_path"
     tmux split-window -h -c "$project_path"
     tmux split-window -v -c "$project_path"
@@ -615,7 +615,7 @@ rsync_copy() {
         echo "Usage: rsync_copy <source> <destination>"
         return 1
     fi
-    
+
     rsync -av --progress --stats "$1" "$2"
 }
 
@@ -625,11 +625,11 @@ backup_dir() {
         echo "Usage: backup_dir <directory>"
         return 1
     fi
-    
+
     local source="$1"
     local timestamp=$(date +%Y%m%d_%H%M%S)
     local backup_name="${source%/}_backup_${timestamp}.tar.gz"
-    
+
     tar -czf "$backup_name" -C "$(dirname "$source")" "$(basename "$source")"
     echo "Backup created: $backup_name"
 }

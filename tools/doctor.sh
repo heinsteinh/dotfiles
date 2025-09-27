@@ -45,7 +45,7 @@ EOF
 check_file_exists() {
     local file="$1"
     local description="$2"
-    
+
     if [[ -f "$file" ]]; then
         log_success "$description exists"
         return 0
@@ -59,7 +59,7 @@ check_file_exists() {
 check_dir_exists() {
     local dir="$1"
     local description="$2"
-    
+
     if [[ -d "$dir" ]]; then
         log_success "$description exists"
         return 0
@@ -73,16 +73,16 @@ check_dir_exists() {
 check_script_syntax() {
     local script="$1"
     local name="$(basename "$script")"
-    
+
     if [[ ! -f "$script" ]]; then
         log_error "Script not found: $script"
         return 1
     fi
-    
+
     if [[ ! -x "$script" ]]; then
         log_warning "Script not executable: $name"
     fi
-    
+
     # Check shebang
     local shebang
     shebang=$(head -1 "$script")
@@ -90,7 +90,7 @@ check_script_syntax() {
         log_error "Missing or invalid shebang in: $name"
         return 1
     fi
-    
+
     # Basic syntax check for bash scripts
     if [[ "$shebang" =~ bash|sh ]]; then
         if bash -n "$script" 2>/dev/null; then
@@ -100,7 +100,7 @@ check_script_syntax() {
             return 1
         fi
     fi
-    
+
     return 0
 }
 
@@ -109,11 +109,11 @@ check_config_syntax() {
     local config="$1"
     local type="$2"
     local name="$(basename "$config")"
-    
+
     if [[ ! -f "$config" ]]; then
         return 1
     fi
-    
+
     case "$type" in
         "toml")
             if command -v toml-test &> /dev/null; then
@@ -166,19 +166,19 @@ check_config_syntax() {
             fi
             ;;
     esac
-    
+
     return 0
 }
 
 # Check for duplicate files
 check_duplicates() {
     log_check "Checking for duplicate or conflicting files..."
-    
+
     # Check for README duplicates
     if [[ -f "$DOTFILES_DIR/README.md" ]] && [[ -f "$DOTFILES_DIR/README copy.md" ]]; then
         log_warning "Duplicate README files found (README.md and 'README copy.md')"
     fi
-    
+
     # Check for backup files that shouldn't be committed
     while IFS= read -r -d '' file; do
         log_warning "Backup file found: $(basename "$file")"
@@ -188,7 +188,7 @@ check_duplicates() {
 # Check symlink targets
 check_symlinks() {
     log_check "Checking symlink configurations..."
-    
+
     local symlink_script="$DOTFILES_DIR/scripts/utils/create-symlinks.sh"
     if [[ -f "$symlink_script" ]]; then
         # Extract symlink mappings and validate source files exist
@@ -196,11 +196,11 @@ check_symlinks() {
             if [[ "$line" =~ ln.*-sf.*\"(.*)\".*\"(.*)\" ]]; then
                 local source="${BASH_REMATCH[1]}"
                 local target="${BASH_REMATCH[2]}"
-                
+
                 # Expand variables in source path
                 source="${source/#\$DOTFILES_DIR/$DOTFILES_DIR}"
                 source="${source/#\$HOME/$HOME}"
-                
+
                 if [[ ! -e "$source" ]]; then
                     log_error "Symlink source missing: $source"
                 fi
@@ -212,7 +212,7 @@ check_symlinks() {
 # Check dependencies
 check_dependencies() {
     log_check "Checking for common dependencies..."
-    
+
     local tools=(
         "git:Git version control"
         "zsh:Z shell"
@@ -221,7 +221,7 @@ check_dependencies() {
         "curl:Data transfer tool"
         "wget:File downloader"
     )
-    
+
     for tool_desc in "${tools[@]}"; do
         IFS=':' read -r tool desc <<< "$tool_desc"
         if command -v "$tool" &> /dev/null; then
@@ -230,7 +230,7 @@ check_dependencies() {
             log_warning "$desc not installed"
         fi
     done
-    
+
     # Check optional modern tools
     local modern_tools=(
         "exa:Modern ls replacement"
@@ -240,7 +240,7 @@ check_dependencies() {
         "fzf:Fuzzy finder"
         "starship:Cross-shell prompt"
     )
-    
+
     for tool_desc in "${modern_tools[@]}"; do
         IFS=':' read -r tool desc <<< "$tool_desc"
         if command -v "$tool" &> /dev/null; then
@@ -254,11 +254,11 @@ check_dependencies() {
 # Check OS-specific configurations
 check_os_support() {
     log_check "Checking OS-specific configurations..."
-    
+
     local current_os
     case "$(uname -s)" in
         Darwin) current_os="macos" ;;
-        Linux) 
+        Linux)
             if [[ -f /etc/arch-release ]]; then
                 current_os="arch"
             elif [[ -f /etc/debian_version ]]; then
@@ -271,7 +271,7 @@ check_os_support() {
             ;;
         *) current_os="unknown" ;;
     esac
-    
+
     local setup_script="$DOTFILES_DIR/scripts/setup/setup-$current_os.sh"
     if [[ -f "$setup_script" ]]; then
         log_success "OS-specific setup script exists for $current_os"
@@ -279,7 +279,7 @@ check_os_support() {
     else
         log_warning "No OS-specific setup script for $current_os"
     fi
-    
+
     # Check distro-specific zsh configs
     local distro_config="$DOTFILES_DIR/config/zsh/distro/$current_os.zsh"
     if [[ -f "$distro_config" ]]; then
@@ -292,7 +292,7 @@ check_os_support() {
 # Check file permissions
 check_permissions() {
     log_check "Checking file permissions..."
-    
+
     # Scripts should be executable
     while IFS= read -r -d '' script; do
         if [[ ! -x "$script" ]]; then
@@ -301,7 +301,7 @@ check_permissions() {
             log_success "Script executable: $(basename "$script")"
         fi
     done < <(find "$DOTFILES_DIR/scripts" -name "*.sh" -type f -print0 2>/dev/null || true)
-    
+
     # Git hooks should be executable
     while IFS= read -r -d '' hook; do
         if [[ ! -x "$hook" ]]; then
@@ -310,7 +310,7 @@ check_permissions() {
             log_success "Git hook executable: $(basename "$hook")"
         fi
     done < <(find "$DOTFILES_DIR/config/git/hooks" -type f -print0 2>/dev/null || true)
-    
+
     # Tmux scripts should be executable
     local tmux_scripts="$DOTFILES_DIR/config/tmux/scripts"
     if [[ -d "$tmux_scripts" ]]; then
@@ -327,7 +327,7 @@ check_permissions() {
 # Check configuration consistency
 check_config_consistency() {
     log_check "Checking configuration consistency..."
-    
+
     # Check if referenced files exist
     local zshrc="$DOTFILES_DIR/config/zsh/.zshrc"
     if [[ -f "$zshrc" ]]; then
@@ -338,14 +338,14 @@ check_config_consistency() {
                 # Expand tilde and variables
                 sourced_file="${sourced_file/#\~/$HOME}"
                 sourced_file="${sourced_file/#\$HOME/$HOME}"
-                
+
                 if [[ ! -f "$sourced_file" ]] && [[ ! "$sourced_file" =~ \$ZSH ]]; then
                     log_warning "Referenced file may not exist: $sourced_file"
                 fi
             fi
         done < "$zshrc"
     fi
-    
+
     # Check vim plugin file references
     local vimrc="$DOTFILES_DIR/config/vim/.vimrc"
     if [[ -f "$vimrc" ]]; then
@@ -362,12 +362,12 @@ check_config_consistency() {
 # Check gitignore effectiveness
 check_gitignore() {
     log_check "Checking .gitignore configuration..."
-    
+
     local gitignore="$DOTFILES_DIR/.gitignore"
     if [[ -f "$gitignore" ]]; then
         # Check for common patterns
         local patterns=("*.log" "*.tmp" ".DS_Store" "local/" "backups/")
-        
+
         for pattern in "${patterns[@]}"; do
             if grep -q "$pattern" "$gitignore"; then
                 log_success "Gitignore includes: $pattern"
@@ -375,7 +375,7 @@ check_gitignore() {
                 log_warning "Gitignore missing: $pattern"
             fi
         done
-        
+
         # Check for merge conflict markers in gitignore
         if grep -q ">>>>>>>" "$gitignore"; then
             log_error "Merge conflict markers found in .gitignore"
@@ -388,21 +388,21 @@ check_gitignore() {
 # Check documentation
 check_documentation() {
     log_check "Checking documentation..."
-    
+
     local docs=(
         "README.md:Main documentation"
         "INSTALL.md:Installation guide"
         "docs/CUSTOMIZATION.md:Customization guide"
         "docs/TROUBLESHOOTING.md:Troubleshooting guide"
     )
-    
+
     for doc_desc in "${docs[@]}"; do
         IFS=':' read -r doc desc <<< "$doc_desc"
         local doc_path="$DOTFILES_DIR/$doc"
-        
+
         if [[ -f "$doc_path" ]]; then
             log_success "$desc exists"
-            
+
             # Check if file has content
             if [[ $(wc -l < "$doc_path") -lt 5 ]]; then
                 log_warning "$desc seems too short"
@@ -416,13 +416,13 @@ check_documentation() {
 # Check template files
 check_templates() {
     log_check "Checking template files..."
-    
+
     local templates_dir="$DOTFILES_DIR/templates"
     if [[ -d "$templates_dir" ]]; then
         while IFS= read -r -d '' template; do
             local name="$(basename "$template")"
             log_success "Template found: $name"
-            
+
             # Check if template has placeholder content
             if grep -q "PLACEHOLDER\|TODO\|CHANGEME\|your-" "$template" 2>/dev/null; then
                 log_success "Template has placeholders: $name"
@@ -436,7 +436,7 @@ check_templates() {
 # Main check functions
 check_core_structure() {
     log_check "Checking core directory structure..."
-    
+
     local core_dirs=(
         "config:Configuration files"
         "scripts:Installation and utility scripts"
@@ -446,7 +446,7 @@ check_core_structure() {
         "tests:Test scripts"
         "tools:Additional tools"
     )
-    
+
     for dir_desc in "${core_dirs[@]}"; do
         IFS=':' read -r dir desc <<< "$dir_desc"
         check_dir_exists "$DOTFILES_DIR/$dir" "$desc"
@@ -455,7 +455,7 @@ check_core_structure() {
 
 check_config_files() {
     log_check "Checking configuration files..."
-    
+
     local configs=(
         "config/zsh/.zshrc:Zsh configuration"
         "config/vim/.vimrc:Vim configuration"
@@ -463,11 +463,11 @@ check_config_files() {
         "config/git/.gitconfig:Git configuration"
         "config/starship/starship.toml:Starship configuration"
     )
-    
+
     for config_desc in "${configs[@]}"; do
         IFS=':' read -r config desc <<< "$config_desc"
         check_file_exists "$DOTFILES_DIR/$config" "$desc"
-        
+
         # Check syntax based on file extension
         case "$config" in
             *.toml) check_config_syntax "$DOTFILES_DIR/$config" "toml" ;;
@@ -479,14 +479,14 @@ check_config_files() {
 
 check_install_scripts() {
     log_check "Checking installation scripts..."
-    
+
     local scripts=(
         "install.sh:Main installation script"
         "scripts/install/install-fonts.sh:Font installation"
         "scripts/install/install-cli-tools.sh:CLI tools installation"
         "scripts/utils/create-symlinks.sh:Symlink creation"
     )
-    
+
     for script_desc in "${scripts[@]}"; do
         IFS=':' read -r script desc <<< "$script_desc"
         if check_file_exists "$DOTFILES_DIR/$script" "$desc"; then
@@ -502,11 +502,11 @@ print_summary() {
     echo -e "${CYAN}║                    SUMMARY                       ║${NC}"
     echo -e "${CYAN}╚══════════════════════════════════════════════════╝${NC}"
     echo
-    
+
     echo -e "${GREEN}✓ Checks passed: $CHECKS_PASSED${NC}"
     echo -e "${YELLOW}⚠ Warnings: $WARNINGS_FOUND${NC}"
     echo -e "${RED}✗ Issues found: $ISSUES_FOUND${NC}"
-    
+
     echo
     if [[ $ISSUES_FOUND -eq 0 ]]; then
         if [[ $WARNINGS_FOUND -eq 0 ]]; then
@@ -517,29 +517,29 @@ print_summary() {
     else
         echo -e "${RED}⚠️  Issues found that should be addressed.${NC}"
     fi
-    
+
     if [[ $WARNINGS_FOUND -gt 0 ]] || [[ $ISSUES_FOUND -gt 0 ]]; then
         echo
         echo -e "${BLUE}💡 Recommendations:${NC}"
-        
+
         if [[ -f "$DOTFILES_DIR/README copy.md" ]]; then
             echo "  • Remove or rename 'README copy.md'"
         fi
-        
+
         if [[ $WARNINGS_FOUND -gt 0 ]]; then
             echo "  • Review warnings and consider fixing them"
             echo "  • Make scripts executable: chmod +x scripts/**/*.sh"
         fi
-        
+
         if [[ $ISSUES_FOUND -gt 0 ]]; then
             echo "  • Fix syntax errors in configuration files"
             echo "  • Ensure all referenced files exist"
         fi
-        
+
         echo "  • Run 'make test' to validate installation"
         echo "  • Test installation in a clean environment"
     fi
-    
+
     echo
     echo -e "${BLUE}Next steps:${NC}"
     echo "  • Run: make install (to test installation)"
@@ -550,10 +550,10 @@ print_summary() {
 # Main execution
 main() {
     print_header
-    
+
     # Change to dotfiles directory
     cd "$DOTFILES_DIR"
-    
+
     # Run all checks
     check_core_structure
     check_config_files
@@ -567,9 +567,9 @@ main() {
     check_gitignore
     check_documentation
     check_templates
-    
+
     print_summary
-    
+
     # Exit with appropriate code
     if [[ $ISSUES_FOUND -gt 0 ]]; then
         exit 1

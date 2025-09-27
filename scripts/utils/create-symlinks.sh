@@ -35,7 +35,7 @@ create_symlink "$DOTFILES_DIR/config/zsh/.zprofile" "$HOME/.zprofile"
 
 # Zsh modular configuration files
 create_symlink "$DOTFILES_DIR/config/zsh/aliases.zsh" "$HOME/.config/zsh/aliases.zsh"
-create_symlink "$DOTFILES_DIR/config/zsh/functions.zsh" "$HOME/.config/zsh/functions.zsh" 
+create_symlink "$DOTFILES_DIR/config/zsh/functions.zsh" "$HOME/.config/zsh/functions.zsh"
 create_symlink "$DOTFILES_DIR/config/zsh/exports.zsh" "$HOME/.config/zsh/exports.zsh"
 create_symlink "$DOTFILES_DIR/config/zsh/distro.zsh" "$HOME/.config/zsh/distro.zsh"
 

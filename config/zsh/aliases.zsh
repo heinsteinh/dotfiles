@@ -123,20 +123,20 @@ if command -v pacman &> /dev/null; then
     alias pacqs='pacman -Qs'                  # Query installed search
     alias pacql='pacman -Ql'                  # List files
     alias pacqo='pacman -Qo'                  # Which package owns file
-    
+
     # Advanced operations
     alias pacorphans='sudo pacman -Rs $(pacman -Qtdq)'
     alias pacclean='sudo pacman -Sc'
     alias paclog='tail -f /var/log/pacman.log'
     alias pacmirror='sudo reflector --verbose --latest 5 --country US --age 6 --sort rate --save /etc/pacman.d/mirrorlist'
-    
+
     # AUR helpers
     if command -v yay &> /dev/null; then
         alias yay-update='yay -Syu'
         alias yay-clean='yay -Sc'
         alias yay-orphans='yay -Rs $(yay -Qtdq)'
     fi
-    
+
     if command -v paru &> /dev/null; then
         alias paru-update='paru -Syu'
         alias paru-clean='paru -Sc'

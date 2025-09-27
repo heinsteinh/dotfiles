@@ -13,7 +13,7 @@ declare -A DEV_TOOLS=(
     ["git"]="Version control system"
     ["vim"]="Text editor"
     ["neovim"]="Modern vim"
-    ["tmux"]="Terminal multiplexer" 
+    ["tmux"]="Terminal multiplexer"
     ["docker"]="Container platform"
     ["docker-compose"]="Container orchestration"
     ["nodejs"]="JavaScript runtime"
@@ -32,9 +32,9 @@ declare -A DEV_TOOLS=(
 install_development_tools() {
     local os
     os=$(detect_os)
-    
+
     log_info "Installing development tools for $os..."
-    
+
     case "$os" in
         macos)
             install_macos_dev_tools
@@ -61,30 +61,30 @@ install_macos_dev_tools() {
         log_info "Installing Xcode command line tools..."
         xcode-select --install
     fi
-    
+
     # Install Homebrew if not present
     if ! command_exists brew; then
         log_info "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
-    
+
     # Install development tools via Homebrew
     local tools=(
         git vim neovim tmux
         node npm yarn
-        python3 
+        python3
         go rust
         openjdk maven gradle
         docker docker-compose
     )
-    
+
     for tool in "${tools[@]}"; do
         if ! command_exists "$tool" && ! brew list "$tool" &>/dev/null; then
             log_info "Installing $tool..."
             brew install "$tool"
         fi
     done
-    
+
     # Install Docker Desktop
     if ! command_exists docker; then
         log_info "Installing Docker Desktop..."
@@ -95,42 +95,42 @@ install_macos_dev_tools() {
 install_debian_dev_tools() {
     # Update package lists
     sudo apt update
-    
+
     # Install build essentials
     sudo apt install -y build-essential
-    
+
     # Install basic development tools
     sudo apt install -y \
         git vim neovim tmux \
         curl wget \
         python3 python3-pip python3-venv \
         default-jdk maven gradle
-    
+
     # Install Node.js via NodeSource
     if ! command_exists node; then
         curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
         sudo apt install -y nodejs
     fi
-    
+
     # Install Yarn
     if ! command_exists yarn; then
         curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
         echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
         sudo apt update && sudo apt install -y yarn
     fi
-    
+
     # Install Go
     if ! command_exists go; then
         sudo apt install -y golang-go
     fi
-    
+
     # Install Rust
     if ! command_exists cargo; then
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         # shellcheck source=/dev/null
         source "$HOME/.cargo/env"
     fi
-    
+
     # Install Docker
     install_docker_debian
 }
@@ -138,7 +138,7 @@ install_debian_dev_tools() {
 install_fedora_dev_tools() {
     # Install development group
     sudo dnf groupinstall -y "Development Tools"
-    
+
     # Install individual tools
     sudo dnf install -y \
         git vim neovim tmux \
@@ -146,7 +146,7 @@ install_fedora_dev_tools() {
         java-latest-openjdk-devel maven gradle \
         nodejs npm yarn \
         golang rust cargo
-    
+
     # Install Docker
     sudo dnf install -y docker docker-compose
     sudo systemctl enable --now docker
@@ -156,7 +156,7 @@ install_fedora_dev_tools() {
 install_arch_dev_tools() {
     # Update package database
     sudo pacman -Syu --noconfirm
-    
+
     # Install base development tools
     sudo pacman -S --noconfirm \
         base-devel git vim neovim tmux \
@@ -164,7 +164,7 @@ install_arch_dev_tools() {
         jdk-openjdk maven gradle \
         nodejs npm yarn \
         go rust
-    
+
     # Install Docker
     sudo pacman -S --noconfirm docker docker-compose
     sudo systemctl enable --now docker
@@ -174,23 +174,23 @@ install_arch_dev_tools() {
 install_docker_debian() {
     if ! command_exists docker; then
         log_info "Installing Docker..."
-        
+
         # Add Docker's official GPG key
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-        
+
         # Set up the stable repository
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-        
+
         # Install Docker Engine
         sudo apt update
         sudo apt install -y docker-ce docker-ce-cli containerd.io
-        
+
         # Add user to docker group
         sudo usermod -aG docker "$USER"
-        
+
         log_info "Installing Docker Compose..."
         sudo apt install -y docker-compose-plugin
-        
+
         log_warning "Please log out and back in for Docker group changes to take effect"
     fi
 }
@@ -198,7 +198,7 @@ install_docker_debian() {
 install_vscode() {
     local os
     os=$(detect_os)
-    
+
     case "$os" in
         macos)
             if ! command_exists code; then
@@ -224,7 +224,7 @@ install_vscode() {
             ;;
         arch)
             if ! command_exists code; then
-                yay -S --noconfirm visual-studio-code-bin || 
+                yay -S --noconfirm visual-studio-code-bin ||
                 sudo pacman -S --noconfirm code
             fi
             ;;
@@ -233,16 +233,16 @@ install_vscode() {
 
 main() {
     log_info "Starting development tools installation..."
-    
+
     install_development_tools
-    
+
     if confirm "Do you want to install Visual Studio Code?"; then
         install_vscode
     fi
-    
+
     log_success "Development tools installation completed!"
     log_info "Please restart your terminal or run 'source ~/.zshrc' to update your environment"
-    
+
     # Show installed versions
     log_info "Installed tool versions:"
     for tool in git node python3 go rustc java; do

@@ -77,7 +77,7 @@ setopt HIST_REDUCE_BLANKS
 # FZF configuration
 if command -v fzf &> /dev/null; then
     export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-    
+
     if command -v fd &> /dev/null; then
         export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -86,7 +86,7 @@ if command -v fzf &> /dev/null; then
         export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     fi
-    
+
     # Key bindings and completion
     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
     [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
@@ -158,14 +158,14 @@ case "$(uname -s)" in
         # macOS specific
         export HOMEBREW_NO_ANALYTICS=1
         export HOMEBREW_NO_AUTO_UPDATE=1
-        
+
         # Add Homebrew to PATH
         if [[ -f "/opt/homebrew/bin/brew" ]]; then
             eval "$(/opt/homebrew/bin/brew shellenv)"
         elif [[ -f "/usr/local/bin/brew" ]]; then
             eval "$(/usr/local/bin/brew shellenv)"
         fi
-        
+
         # macOS aliases
         alias showfiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
         alias hidefiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
@@ -180,7 +180,7 @@ case "$(uname -s)" in
             alias pbcopy='xsel --clipboard --input'
             alias pbpaste='xsel --clipboard --output'
         fi
-        
+
         # Linux aliases
         alias open='xdg-open'
         alias pbcopy='xclip -selection clipboard'

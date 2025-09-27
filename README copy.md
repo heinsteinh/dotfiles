@@ -38,7 +38,7 @@ chmod +x install.sh
 - **SSH** configuration templates
 - **Modern CLI replacements**:
   - `bat` (better cat)
-  - `fzf` (fuzzy finder)  
+  - `fzf` (fuzzy finder)
   - `ripgrep` (better grep)
 
 ### System Integration

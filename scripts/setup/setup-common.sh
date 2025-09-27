@@ -85,7 +85,7 @@ ensure_dir() {
 download_file() {
     local url="$1"
     local output="$2"
-    
+
     if command_exists curl; then
         curl -fsSL -o "$output" "$url"
     elif command_exists wget; then
@@ -101,7 +101,7 @@ install_package() {
     local package="$1"
     local os
     os=$(detect_os)
-    
+
     case "$os" in
         macos)
             if command_exists brew; then
@@ -137,7 +137,7 @@ is_writable() {
 confirm() {
     local message="$1"
     local response
-    
+
     while true; do
         read -p "$message (y/n): " response
         case "$response" in
@@ -168,19 +168,19 @@ install_oh_my_zsh() {
 # Install Zsh plugins
 install_zsh_plugins() {
     local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-    
+
     # zsh-autosuggestions
     if [[ ! -d "$zsh_custom/plugins/zsh-autosuggestions" ]]; then
         log_info "Installing zsh-autosuggestions..."
         git clone https://github.com/zsh-users/zsh-autosuggestions "$zsh_custom/plugins/zsh-autosuggestions"
     fi
-    
+
     # zsh-syntax-highlighting
     if [[ ! -d "$zsh_custom/plugins/zsh-syntax-highlighting" ]]; then
         log_info "Installing zsh-syntax-highlighting..."
         git clone https://github.com/zsh-users/zsh-syntax-highlighting "$zsh_custom/plugins/zsh-syntax-highlighting"
     fi
-    
+
     # powerlevel10k theme
     if [[ ! -d "$zsh_custom/themes/powerlevel10k" ]]; then
         log_info "Installing powerlevel10k theme..."
@@ -225,12 +225,12 @@ cleanup_temp_files() {
 # Main common setup function
 common_setup() {
     log_info "Running common setup tasks..."
-    
+
     check_root
     install_oh_my_zsh
     install_zsh_plugins
     install_starship
     set_zsh_default
-    
+
     log_success "Common setup completed"
 }

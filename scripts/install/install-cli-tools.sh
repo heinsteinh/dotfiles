@@ -13,11 +13,11 @@ if command -v pacman &> /dev/null; then
         jq \
         nmap \
         tldr
-    
+
     yay -S --noconfirm \
         thefuck \
         neofetch
-        
+
 elif command -v brew &> /dev/null; then
     # macOS
     brew install \
@@ -29,7 +29,7 @@ elif command -v brew &> /dev/null; then
         tldr \
         thefuck \
         neofetch
-        
+
 elif command -v apt &> /dev/null; then
     # Debian/Ubuntu
     sudo apt update

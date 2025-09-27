@@ -4,7 +4,7 @@
 # Personal laptop key
 # ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExampleKey1234567890 user@laptop
 
-# Work laptop key  
+# Work laptop key
 # ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExampleKey0987654321 user@work-laptop
 
 # Desktop key

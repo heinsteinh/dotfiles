@@ -15,9 +15,9 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # FZF options for better UI
 export FZF_DEFAULT_OPTS="
---height 40% 
---layout reverse 
---border 
+--height 40%
+--layout reverse
+--border
 --inline-info
 --preview 'bat --style=numbers --color=always --line-range :500 {}'
 --preview-window right:50%:wrap

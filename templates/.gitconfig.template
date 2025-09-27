@@ -11,7 +11,7 @@
     autocrlf = input
     excludesfile = ~/.gitignore_global
     pager = delta
-    
+
 [init]
     defaultBranch = main
 
@@ -48,34 +48,34 @@
     br = branch
     co = checkout
     ci = commit
-    
+
     # Logging
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     ll = log --oneline --graph --decorate --all
-    
+
     # Operations
     unstage = reset HEAD --
     uncommit = reset --soft HEAD^
     amend = commit --amend
     please = push --force-with-lease
-    
+
     # Shortcuts
     cm = commit -m
     ca = commit -a
     cam = commit -am
-    
+
     # Branch operations
     bd = branch -d
     bD = branch -D
-    
+
     # Remote operations
     po = push origin
     pu = push upstream
-    
+
     # Diff shortcuts
     dc = diff --cached
     ds = diff --staged
-    
+
     # Stash operations
     sl = stash list
     sa = stash apply
