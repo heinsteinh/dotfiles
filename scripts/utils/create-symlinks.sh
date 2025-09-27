@@ -79,4 +79,16 @@ if [[ -f "$DOTFILES_DIR/config/bat/config" ]]; then
     create_symlink "$DOTFILES_DIR/config/bat/config" "$HOME/.config/bat/config"
 fi
 
+# Ranger configuration
+if [[ -d "$DOTFILES_DIR/config/ranger" ]]; then
+    create_symlink "$DOTFILES_DIR/config/ranger/rc.conf" "$HOME/.config/ranger/rc.conf"
+    create_symlink "$DOTFILES_DIR/config/ranger/rifle.conf" "$HOME/.config/ranger/rifle.conf"
+    create_symlink "$DOTFILES_DIR/config/ranger/scope.sh" "$HOME/.config/ranger/scope.sh"
+    
+    # Ranger colorschemes
+    if [[ -d "$DOTFILES_DIR/config/ranger/colorschemes" ]]; then
+        create_symlink "$DOTFILES_DIR/config/ranger/colorschemes" "$HOME/.config/ranger/colorschemes"
+    fi
+fi
+
 echo "Symlinks created successfully!"

@@ -1,17 +1,19 @@
 # Gruvbox colorscheme for ranger
-# Based on the gruvbox theme for vim
+# Based on the original Gruvbox theme by morhetz
+# https://github.com/morhetz/gruvbox
 
 from __future__ import (absolute_import, division, print_function)
 
 from ranger.gui.colorscheme import ColorScheme
 from ranger.gui.color import (
     black, blue, cyan, green, magenta, red, white, yellow, default,
-    normal, bold, reverse, underline, BRIGHT,
+    normal, bold, reverse, dim, BRIGHT,
     default_colors,
 )
 
+
 class Gruvbox(ColorScheme):
-    progress_bar_color = 214  # Orange
+    progress_bar_color = 11
 
     def use(self, context):
         fg, bg, attr = default_colors
@@ -25,87 +27,93 @@ class Gruvbox(ColorScheme):
             else:
                 attr = normal
             if context.empty or context.error:
-                fg = 167  # Light red
-                bg = 235  # Dark gray
+                bg = 1
+                fg = 15
             if context.border:
-                fg = 239  # Medium gray
+                fg = default
             if context.media:
                 if context.image:
-                    fg = 142  # Green
+                    fg = 11  # yellow
                 else:
-                    fg = 214  # Orange
+                    fg = 13  # magenta
             if context.container:
-                fg = 109  # Blue-gray
+                fg = 1  # red
             if context.directory:
                 attr |= bold
-                fg = 109  # Blue-gray
+                fg = 12  # blue
             elif context.executable and not \
                     any((context.media, context.container,
-                        context.fifo, context.socket)):
+                         context.fifo, context.socket)):
                 attr |= bold
-                fg = 142  # Green
+                fg = 10  # green
             if context.socket:
-                fg = 175  # Pink
                 attr |= bold
+                fg = 13  # magenta
             if context.fifo or context.device:
-                fg = 214  # Orange
+                fg = 11  # yellow
                 if context.device:
                     attr |= bold
             if context.link:
-                fg = 132 if context.good else 167  # Cyan or light red
-            if context.bad:
-                fg = 167  # Light red
-                bg = 235  # Dark gray
+                fg = 14  # cyan
+                if context.bad:
+                    bg = 1  # red
             if context.tag_marker and not context.selected:
                 attr |= bold
-                if fg in (red, magenta):
+                if fg in (1, 9):  # red
                     fg = white
                 else:
-                    fg = 167  # Light red
-            if not context.selected and (context.cut or context.copied):
-                fg = 223  # Light gray
-                bg = 237  # Dark gray
+                    fg = 1  # red
+            if not context.selected and context.cut:
+                fg = 8  # bright black
+                bg = default
             if context.main_column:
                 if context.selected:
                     attr |= bold
                 if context.marked:
                     attr |= bold
-                    fg = 214  # Orange
+                    bg = 11  # yellow
+                    fg = 0   # black
             if context.badinfo:
                 if attr & reverse:
-                    bg = 167  # Light red
+                    bg = 1  # red
                 else:
-                    fg = 167  # Light red
+                    fg = 1  # red
 
         elif context.in_titlebar:
             attr |= bold
             if context.hostname:
-                fg = 167 if context.bad else 142  # Light red or green
+                fg = 1  # red
             elif context.directory:
-                fg = 109  # Blue-gray
+                fg = 12  # blue
             elif context.tab:
                 if context.good:
-                    bg = 142  # Green
-                    fg = 235  # Dark gray
+                    bg = 10  # green
             elif context.link:
-                fg = 132  # Cyan
+                fg = 14  # cyan
 
         elif context.in_statusbar:
             if context.permissions:
                 if context.good:
-                    fg = 142  # Green
+                    fg = 14  # cyan
                 elif context.bad:
-                    fg = 167  # Light red
+                    fg = 1  # red
             if context.marked:
                 attr |= bold | reverse
-                fg = 214  # Orange
+                fg = 11  # yellow
             if context.message:
                 if context.bad:
                     attr |= bold
-                    fg = 167  # Light red
+                    fg = 1  # red
+                else:
+                    fg = default
             if context.loaded:
                 bg = self.progress_bar_color
-                fg = 235  # Dark gray
+            if context.vcsinfo:
+                fg = 12  # blue
+                attr &= ~bold
+            if context.vcscommit:
+                fg = 11  # yellow
+                attr &= ~bold
 
         if context.text:
             if context.highlight:
@@ -113,7 +121,7 @@ class Gruvbox(ColorScheme):
 
         if context.in_taskview:
             if context.title:
-                fg = 109  # Blue-gray
+                fg = 12  # blue
 
             if context.selected:
                 attr |= reverse
@@ -121,9 +129,35 @@ class Gruvbox(ColorScheme):
             if context.loaded:
                 if context.selected:
                     fg = self.progress_bar_color
-                    bg = 235  # Dark gray
                 else:
                     bg = self.progress_bar_color
-                    fg = 235  # Dark gray
+
+        if context.vcsfile and not context.selected:
+            attr &= ~bold
+            if context.vcsconflicts:
+                fg = 1  # red
+            elif context.vcschanged:
+                fg = 11  # yellow
+            elif context.vcsunknown:
+                fg = 1  # red
+            elif context.vcsstaged:
+                fg = 10  # green
+            elif context.vcssync:
+                fg = 10  # green
+            elif context.vcsignored:
+                fg = default
+
+        elif context.vcsremote and not context.selected:
+            attr &= ~bold
+            if context.vcssync:
+                fg = 10  # green
+            elif context.vcsbehind:
+                fg = 1  # red
+            elif context.vcsahead:
+                fg = 12  # blue
+            elif context.vcsdiverged:
+                fg = 13  # magenta
+            elif context.vcsunknown:
+                fg = 1  # red
 
         return fg, bg, attr
