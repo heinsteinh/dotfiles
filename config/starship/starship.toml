@@ -1,0 +1,160 @@
+# Starship Prompt Configuration
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+# Wait 10 milliseconds for starship to check files under the current directory
+scan_timeout = 10
+
+# Timeout for commands executed by starship (in milliseconds)
+command_timeout = 1000
+
+# Configure the format of the prompt
+format = """
+[╭─ ](bold green)$username$hostname$directory$git_branch$git_status$git_metrics$python$nodejs$rust$golang$docker_context$kubernetes$aws$gcloud$azure
+[╰─](bold green)$character"""
+
+# Configure the right-hand side of the prompt
+right_format = """$cmd_duration$time"""
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"
+vicmd_symbol = "[❮](bold yellow)"
+
+[username]
+style_user = "bold yellow"
+style_root = "bold red"
+format = "[$user]($style) "
+disabled = false
+show_always = true
+
+[hostname]
+ssh_only = true
+format = "on [$hostname](bold cyan) "
+disabled = false
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+home_symbol = "~"
+read_only_style = "197"
+read_only = "🔒"
+format = "in [$path]($style)[$read_only]($read_only_style) "
+style = "bold cyan"
+
+[git_branch]
+format = "on [$symbol$branch]($style) "
+symbol = " "
+style = "bold purple"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "bold red"
+conflicted = "🏳"
+up_to_date = "✓"
+untracked = "🤷"
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
+stashed = "📦"
+modified = "📝"
+staged = '[++\($count\)](green)'
+renamed = "👅"
+deleted = "🗑"
+
+[git_metrics]
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+disabled = false
+
+[cmd_duration]
+min_time = 2_000
+format = "took [$duration](bold yellow) "
+
+[time]
+disabled = false
+format = '🕙[\[ $time \]]($style) '
+time_format = "%T"
+utc_time_offset = "local"
+
+[python]
+format = 'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+symbol = "🐍 "
+style = "yellow bold"
+pyenv_version_name = true
+
+[nodejs]
+format = "via [${symbol}(${version} )]($style)"
+symbol = " "
+style = "bold green"
+
+[rust]
+format = "via [${symbol}(${version} )]($style)"
+symbol = "🦀 "
+style = "bold red"
+
+[golang]
+format = "via [${symbol}(${version} )]($style)"
+symbol = "🐹 "
+style = "bold cyan"
+
+[docker_context]
+format = "via [${symbol}${context}]($style) "
+symbol = "🐳 "
+style = "blue bold"
+
+[kubernetes]
+format = 'on [${symbol}${context}( \(${namespace}\))]($style) '
+symbol = "☸ "
+style = "cyan bold"
+disabled = false
+
+[aws]
+format = 'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'
+symbol = "☁️ "
+style = "bold blue"
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($region\))]($style) '
+symbol = "☁️ "
+style = "bold blue"
+
+[azure]
+format = "on [$symbol($subscription)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
+
+[package]
+format = "is [$symbol$version]($style) "
+symbol = "📦 "
+style = "208 bold"
+
+[memory_usage]
+disabled = false
+threshold = 70
+format = "via $symbol [${ram}( | ${swap})]($style) "
+style = "white bold dimmed"
+symbol = "🐏"
+
+[battery]
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
+
+[[battery.display]]
+threshold = 10
+style = "bold red"
+
+[[battery.display]]
+threshold = 30
+style = "bold yellow"
+
+[status]
+style = "bg:blue"
+symbol = "🔴"
+format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
+map_symbol = true
+disabled = false

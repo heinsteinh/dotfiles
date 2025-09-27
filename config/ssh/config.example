@@ -1,0 +1,66 @@
+# SSH Configuration Template
+# Copy this file to ~/.ssh/config and customize as needed
+
+# Global settings
+Host *
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_ed25519
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    Compression yes
+    ControlMaster auto
+    ControlPath ~/.ssh/control-%r@%h:%p
+    ControlPersist 10m
+
+# GitHub
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_github
+    PreferredAuthentications publickey
+
+# GitLab
+Host gitlab.com
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_gitlab
+    PreferredAuthentications publickey
+
+# Personal server example
+Host myserver
+    HostName server.example.com
+    User myuser
+    Port 22
+    IdentityFile ~/.ssh/id_ed25519_server
+    ForwardAgent yes
+    
+# Development server example
+Host devserver
+    HostName dev.company.com
+    User developer
+    Port 2222
+    IdentityFile ~/.ssh/id_ed25519_work
+    ProxyJump bastion.company.com
+
+# Local development VM
+Host localvm
+    HostName 192.168.1.100
+    User vagrant
+    IdentityFile ~/.ssh/id_rsa_vagrant
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+
+# Bastion host example
+Host bastion
+    HostName bastion.company.com
+    User myuser
+    IdentityFile ~/.ssh/id_ed25519_bastion
+    ForwardAgent yes
+    
+# Production server via bastion
+Host production
+    HostName prod.internal.company.com
+    User produser
+    ProxyJump bastion
+    IdentityFile ~/.ssh/id_ed25519_prod

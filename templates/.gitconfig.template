@@ -1,0 +1,126 @@
+# Git Configuration Template
+# Copy this file to local/config/.gitconfig and customize
+
+[user]
+    name = Your Name
+    email = your.email@example.com
+    signingkey = YOUR_GPG_KEY_ID
+
+[core]
+    editor = vim
+    autocrlf = input
+    excludesfile = ~/.gitignore_global
+    pager = delta
+    
+[init]
+    defaultBranch = main
+
+[push]
+    default = simple
+    autoSetupRemote = true
+
+[pull]
+    rebase = false
+
+[fetch]
+    prune = true
+
+[merge]
+    tool = vimdiff
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+    tool = vimdiff
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    light = false
+    side-by-side = true
+    line-numbers = true
+
+[alias]
+    # Status and info
+    st = status
+    br = branch
+    co = checkout
+    ci = commit
+    
+    # Logging
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    ll = log --oneline --graph --decorate --all
+    
+    # Operations
+    unstage = reset HEAD --
+    uncommit = reset --soft HEAD^
+    amend = commit --amend
+    please = push --force-with-lease
+    
+    # Shortcuts
+    cm = commit -m
+    ca = commit -a
+    cam = commit -am
+    
+    # Branch operations
+    bd = branch -d
+    bD = branch -D
+    
+    # Remote operations
+    po = push origin
+    pu = push upstream
+    
+    # Diff shortcuts
+    dc = diff --cached
+    ds = diff --staged
+    
+    # Stash operations
+    sl = stash list
+    sa = stash apply
+    ss = stash save
+
+[color]
+    ui = auto
+    branch = auto
+    diff = auto
+    status = auto
+
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red
+    new = green
+
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+
+[credential]
+    helper = cache --timeout=3600
+
+[commit]
+    template = ~/.gitmessage.txt
+    gpgsign = false
+
+[tag]
+    sort = version:refname
+
+[branch]
+    sort = -committerdate
+
+[rerere]
+    enabled = true
+
+[help]
+    autocorrect = 1

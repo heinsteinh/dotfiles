@@ -1,0 +1,106 @@
+# SSH Configuration Template
+# Copy this file to ~/.ssh/config and customize
+
+# Global settings for all hosts
+Host *
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_ed25519
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    Compression yes
+    ControlMaster auto
+    ControlPath ~/.ssh/control-%r@%h:%p
+    ControlPersist 10m
+    HashKnownHosts yes
+    VisualHostKey yes
+
+# GitHub configuration
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_github
+    PreferredAuthentications publickey
+    AddKeysToAgent yes
+
+# GitLab configuration
+Host gitlab.com
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_gitlab
+    PreferredAuthentications publickey
+    AddKeysToAgent yes
+
+# Bitbucket configuration
+Host bitbucket.org
+    HostName bitbucket.org
+    User git
+    IdentityFile ~/.ssh/id_ed25519_bitbucket
+    PreferredAuthentications publickey
+
+# Personal server example
+Host personal-server
+    HostName your-server.example.com
+    User your-username
+    Port 22
+    IdentityFile ~/.ssh/id_ed25519_personal
+    ForwardAgent yes
+    
+# Work server example
+Host work-server
+    HostName work.company.com
+    User work-username
+    Port 2222
+    IdentityFile ~/.ssh/id_ed25519_work
+    ProxyJump bastion.company.com
+    
+# Bastion host example
+Host bastion
+    HostName bastion.company.com
+    User bastion-user
+    IdentityFile ~/.ssh/id_ed25519_bastion
+    ForwardAgent yes
+    
+# Production server via bastion
+Host prod-server
+    HostName prod.internal.company.com
+    User prod-user
+    ProxyJump bastion
+    IdentityFile ~/.ssh/id_ed25519_prod
+    ForwardAgent no
+
+# Development VM
+Host dev-vm
+    HostName 192.168.1.100
+    User developer
+    IdentityFile ~/.ssh/id_rsa_dev
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    LogLevel QUIET
+
+# Local development containers
+Host localhost
+    HostName localhost
+    User root
+    Port 2222
+    IdentityFile ~/.ssh/id_rsa_local
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+
+# AWS EC2 instances
+Host aws-*
+    User ec2-user
+    IdentityFile ~/.ssh/aws-key.pem
+    StrictHostKeyChecking no
+
+# Google Cloud instances  
+Host gcp-*
+    User your-gcp-user
+    IdentityFile ~/.ssh/gcp-key
+    StrictHostKeyChecking no
+
+# Digital Ocean droplets
+Host do-*
+    User root
+    IdentityFile ~/.ssh/digitalocean-key
+    StrictHostKeyChecking no
