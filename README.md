@@ -6,14 +6,17 @@ A comprehensive dotfiles configuration that works seamlessly across Linux (Arch,
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dotfiles.git ~/.dotfiles
+git clone https://github.com/heinsteinh/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 
-# Run installation
+# Run installation (recommended)
 make install
 
 # Or manual installation
 ./install.sh
+
+# Restart terminal or reload config
+source ~/.zshrc
 ```
 
 ## Features
@@ -25,14 +28,22 @@ make install
 - **Kitty** terminal with optimized configuration
 - **Git** with sensible defaults and aliases
 
-### Enhanced Tools
+### Enhanced CLI Tools
 - **FZF** - Fuzzy finding for files, history, and commands
 - **Eza** - Modern ls replacement with git integration (successor to exa)
-- **Bat** - Cat with syntax highlighting
-- **Ripgrep** - Fast text search
-- **Lazygit** - Terminal UI for git
-- **Starship** - Cross-shell prompt
-- **Zoxide** - Smarter cd command
+- **Bat** - Cat with syntax highlighting and git integration
+- **Ripgrep** - Fast text search with smart filtering
+- **Fd** - Fast and user-friendly find alternative
+- **Lazygit** - Terminal UI for git operations
+- **Starship** - Cross-shell prompt with git integration
+- **Zoxide** - Smarter cd command with frecency
+
+### Recent Improvements ✨
+- **Ubuntu 24.04 Support** - Updated exa → eza for compatibility
+- **Conflict Resolution** - Fixed all function/alias conflicts
+- **Modular Configuration** - Organized zsh config into separate files
+- **Enhanced Functions** - 50+ utility functions with fzf integration
+- **Better Error Handling** - Graceful fallbacks and conflict prevention
 
 ## Installation Options
 
@@ -64,18 +75,20 @@ make backup
 
 ## Configuration Files
 
-### Zsh Configuration
-- **Main config**: `config/zsh/.zshrc`
-- **Aliases**: Auto-loaded from main config
-- **Functions**: Useful shell functions
-- **OS detection**: Automatic platform-specific settings
+### Zsh Configuration (Modular Structure)
+- **Main config**: `config/zsh/.zshrc` - Core configuration and plugin setup
+- **Aliases**: `config/zsh/aliases.zsh` - 200+ command aliases and shortcuts
+- **Functions**: `config/zsh/functions.zsh` - 50+ utility functions with fzf integration
+- **Exports**: `config/zsh/exports.zsh` - Environment variables and PATH setup
+- **Distro**: `config/zsh/distro.zsh` - OS-specific configurations and detection
 
 Key features:
-- Enhanced history management
-- Smart completion
-- Git integration
-- Package manager aliases
-- Custom functions (mkcd, extract, fkill)
+- **Smart Loading**: Functions before aliases to prevent conflicts
+- **Enhanced History**: Shared history with deduplication
+- **Fuzzy Integration**: FZF for files, history, processes, git branches
+- **Package Manager Aliases**: Auto-detects pacman, apt, brew, dnf
+- **Modern Tools**: Integrated eza, bat, ripgrep, fd with fallbacks
+- **Git Integration**: Advanced aliases and functions for git workflows
 
 ### Vim Configuration
 - **Enhanced search** with FZF integration

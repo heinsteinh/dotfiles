@@ -1,39 +1,45 @@
-# Comprehensive Dotfiles Documentation
+# Installation Guide
 
-A complete guide to setting up and maintaining a productive development environment across Linux and macOS systems.
+Complete installation instructions for setting up the dotfiles across different platforms.
 
-## Table of Contents
+## Prerequisites
 
-1. [Overview](#overview)
-2. [Quick Start](#quick-start)
-3. [Architecture](#architecture)
-4. [Installation Guide](#installation-guide)
-5. [Configuration Details](#configuration-details)
-6. [Customization](#customization)
-7. [Troubleshooting](#troubleshooting)
-8. [CLI Tools Reference](#cli-tools-reference)
-9. [Keybindings Reference](#keybindings-reference)
-10. [Maintenance](#maintenance)
-11. [Advanced Usage](#advanced-usage)
-12. [Contributing](#contributing)
+Before installing the dotfiles, ensure you have:
 
-## Overview
+- Git (2.0 or later)
+- Curl
+- Administrative privileges (sudo/admin access)
+- Terminal with 256 color support
+- Internet connection for downloading dependencies
 
-This dotfiles repository provides a comprehensive, cross-platform development environment that emphasizes:
+## Supported Platforms
 
-- **Consistency**: Same experience across Linux and macOS
-- **Productivity**: Modern CLI tools and optimized workflows
-- **Maintainability**: Modular structure with automatic backups
-- **Flexibility**: Easy customization without breaking core functionality
+- **Ubuntu 20.04+** (including 24.04 LTS)
+- **Debian 11+**
+- **Arch Linux** (and Arch-based distributions)
+- **macOS 12+** (Monterey or later)
+- **Fedora 35+**
 
-### Core Philosophy
+## Before Installation
 
-The configuration prioritizes:
-- **Vim-like navigation** throughout all tools
-- **Fuzzy finding** capabilities for fast file/command discovery
-- **Git integration** at every level
-- **Visual consistency** with the Gruvbox theme
-- **Performance optimization** for daily development tasks
+### Backup Existing Configurations
+
+The installer will automatically backup your existing dotfiles, but manual backup is recommended:
+
+```bash
+# Backup important configs
+cp ~/.zshrc ~/.zshrc.backup
+cp ~/.vimrc ~/.vimrc.backup
+cp ~/.tmux.conf ~/.tmux.conf.backup
+cp -r ~/.config ~/.config.backup
+```
+
+### Check Current Shell
+
+```bash
+echo $SHELL
+# If not using zsh, the installer will offer to change it
+```
 
 ## Quick Start
 
