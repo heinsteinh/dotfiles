@@ -10,7 +10,7 @@ mkcd() {
         echo "Usage: mkcd <directory>"
         return 1
     fi
-    mkdir -p "$1" && cd "$1"
+    command mkdir -p "$1" && cd "$1"
 }
 
 # Quick backup with timestamp
@@ -20,7 +20,7 @@ backup() {
         return 1
     fi
     local timestamp=$(date +%Y%m%d_%H%M%S)
-    cp "$1" "${1}.bak.${timestamp}"
+    command cp "$1" "${1}.bak.${timestamp}"
     echo "Backed up $1 to ${1}.bak.${timestamp}"
 }
 
@@ -367,7 +367,7 @@ sysmon() {
     
     watch -n "$interval" "
     echo '=== CPU Usage ==='
-    grep 'cpu ' /proc/stat | awk '{usage=(\$2+\$4)*100/(\$2+\$3+\$4+\$5)} END {print usage \"%\"}'
+    command grep 'cpu ' /proc/stat | awk '{usage=(\$2+\$4)*100/(\$2+\$3+\$4+\$5)} END {print usage \"%\"}'
     echo
     echo '=== Memory Usage ==='
     free -h

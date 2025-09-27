@@ -485,8 +485,7 @@ alias sha256='sha256sum'
 # ============================================================================
 # Fun & Productivity
 # ============================================================================
-# Weather
-alias weather='curl wttr.in'
+# weather function is defined in functions.zsh (supports location parameter)
 alias weather-short='curl "wttr.in?format=3"'
 
 # Cheat sheets
@@ -569,11 +568,9 @@ esac
 # ============================================================================
 # Custom Functions as Aliases
 # ============================================================================
-# Quick backup
-alias backup='cp "$1"{,.bak}'
+# backup function is defined in functions.zsh (more powerful than simple alias)
 
-# Extract function alias
-alias extract='extract_archive'
+# extract function is defined in functions.zsh (more comprehensive than alias)
 
 # Find and replace in files
 alias find-replace='grep -rl "$1" . | xargs sed -i "s/$1/$2/g"'
