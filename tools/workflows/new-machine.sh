@@ -178,44 +178,71 @@ run_installation() {
 run_minimal_installation() {
     log_info "Running minimal installation..."
 
+    # Change to dotfiles directory
+    cd "$DOTFILES_DIR"
+    
     # Core configurations only
-    "$DOTFILES_DIR/scripts/utils/create-symlinks.sh" --minimal
+    if [[ -x "./scripts/utils/create-symlinks.sh" ]]; then
+        ./scripts/utils/create-symlinks.sh
+    else
+        log_error "Symlinks script not found: ./scripts/utils/create-symlinks.sh"
+        return 1
+    fi
 
     # Install essential fonts
-    "$DOTFILES_DIR/scripts/install/install-fonts.sh" --essential
+    if [[ -x "./scripts/install/install-fonts.sh" ]]; then
+        ./scripts/install/install-fonts.sh
+    else
+        log_warning "Fonts script not found, skipping font installation"
+    fi
+    
+    log_success "Minimal installation completed"
 }
 
 run_full_installation() {
     log_info "Running full installation..."
 
+    # Change to dotfiles directory to ensure relative paths work
+    cd "$DOTFILES_DIR"
+    
     # Run the main install script
-    "$DOTFILES_DIR/install.sh"
+    if [[ -x "./install.sh" ]]; then
+        ./install.sh
+    else
+        log_error "Main install script not found or not executable: ./install.sh"
+        return 1
+    fi
 
-    # Install fonts
-    "$DOTFILES_DIR/scripts/install/install-fonts.sh"
-
-    # Install CLI tools
-    "$DOTFILES_DIR/scripts/install/install-cli-tools.sh"
+    log_success "Full installation completed"
 }
 
 run_development_installation() {
     log_info "Running development installation..."
 
     # Full installation first
-    run_full_installation
+    run_full_installation || return 1
+    
+    # Change to dotfiles directory
+    cd "$DOTFILES_DIR"
 
-    # Development tools
-    "$DOTFILES_DIR/scripts/install/install-dev-tools.sh"
+    # Development tools (check if script exists)
+    if [[ -x "./scripts/install/install-dev-tools.sh" ]]; then
+        ./scripts/install/install-dev-tools.sh
+    else
+        log_warning "Development tools script not found, skipping..."
+    fi
 
     # Docker (optional)
-    if confirm "Install Docker?"; then
-        "$DOTFILES_DIR/scripts/install/install-docker.sh"
+    if [[ -x "./scripts/install/install-docker.sh" ]] && confirm "Install Docker?"; then
+        ./scripts/install/install-docker.sh
     fi
 
     # Node.js (optional)
-    if confirm "Install Node.js?"; then
-        "$DOTFILES_DIR/scripts/install/install-nodejs.sh"
+    if [[ -x "./scripts/install/install-nodejs.sh" ]] && confirm "Install Node.js?"; then
+        ./scripts/install/install-nodejs.sh
     fi
+    
+    log_success "Development installation completed"
 }
 
 run_custom_installation() {
@@ -243,21 +270,59 @@ run_custom_installation() {
     read -p "Enter component numbers (e.g., 1,2,3): " selections
 
     # Process selections
+    cd "$DOTFILES_DIR"
     IFS=',' read -ra SELECTED <<< "$selections"
     for selection in "${SELECTED[@]}"; do
+        selection=$(echo "$selection" | xargs) # trim whitespace
         case $((selection-1)) in
             0) create_core_symlinks ;;
             1) setup_shell_configs ;;
             2) setup_terminal_configs ;;
             3) setup_editor_configs ;;
             4) setup_git_configs ;;
-            5) "$DOTFILES_DIR/scripts/install/install-fonts.sh" ;;
-            6) "$DOTFILES_DIR/scripts/install/install-cli-tools.sh" ;;
-            7) "$DOTFILES_DIR/scripts/install/install-dev-tools.sh" ;;
-            8) "$DOTFILES_DIR/scripts/install/install-docker.sh" ;;
-            9) "$DOTFILES_DIR/scripts/install/install-nodejs.sh" ;;
+            5) [[ -x "./scripts/install/install-fonts.sh" ]] && ./scripts/install/install-fonts.sh || log_warning "Fonts script not found" ;;
+            6) [[ -x "./scripts/install/install-cli-tools.sh" ]] && ./scripts/install/install-cli-tools.sh || log_warning "CLI tools script not found" ;;
+            7) [[ -x "./scripts/install/install-dev-tools.sh" ]] && ./scripts/install/install-dev-tools.sh || log_warning "Dev tools script not found" ;;
+            8) [[ -x "./scripts/install/install-docker.sh" ]] && ./scripts/install/install-docker.sh || log_warning "Docker script not found" ;;
+            9) [[ -x "./scripts/install/install-nodejs.sh" ]] && ./scripts/install/install-nodejs.sh || log_warning "Node.js script not found" ;;
         esac
     done
+}
+
+# Helper functions for custom installation
+create_core_symlinks() {
+    log_info "Creating core configuration symlinks..."
+    cd "$DOTFILES_DIR"
+    if [[ -x "./scripts/utils/create-symlinks.sh" ]]; then
+        ./scripts/utils/create-symlinks.sh
+    else
+        log_error "Symlinks script not found or not executable"
+        return 1
+    fi
+}
+
+setup_shell_configs() {
+    log_info "Setting up shell configurations..."
+    # Zsh configs are handled by symlinks
+    create_core_symlinks
+}
+
+setup_terminal_configs() {
+    log_info "Setting up terminal configurations..."
+    # Terminal configs are handled by symlinks
+    create_core_symlinks
+}
+
+setup_editor_configs() {
+    log_info "Setting up editor configurations..."
+    # Editor configs are handled by symlinks
+    create_core_symlinks
+}
+
+setup_git_configs() {
+    log_info "Setting up git configurations..."
+    create_core_symlinks
+    setup_git_config
 }
 
 setup_git_config() {
@@ -267,8 +332,14 @@ setup_git_config() {
         git config --global user.name "$USER_NAME"
         git config --global user.email "$USER_EMAIL"
 
-        # Copy git template
-        cp "$DOTFILES_DIR/templates/.gitconfig.template" "$HOME/.gitconfig.local"
+        # Copy git template if it doesn't exist
+        if [[ -f "$DOTFILES_DIR/templates/.gitconfig.template" ]] && [[ ! -f "$HOME/.gitconfig.local" ]]; then
+            cp "$DOTFILES_DIR/templates/.gitconfig.template" "$HOME/.gitconfig.local"
+            # Update template with actual values
+            sed -i.bak "s/Your Name/$USER_NAME/g" "$HOME/.gitconfig.local"
+            sed -i.bak "s/your.email@example.com/$USER_EMAIL/g" "$HOME/.gitconfig.local"
+            rm -f "$HOME/.gitconfig.local.bak"
+        fi
 
         log_success "Git configured with name: $USER_NAME, email: $USER_EMAIL"
     fi
@@ -278,12 +349,19 @@ setup_ssh_keys() {
     if [[ ! -f "$HOME/.ssh/id_ed25519" ]]; then
         if confirm "Generate SSH key for Git repositories?"; then
             log_info "Generating SSH key..."
+            
+            # Use email if provided, otherwise use default
+            local email_comment="${USER_EMAIL:-$(whoami)@$(hostname)}"
+            
+            # Create .ssh directory if it doesn't exist
+            mkdir -p "$HOME/.ssh"
+            chmod 700 "$HOME/.ssh"
 
-            ssh-keygen -t ed25519 -C "$USER_EMAIL" -f "$HOME/.ssh/id_ed25519" -N ""
+            ssh-keygen -t ed25519 -C "$email_comment" -f "$HOME/.ssh/id_ed25519" -N ""
 
             # Start ssh-agent and add key
-            eval "$(ssh-agent -s)"
-            ssh-add "$HOME/.ssh/id_ed25519"
+            eval "$(ssh-agent -s)" >/dev/null 2>&1
+            ssh-add "$HOME/.ssh/id_ed25519" >/dev/null 2>&1
 
             log_success "SSH key generated: $HOME/.ssh/id_ed25519.pub"
             log_info "Add this public key to your Git hosting service:"
@@ -367,10 +445,10 @@ EOF
     echo "  make clean         - Clean up temporary files"
     echo
 
-    if [[ -n "$USER_EMAIL" ]]; then
+    if [[ -f "$HOME/.ssh/id_ed25519.pub" ]]; then
         log_info "Your SSH public key (add to Git hosting):"
         echo
-        cat "$HOME/.ssh/id_ed25519.pub" 2>/dev/null || echo "SSH key not found"
+        cat "$HOME/.ssh/id_ed25519.pub"
         echo
     fi
 }
