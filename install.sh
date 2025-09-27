@@ -3,6 +3,9 @@
 
 set -euo pipefail
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Detect OS
 detect_os() {
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -30,6 +33,9 @@ main() {
     echo "Detected OS: $os_type"
     echo "Installing dotfiles..."
 
+    # Change to script directory to ensure relative paths work
+    cd "$SCRIPT_DIR"
+
     # Run OS-specific setup
     case "$os_type" in
         arch)
@@ -40,6 +46,9 @@ main() {
             ;;
         macos)
             ./scripts/setup/setup-macos.sh
+            ;;
+        fedora)
+            ./scripts/setup/setup-fedora.sh
             ;;
         *)
             echo "Unsupported OS: $os_type"

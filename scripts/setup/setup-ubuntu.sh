@@ -47,6 +47,7 @@ main() {
         wget \
         git \
         vim \
+        ranger \
         zsh \
         tmux \
         tree \
