@@ -1,0 +1,13 @@
+# Local Zsh configuration
+# This file is sourced by .zshrc and is gitignored
+
+# Personal aliases
+alias myproject='cd ~/Projects/my-project'
+
+# Environment variables
+export MY_VAR='value'
+
+# Custom functions
+my_function() {
+    echo "Hello from local function"
+}

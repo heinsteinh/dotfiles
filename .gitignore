@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # See https://www.dartlang.org/guides/libraries/private-files
 
 # Files and directories created by pub
@@ -25,3 +26,52 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+=======
+# Local configurations
+local/
+backups/
+*.local
+*.backup
+*.bak
+*~
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.local
+.envrc
+
+# SSH keys and sensitive data
+config/ssh/id_*
+config/ssh/known_hosts
+config/ssh/authorized_keys
+!config/ssh/*.example
+
+# Personal directories
+private/
+personal/
+
+# Editor files
+.vscode/
+.idea/
+
+# Cache directories
+__pycache__/
+*.pyc
+*.pyo
+node_modules/
+>>>>>>> 992bdcd (Add initial cross-platform dotfiles setup with installation scripts and configurations)
