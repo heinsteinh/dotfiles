@@ -90,7 +90,7 @@ ff() {
 }
 
 # Find directories with fzf
-fd() {
+fcd() {
     local selected
     if command -v fd &> /dev/null; then
         selected=$(fd --type d --hidden --follow --exclude .git | fzf --preview 'ls -la {}')
@@ -650,7 +650,7 @@ show_functions() {
     echo
     echo "Search & Find:"
     echo "  ff                  - Find files with fzf preview"
-    echo "  fd                  - Find directories with fzf"
+    echo "  fcd                 - Find directories with fzf"
     echo "  fgrep <pattern>     - Interactive grep with fzf"
     echo
     echo "Process Management:"

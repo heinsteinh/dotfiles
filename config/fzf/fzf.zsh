@@ -126,19 +126,9 @@ if command -v apt &> /dev/null; then
     }
 fi
 
-# Key bindings (if not already loaded by oh-my-zsh or similar)
-if [[ ! -v FZF_KEYBINDINGS_LOADED ]]; then
-    # Ctrl-R for history search
-    bindkey '^R' fzf-history-widget
-    
-    # Ctrl-T for file search
-    bindkey '^T' fzf-file-widget
-    
-    # Alt-C for directory search
-    bindkey '\ec' fzf-cd-widget
-    
-    export FZF_KEYBINDINGS_LOADED=1
-fi
+# Key bindings will be loaded by system FZF installation or oh-my-zsh plugin
+# Don't manually bind here to avoid conflicts
 
-# Load FZF completion if available
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+# Load system FZF completion if available (not this file)
+[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
+[[ -f /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh

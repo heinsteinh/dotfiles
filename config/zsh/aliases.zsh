@@ -233,7 +233,11 @@ alias kill-port='kill -9 $(lsof -t -i:'
 # System Information & Monitoring
 # ============================================================================
 # System info
-alias sysinfo='neofetch'
+# sysinfo function is defined in distro.zsh
+# Use neofetch directly or call the sysinfo function
+if command -v neofetch &> /dev/null; then
+    alias nf='neofetch'
+fi
 alias cpu-info='lscpu'
 alias mem-info='free -h'
 alias disk-info='df -h'
@@ -574,8 +578,7 @@ alias extract='extract_archive'
 # Find and replace in files
 alias find-replace='grep -rl "$1" . | xargs sed -i "s/$1/$2/g"'
 
-# Create directory and cd into it
-alias mkcd='mkdir -p "$1" && cd "$1"'
+# mkcd function is defined in functions.zsh
 
 # Find process and kill
 alias fkill='ps aux | grep "$1" | grep -v grep | awk "{print $2}" | xargs kill -9'
