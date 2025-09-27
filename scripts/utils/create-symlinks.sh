@@ -51,6 +51,22 @@ create_symlink "$DOTFILES_DIR/config/git/.gitignore_global" "$HOME/.gitignore_gl
 # Kitty (if config exists)
 if [[ -f "$DOTFILES_DIR/config/kitty/kitty.conf" ]]; then
     create_symlink "$DOTFILES_DIR/config/kitty/kitty.conf" "$HOME/.config/kitty/kitty.conf"
+    
+    # Kitty themes
+    if [[ -d "$DOTFILES_DIR/config/kitty/themes" ]]; then
+        create_symlink "$DOTFILES_DIR/config/kitty/themes" "$HOME/.config/kitty/themes"
+    fi
+    
+    # Kitty sessions
+    if [[ -d "$DOTFILES_DIR/config/kitty/sessions" ]]; then
+        create_symlink "$DOTFILES_DIR/config/kitty/sessions" "$HOME/.config/kitty/sessions"
+    fi
+    
+    # Create local.conf from example if it doesn't exist
+    if [[ ! -f "$HOME/.config/kitty/local.conf" && -f "$DOTFILES_DIR/config/kitty/local.conf.example" ]]; then
+        cp "$DOTFILES_DIR/config/kitty/local.conf.example" "$HOME/.config/kitty/local.conf"
+        echo "Created: $HOME/.config/kitty/local.conf from example"
+    fi
 fi
 
 # Starship configuration
