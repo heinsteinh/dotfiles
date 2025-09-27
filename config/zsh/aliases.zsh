@@ -157,7 +157,7 @@ if command -v apt &> /dev/null; then
     alias apt-files='dpkg -L'
     alias apt-which='dpkg -S'
     alias apt-clean='sudo apt autoclean && sudo apt autoremove'
-    alias apt-history='grep " install \| remove " /var/log/dpkg.log'
+    alias apt-history='command grep " install \| remove " /var/log/dpkg.log'
 fi
 
 # macOS (Homebrew)
@@ -213,10 +213,10 @@ alias ps-all='ps aux'
 alias ps-user='ps -f -u $USER'
 alias ps-cpu='ps aux --sort=-%cpu | head -10'
 alias ps-mem='ps aux --sort=-%mem | head -10'
-alias ps-grep='ps aux | grep'
+alias ps-grep='ps aux | command grep'
 
 # Process shortcuts
-alias psg='ps aux | grep'
+alias psg='ps aux | command grep'
 alias psk='pkill -f'
 alias pskill='pkill -9 -f'
 
@@ -573,12 +573,11 @@ esac
 # extract function is defined in functions.zsh (more comprehensive than alias)
 
 # Find and replace in files
-alias find-replace='grep -rl "$1" . | xargs sed -i "s/$1/$2/g"'
+alias find-replace='command grep -rl "$1" . | xargs sed -i "s/$1/$2/g"'
 
 # mkcd function is defined in functions.zsh
 
-# Find process and kill
-alias fkill='ps aux | grep "$1" | grep -v grep | awk "{print $2}" | xargs kill -9'
+# fkill function is defined in functions.zsh (more interactive with fzf)
 
 # Quick calculator
 alias calc='python3 -c "import sys; print(eval(\" \".join(sys.argv[1:])))"'

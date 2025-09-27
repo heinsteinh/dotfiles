@@ -101,9 +101,9 @@ fcd() {
 }
 
 # Interactive grep with fzf
-fgrep() {
+fsearch() {
     if [[ $# -eq 0 ]]; then
-        echo "Usage: fgrep <pattern>"
+        echo "Usage: fsearch <pattern>"
         return 1
     fi
     
@@ -651,7 +651,7 @@ show_functions() {
     echo "Search & Find:"
     echo "  ff                  - Find files with fzf preview"
     echo "  fcd                 - Find directories with fzf"
-    echo "  fgrep <pattern>     - Interactive grep with fzf"
+    echo "  fsearch <pattern>   - Interactive grep with fzf"
     echo
     echo "Process Management:"
     echo "  fkill               - Interactive process killer"
