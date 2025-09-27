@@ -51,17 +51,17 @@ create_symlink "$DOTFILES_DIR/config/git/.gitignore_global" "$HOME/.gitignore_gl
 # Kitty (if config exists)
 if [[ -f "$DOTFILES_DIR/config/kitty/kitty.conf" ]]; then
     create_symlink "$DOTFILES_DIR/config/kitty/kitty.conf" "$HOME/.config/kitty/kitty.conf"
-    
+
     # Kitty themes
     if [[ -d "$DOTFILES_DIR/config/kitty/themes" ]]; then
         create_symlink "$DOTFILES_DIR/config/kitty/themes" "$HOME/.config/kitty/themes"
     fi
-    
+
     # Kitty sessions
     if [[ -d "$DOTFILES_DIR/config/kitty/sessions" ]]; then
         create_symlink "$DOTFILES_DIR/config/kitty/sessions" "$HOME/.config/kitty/sessions"
     fi
-    
+
     # Create local.conf from example if it doesn't exist
     if [[ ! -f "$HOME/.config/kitty/local.conf" && -f "$DOTFILES_DIR/config/kitty/local.conf.example" ]]; then
         cp "$DOTFILES_DIR/config/kitty/local.conf.example" "$HOME/.config/kitty/local.conf"
@@ -84,7 +84,7 @@ if [[ -d "$DOTFILES_DIR/config/ranger" ]]; then
     create_symlink "$DOTFILES_DIR/config/ranger/rc.conf" "$HOME/.config/ranger/rc.conf"
     create_symlink "$DOTFILES_DIR/config/ranger/rifle.conf" "$HOME/.config/ranger/rifle.conf"
     create_symlink "$DOTFILES_DIR/config/ranger/scope.sh" "$HOME/.config/ranger/scope.sh"
-    
+
     # Ranger colorschemes
     if [[ -d "$DOTFILES_DIR/config/ranger/colorschemes" ]]; then
         create_symlink "$DOTFILES_DIR/config/ranger/colorschemes" "$HOME/.config/ranger/colorschemes"

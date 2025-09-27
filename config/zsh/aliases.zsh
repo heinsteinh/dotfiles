@@ -382,13 +382,11 @@ if command -v docker &> /dev/null; then
     alias drmi='docker rmi'
     alias dv='docker volume ls'
     alias dn='docker network ls'
-    alias dlog='docker logs -f'
-    alias dexec='docker exec -it'
+    # Note: dlog, dexec, and dclean are defined as functions in functions.zsh for better functionality
     alias drun='docker run -it --rm'
     alias dstop='docker stop'
     alias dstart='docker start'
     alias drestart='docker restart'
-    alias dclean='docker system prune -f'
     alias dclean-all='docker system prune -af'
     alias dstats='docker stats'
 fi

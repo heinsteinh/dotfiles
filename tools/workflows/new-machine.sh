@@ -180,7 +180,7 @@ run_minimal_installation() {
 
     # Change to dotfiles directory
     cd "$DOTFILES_DIR"
-    
+
     # Core configurations only
     if [[ -x "./scripts/utils/create-symlinks.sh" ]]; then
         ./scripts/utils/create-symlinks.sh
@@ -195,7 +195,7 @@ run_minimal_installation() {
     else
         log_warning "Fonts script not found, skipping font installation"
     fi
-    
+
     log_success "Minimal installation completed"
 }
 
@@ -204,7 +204,7 @@ run_full_installation() {
 
     # Change to dotfiles directory to ensure relative paths work
     cd "$DOTFILES_DIR"
-    
+
     # Run the main install script
     if [[ -x "./install.sh" ]]; then
         ./install.sh
@@ -221,7 +221,7 @@ run_development_installation() {
 
     # Full installation first
     run_full_installation || return 1
-    
+
     # Change to dotfiles directory
     cd "$DOTFILES_DIR"
 
@@ -241,7 +241,7 @@ run_development_installation() {
     if [[ -x "./scripts/install/install-nodejs.sh" ]] && confirm "Install Node.js?"; then
         ./scripts/install/install-nodejs.sh
     fi
-    
+
     log_success "Development installation completed"
 }
 
@@ -349,10 +349,10 @@ setup_ssh_keys() {
     if [[ ! -f "$HOME/.ssh/id_ed25519" ]]; then
         if confirm "Generate SSH key for Git repositories?"; then
             log_info "Generating SSH key..."
-            
+
             # Use email if provided, otherwise use default
             local email_comment="${USER_EMAIL:-$(whoami)@$(hostname)}"
-            
+
             # Create .ssh directory if it doesn't exist
             mkdir -p "$HOME/.ssh"
             chmod 700 "$HOME/.ssh"
