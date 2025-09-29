@@ -61,14 +61,14 @@ collect_user_info() {
         INSTALL_TYPE=${INSTALL_TYPE:-"minimal"}
         USER_NAME=${USER_NAME:-"testuser"}
         USER_EMAIL=${USER_EMAIL:-"test@example.com"}
-        
+
         # Try to read from stdin if available (for echo piping)
         if [[ -p /dev/stdin ]]; then
             read -r MACHINE_NAME || true
             read -r USER_EMAIL || true
             read -r INSTALL_TYPE || true
         fi
-        
+
         log_info "CI Mode - Using configuration:"
         echo "  Machine name: $MACHINE_NAME"
         echo "  Installation type: $INSTALL_TYPE"
@@ -76,7 +76,7 @@ collect_user_info() {
         echo "  Git email: ${USER_EMAIL:-<not set>}"
         return
     fi
-    
+
     log_info "Let's gather some information about your setup..."
     echo
 
@@ -125,7 +125,7 @@ collect_user_info() {
 confirm() {
     local message="$1"
     local response
-    
+
     # Auto-confirm in CI mode
     if [[ "$DOTFILES_SKIP_INTERACTIVE" == "true" ]]; then
         log_info "Auto-confirming: $message"
@@ -211,7 +211,7 @@ manual_macos_setup() {
     if ! command -v brew &> /dev/null; then
         log_info "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        
+
         # Add Homebrew to PATH
         echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
         eval "$(/opt/homebrew/bin/brew shellenv)"

@@ -39,7 +39,7 @@ install_homebrew() {
     if ! command -v brew &> /dev/null; then
         log_info "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        
+
         # Add Homebrew to PATH for Apple Silicon Macs
         if [[ -f "/opt/homebrew/bin/brew" ]]; then
             echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
@@ -55,7 +55,7 @@ install_homebrew() {
 # Install essential packages
 install_essential_packages() {
     log_info "Installing essential packages..."
-    
+
     # Core utilities
     brew install \
         curl \
@@ -74,14 +74,14 @@ install_essential_packages() {
         gnu-sed \
         gnu-tar \
         grep
-    
+
     log_success "Essential packages installed"
 }
 
 # Install modern CLI tools
 install_modern_cli_tools() {
     log_info "Installing modern CLI tools..."
-    
+
     brew install \
         ripgrep \
         fd \
@@ -99,14 +99,14 @@ install_modern_cli_tools() {
         hyperfine \
         bandwhich \
         gping
-    
+
     log_success "Modern CLI tools installed"
 }
 
 # Install development tools
 install_development_tools() {
     log_info "Installing development tools..."
-    
+
     # Programming languages and tools
     brew install \
         python@3.11 \
@@ -117,7 +117,7 @@ install_development_tools() {
         openjdk \
         maven \
         gradle
-    
+
     # Development utilities
     brew install \
         docker \
@@ -129,14 +129,14 @@ install_development_tools() {
         vault \
         consul \
         nomad
-    
+
     log_success "Development tools installed"
 }
 
 # Install GUI applications
 install_gui_applications() {
     log_info "Installing GUI applications..."
-    
+
     # Install essential cask applications
     brew install --cask \
         iterm2 \
@@ -158,17 +158,17 @@ install_gui_applications() {
         keka \
         vlc \
         spotify
-    
+
     log_success "GUI applications installed"
 }
 
 # Install fonts
 install_fonts() {
     log_info "Installing fonts..."
-    
+
     # Add font tap
     brew tap homebrew/cask-fonts
-    
+
     # Install programming fonts
     brew install --cask \
         font-fira-code \
@@ -182,43 +182,43 @@ install_fonts() {
         font-source-code-pro \
         font-cascadia-code \
         font-cascadia-code-pl
-    
+
     log_success "Fonts installed"
 }
 
 # Configure macOS settings
 configure_macos_settings() {
     log_info "Configuring macOS settings..."
-    
+
     # Dock settings
     defaults write com.apple.dock autohide -bool true
     defaults write com.apple.dock tilesize -int 48
     defaults write com.apple.dock orientation -string "bottom"
-    
+
     # Finder settings
     defaults write com.apple.finder ShowPathbar -bool true
     defaults write com.apple.finder ShowStatusBar -bool true
     defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
     defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
-    
+
     # Screenshot settings
     defaults write com.apple.screencapture location -string "$HOME/Desktop/Screenshots"
     defaults write com.apple.screencapture type -string "png"
     defaults write com.apple.screencapture disable-shadow -bool true
-    
+
     # Trackpad settings
     defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
     defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
-    
+
     # Keyboard settings
     defaults write NSGlobalDomain KeyRepeat -int 2
     defaults write NSGlobalDomain InitialKeyRepeat -int 15
-    
+
     # Energy saving
     sudo pmset -a displaytimeout 10
     sudo pmset -a disksleep 10
     sudo pmset -a sleep 30
-    
+
     log_success "macOS settings configured"
 }
 
@@ -298,18 +298,18 @@ cleanup() {
 # Main function
 main() {
     log_info "Starting macOS-specific setup..."
-    
+
     # Core installation
     install_homebrew
     install_essential_packages
     install_modern_cli_tools
-    
+
     # Shell setup
     install_starship
     set_zsh_default
     install_oh_my_zsh
     install_zsh_plugins
-    
+
     # Optional installations (ask user)
     if [[ "${1:-}" == "--full" ]] || [[ "${INSTALL_TYPE:-}" == "development" ]]; then
         install_development_tools
@@ -321,16 +321,16 @@ main() {
         install_gui_applications
         install_fonts
     fi
-    
+
     # Configuration
     configure_macos_settings
-    
+
     # Cleanup
     cleanup
-    
+
     log_success "macOS setup completed successfully!"
     log_info "Please run 'source ~/.zshrc' or restart your terminal to apply changes"
-    
+
     # Restart required services
     log_info "Restarting Dock and Finder to apply settings..."
     killall Dock

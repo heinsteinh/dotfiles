@@ -58,14 +58,14 @@ log_verbose() {
 run_test() {
     local test_name="$1"
     local test_function="$2"
-    
+
     ((TESTS_RUN++))
     log_verbose "Running test: $test_name"
-    
+
     # Capture test function output and exit code
     local test_output
     local test_exit_code=0
-    
+
     if test_output=$($test_function 2>&1); then
         ((TESTS_PASSED++))
         log_success "$test_name"
@@ -105,19 +105,19 @@ test_essential_commands() {
     local essential_commands=(
         "git" "curl" "zsh" "vim" "tmux"
     )
-    
+
     local missing_commands=()
     for cmd in "${essential_commands[@]}"; do
         if ! command_exists "$cmd"; then
             missing_commands+=("$cmd")
         fi
     done
-    
+
     if [[ ${#missing_commands[@]} -gt 0 ]]; then
         log_error "Missing essential commands: ${missing_commands[*]}"
         return 1
     fi
-    
+
     return 0
 }
 
@@ -126,10 +126,10 @@ test_modern_cli_tools() {
     local modern_tools=(
         "fzf" "ripgrep" "fd" "bat" "eza" "htop" "tree"
     )
-    
+
     local missing_tools=()
     local found_tools=()
-    
+
     for tool in "${modern_tools[@]}"; do
         # Check multiple possible command names
         if command_exists "$tool"; then
@@ -146,26 +146,26 @@ test_modern_cli_tools() {
             missing_tools+=("$tool")
         fi
     done
-    
+
     # Log what we found
     if [[ ${#found_tools[@]} -gt 0 ]]; then
         log_verbose "Available modern CLI tools: ${found_tools[*]}"
     fi
-    
+
     if [[ ${#missing_tools[@]} -gt 0 ]]; then
         log_warning "Missing modern CLI tools: ${missing_tools[*]}"
-        
+
         # Only fail if ALL tools are missing (indicates no setup was done)
         # Or if we're in a development environment where they should be present
         if [[ ${#found_tools[@]} -eq 0 ]] && [[ "${DOTFILES_SKIP_INTERACTIVE_MODE}" != "true" ]]; then
             log_error "No modern CLI tools found - dotfiles setup may not have completed"
             return 1
         fi
-        
+
         # Otherwise just warn but don't fail - these are enhancements, not requirements
         log_verbose "Modern CLI tools are optional - test passes with warnings"
     fi
-    
+
     return 0
 }
 
@@ -177,26 +177,26 @@ test_core_symlinks() {
         "$HOME/.tmux.conf"
         "$HOME/.gitconfig"
     )
-    
+
     # In CI, we only test setup scripts, not actual dotfiles installation
     if [[ "${CI:-}" == "true" ]]; then
         log_verbose "Skipping symlink checks in CI environment (setup-only tests)"
         log_verbose "Symlink creation requires full dotfiles installation"
         return 0
     fi
-    
+
     local missing_symlinks=()
     for file in "${core_files[@]}"; do
         if ! is_symlink "$file"; then
             missing_symlinks+=("$file")
         fi
     done
-    
+
     if [[ ${#missing_symlinks[@]} -gt 0 ]]; then
         log_error "Missing core symlinks: ${missing_symlinks[*]}"
         return 1
     fi
-    
+
     return 0
 }
 
@@ -207,13 +207,13 @@ test_config_directories() {
         "$HOME/.local/bin"
         "$HOME/.local/share"
     )
-    
+
     # In CI, directories may not be created by setup scripts alone
     if [[ "${CI:-}" == "true" ]]; then
         log_verbose "Checking directory creation in CI environment"
         local existing_dirs=()
         local missing_dirs=()
-        
+
         for dir in "${config_dirs[@]}"; do
             if dir_exists "$dir"; then
                 existing_dirs+=("$dir")
@@ -221,30 +221,30 @@ test_config_directories() {
                 missing_dirs+=("$dir")
             fi
         done
-        
+
         if [[ ${#existing_dirs[@]} -gt 0 ]]; then
             log_verbose "Existing directories: ${existing_dirs[*]}"
         fi
-        
+
         if [[ ${#missing_dirs[@]} -gt 0 ]]; then
             log_verbose "Missing directories (expected in CI setup-only): ${missing_dirs[*]}"
         fi
-        
+
         return 0
     fi
-    
+
     local missing_dirs=()
     for dir in "${config_dirs[@]}"; do
         if ! dir_exists "$dir"; then
             missing_dirs+=("$dir")
         fi
     done
-    
+
     if [[ ${#missing_dirs[@]} -gt 0 ]]; then
         log_error "Missing configuration directories: ${missing_dirs[*]}"
         return 1
     fi
-    
+
     return 0
 }
 
@@ -260,23 +260,23 @@ test_zsh_config() {
             return 1
         fi
     fi
-    
+
     if ! file_exists "$HOME/.zshrc"; then
         log_error "Zsh configuration file not found"
         return 1
     fi
-    
+
     # Test zsh syntax
     if ! zsh -n "$HOME/.zshrc" 2>/dev/null; then
         log_error "Zsh configuration syntax error"
         return 1
     fi
-    
+
     # Check for Oh My Zsh
     if [[ ! -d "$HOME/.oh-my-zsh" ]] && [[ "${DOTFILES_SKIP_INTERACTIVE_MODE}" != "true" ]]; then
         log_warning "Oh My Zsh not installed"
     fi
-    
+
     return 0
 }
 
@@ -292,18 +292,18 @@ test_vim_config() {
             return 1
         fi
     fi
-    
+
     if ! file_exists "$HOME/.vimrc"; then
         log_error "Vim configuration file not found"
         return 1
     fi
-    
+
     # Test vim configuration
     if ! vim -u "$HOME/.vimrc" -c 'syntax on' -c 'quit' >/dev/null 2>&1; then
         log_error "Vim configuration error"
         return 1
     fi
-    
+
     return 0
 }
 
@@ -319,18 +319,18 @@ test_tmux_config() {
             return 1
         fi
     fi
-    
+
     if ! file_exists "$HOME/.tmux.conf"; then
         log_error "Tmux configuration file not found"
         return 1
     fi
-    
+
     # Test tmux configuration
     if ! tmux -f "$HOME/.tmux.conf" list-keys >/dev/null 2>&1; then
         log_error "Tmux configuration error"
         return 1
     fi
-    
+
     return 0
 }
 
@@ -340,44 +340,44 @@ test_git_config() {
         log_error "Git configuration file not found"
         return 1
     fi
-    
+
     # Check if git user is configured
     if ! git config --get user.name >/dev/null 2>&1; then
         log_warning "Git user.name not configured"
     fi
-    
+
     if ! git config --get user.email >/dev/null 2>&1; then
         log_warning "Git user.email not configured"
     fi
-    
+
     return 0
 }
 
 # Test 9: Shell plugins and extensions
 test_shell_plugins() {
     local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-    
+
     if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
         log_warning "Oh My Zsh not installed, skipping plugin tests"
         return 0
     fi
-    
+
     local expected_plugins=(
         "$zsh_custom/plugins/zsh-autosuggestions"
         "$zsh_custom/plugins/zsh-syntax-highlighting"
     )
-    
+
     local missing_plugins=()
     for plugin in "${expected_plugins[@]}"; do
         if [[ ! -d "$plugin" ]]; then
             missing_plugins+=("$(basename "$plugin")")
         fi
     done
-    
+
     if [[ ${#missing_plugins[@]} -gt 0 ]]; then
         log_warning "Missing Zsh plugins: ${missing_plugins[*]}"
     fi
-    
+
     return 0
 }
 
@@ -387,12 +387,12 @@ test_starship_prompt() {
         log_warning "Starship prompt not installed"
         return 0
     fi
-    
+
     # Test starship configuration
     if ! starship config >/dev/null 2>&1; then
         log_warning "Starship configuration error"
     fi
-    
+
     return 0
 }
 
@@ -404,7 +404,7 @@ test_ssh_config() {
             log_verbose "SSH config test completed (expected to fail in CI)"
         fi
     fi
-    
+
     # Check SSH key permissions
     if [[ -f "$HOME/.ssh/id_rsa" ]]; then
         local perms=$(stat -c "%a" "$HOME/.ssh/id_rsa" 2>/dev/null || stat -f "%Mp%Lp" "$HOME/.ssh/id_rsa" 2>/dev/null)
@@ -412,7 +412,7 @@ test_ssh_config() {
             log_warning "SSH private key has incorrect permissions: $perms (should be 600)"
         fi
     fi
-    
+
     return 0
 }
 
@@ -424,7 +424,7 @@ test_fonts() {
         "$HOME/.local/share/fonts"
         "$HOME/.fonts"
     )
-    
+
     local fonts_found=false
     for dir in "${font_dirs[@]}"; do
         if [[ -d "$dir" ]] && [[ -n "$(find "$dir" -name "*.ttf" -o -name "*.otf" 2>/dev/null | head -1)" ]]; then
@@ -432,11 +432,11 @@ test_fonts() {
             break
         fi
     done
-    
+
     if [[ "$fonts_found" == "false" ]]; then
         log_warning "No fonts found in standard directories"
     fi
-    
+
     return 0
 }
 
@@ -447,24 +447,24 @@ test_environment_variables() {
         "USER"
         "SHELL"
     )
-    
+
     local missing_vars=()
     for var in "${expected_vars[@]}"; do
         if [[ -z "${!var:-}" ]]; then
             missing_vars+=("$var")
         fi
     done
-    
+
     if [[ ${#missing_vars[@]} -gt 0 ]]; then
         log_error "Missing environment variables: ${missing_vars[*]}"
         return 1
     fi
-    
+
     # Check if zsh is the default shell
     if [[ "$SHELL" != */zsh ]]; then
         log_warning "Default shell is not zsh: $SHELL"
     fi
-    
+
     return 0
 }
 
@@ -477,7 +477,7 @@ test_script_permissions() {
         "$dotfiles_dir/scripts/utils"
         "$dotfiles_dir/tools"
     )
-    
+
     local executable_scripts=()
     for dir in "${script_dirs[@]}"; do
         if [[ -d "$dir" ]]; then
@@ -488,11 +488,11 @@ test_script_permissions() {
             done < <(find "$dir" -name "*.sh" -print0 2>/dev/null)
         fi
     done
-    
+
     if [[ ${#executable_scripts[@]} -gt 0 ]]; then
         log_warning "Non-executable scripts found: ${executable_scripts[*]}"
     fi
-    
+
     return 0
 }
 
@@ -504,7 +504,7 @@ test_cicd_compatibility() {
             log_error "CI environment detected but DOTFILES_SKIP_INTERACTIVE_MODE not set"
             return 1
         fi
-        
+
         # Test that no GUI applications are required
         local gui_commands=("xdg-open" "open" "firefox" "chrome")
         for cmd in "${gui_commands[@]}"; do
@@ -513,7 +513,7 @@ test_cicd_compatibility() {
             fi
         done
     fi
-    
+
     return 0
 }
 
@@ -527,14 +527,14 @@ test_performance() {
         startup_time=$(time (zsh -c 'exit') 2>&1 | grep real | awk '{print $2}' || echo "unknown")
         log_verbose "Zsh startup time: $startup_time"
     fi
-    
+
     # Test command availability performance
     local start_time=$(date +%s%N)
     command_exists "git" >/dev/null
     local end_time=$(date +%s%N)
     local duration=$(( (end_time - start_time) / 1000000 ))
     log_verbose "Command existence check took: ${duration}ms"
-    
+
     return 0
 }
 
@@ -545,13 +545,13 @@ test_system_health() {
     if [[ "$available_space" -lt 1000000 ]]; then # Less than ~1GB
         log_warning "Low disk space: ${available_space}KB available"
     fi
-    
+
     # Check memory usage
     if command_exists "free"; then
         local mem_info=$(free -m | awk 'NR==2{printf "%.1f%%", $3*100/$2}')
         log_verbose "Memory usage: $mem_info"
     fi
-    
+
     return 0
 }
 
@@ -566,30 +566,30 @@ run_all_tests() {
     log_info "Test directory: $TEST_DIR"
     log_info "Skip interactive mode: ${DOTFILES_SKIP_INTERACTIVE_MODE}"
     log_info "Verbose mode: ${VERBOSE}"
-    
+
     # Core functionality tests
     run_test "Essential Commands" test_essential_commands
     run_test "Modern CLI Tools" test_modern_cli_tools
     run_test "Core Symlinks" test_core_symlinks
     run_test "Config Directories" test_config_directories
-    
+
     # Configuration validity tests
     run_test "Zsh Configuration" test_zsh_config
     run_test "Vim Configuration" test_vim_config
     run_test "Tmux Configuration" test_tmux_config
     run_test "Git Configuration" test_git_config
-    
+
     # Feature tests
     run_test "Shell Plugins" test_shell_plugins
     run_test "Starship Prompt" test_starship_prompt
     run_test "SSH Configuration" test_ssh_config
     run_test "Font Installation" test_fonts
-    
+
     # System tests
     run_test "Environment Variables" test_environment_variables
     run_test "Script Permissions" test_script_permissions
     run_test "CI/CD Compatibility" test_cicd_compatibility
-    
+
     # Performance and health
     #run_test "Performance Check" test_performance
     run_test "System Health" test_system_health
@@ -602,7 +602,7 @@ print_test_summary() {
     echo "  Total tests: $TESTS_RUN"
     echo "  Passed: $TESTS_PASSED"
     echo "  Failed: $TESTS_FAILED"
-    
+
     if [[ $TESTS_FAILED -gt 0 ]]; then
         echo
         log_error "Failed tests:"
@@ -610,7 +610,7 @@ print_test_summary() {
             echo "  - $test"
         done
     fi
-    
+
     echo
     if [[ $TESTS_FAILED -eq 0 ]]; then
         log_success "All tests passed! ✨"
@@ -658,10 +658,10 @@ main() {
                 ;;
         esac
     done
-    
+
     # Run tests
     run_all_tests
-    
+
     # Print summary and exit with appropriate code
     print_test_summary
 }

@@ -83,7 +83,7 @@ git clone https://github.com/heinsteinh/dotfiles.git ~/.dotfiles && cd ~/.dotfil
 
 # Choose your platform:
 ./scripts/setup/setup-ubuntu.sh    # Ubuntu/Debian systems
-./scripts/setup/setup-macos.sh     # macOS systems  
+./scripts/setup/setup-macos.sh     # macOS systems
 ./scripts/setup/setup-fedora.sh    # Fedora systems
 ./scripts/setup/setup-arch.sh      # Arch Linux systems
 
@@ -103,7 +103,7 @@ git clone https://github.com/heinsteinh/dotfiles.git ~/.dotfiles && cd ~/.dotfil
 # Run comprehensive tests
 ./tests/test-installation.sh --verbose
 
-# Individual component testing  
+# Individual component testing
 ./scripts/install/install-fonts.sh
 ./tests/test-installation.sh --skip-interactive
 ```

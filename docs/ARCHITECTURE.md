@@ -23,27 +23,27 @@ This document describes the architecture, design decisions, and implementation d
 graph TB
     A[User] --> B[New Machine Workflow]
     B --> C{OS Detection}
-    
+
     C -->|Ubuntu| D[setup-ubuntu.sh]
     C -->|macOS| E[setup-macos.sh]
-    C -->|Fedora| F[setup-fedora.sh] 
+    C -->|Fedora| F[setup-fedora.sh]
     C -->|Arch| G[setup-arch.sh]
-    
+
     D --> H[Common Setup]
     E --> H
     F --> H
     G --> H
-    
+
     H --> I[Package Installation]
     H --> J[Font Installation]
     H --> K[Config Symlinks]
     H --> L[Plugin Setup]
-    
+
     I --> M[Validation & Testing]
     J --> M
     K --> M
     L --> M
-    
+
     M --> N{Tests Pass?}
     N -->|Yes| O[✅ Complete]
     N -->|No| P[🔧 Repair & Retry]
@@ -123,7 +123,7 @@ sequenceDiagram
     participant Setup as setup-{os}.sh
     participant Common as common_setup()
     participant Tests as test-installation.sh
-    
+
     User->>Wizard: ./tools/workflows/new-machine.sh
     Wizard->>User: Prompt for user info
     Wizard->>User: Select installation type
@@ -141,23 +141,23 @@ sequenceDiagram
 graph LR
     A[Push/PR] --> B[Lint & Check]
     B --> C{Multi-OS Matrix}
-    
+
     C --> D[Ubuntu 22.04]
-    C --> E[Ubuntu 24.04] 
+    C --> E[Ubuntu 24.04]
     C --> F[macOS 14]
     C --> G[Fedora Latest]
     C --> H[Arch Linux]
-    
+
     D --> I[Security Scan]
     E --> I
     F --> I
     G --> I
     H --> I
-    
+
     I --> J[Performance Test]
     J --> K[Documentation Check]
     K --> L{All Pass?}
-    
+
     L -->|Yes| M[Create Release]
     L -->|No| N[Report Issues]
 ```
@@ -170,11 +170,11 @@ graph TB
     B --> C[TruffleHog Analysis]
     C --> D[Trivy Vulnerability Check]
     D --> E[Custom Pattern Detection]
-    
+
     E --> F{Issues Found?}
     F -->|No| G[✅ Security Pass]
     F -->|Yes| H[Generate SARIF Reports]
-    
+
     H --> I[Upload to GitHub Security]
     H --> J[Archive Artifacts]
     H --> K[Comment on PR]
@@ -188,7 +188,7 @@ graph TB
 ```bash
 # Priority order for reliability
 1. /etc/os-release (standard)
-2. lsb_release -si (if available)  
+2. lsb_release -si (if available)
 3. /etc/issue (fallback)
 4. CI environment detection
 5. Package manager detection
@@ -216,7 +216,7 @@ install_package() {
 
 **Platform-Specific Optimizations:**
 - **Ubuntu**: APT + Snap + PPA support
-- **macOS**: Homebrew + Mac App Store integration  
+- **macOS**: Homebrew + Mac App Store integration
 - **Fedora**: DNF + Flatpak + RPM Fusion repos
 - **Arch**: Pacman + AUR via yay helper
 
@@ -228,7 +228,7 @@ install_package() {
 create_symlink() {
     local source="$1"
     local target="$2"
-    
+
     [[ -e "$target" ]] && backup_file "$target"
     ln -sf "$source" "$target"
     validate_symlink "$target"
@@ -239,7 +239,7 @@ create_symlink() {
 ```bash
 # Zsh loading order (critical for functionality)
 1. exports.zsh    # Environment setup
-2. functions.zsh  # Function definitions  
+2. functions.zsh  # Function definitions
 3. aliases.zsh    # Command aliases
 4. distro.zsh     # OS-specific configurations
 5. local.zsh      # User customizations
@@ -337,7 +337,7 @@ fi
 ```yaml
 # Automated security reporting
 - Upload vulnerability results
-- Upload secret detection results  
+- Upload secret detection results
 - Generate security summaries
 - Archive detailed reports
 ```
@@ -354,7 +354,7 @@ fi
 
 **Modular Extension Points:**
 - **OS Support**: Add new `setup-{distro}.sh` scripts
-- **Tools**: Extend `install-{component}.sh` scripts  
+- **Tools**: Extend `install-{component}.sh` scripts
 - **Configurations**: Add new config directories
 - **Tests**: Extend test framework with new validations
 
@@ -424,7 +424,7 @@ lazy_load_nvm() {
 
 **Memory Optimization:**
 - **Plugin Pruning** - Only load essential plugins
-- **History Management** - Efficient history storage and retrieval  
+- **History Management** - Efficient history storage and retrieval
 - **Completion Caching** - Smart completion result caching
 
 **Startup Time Optimization:**

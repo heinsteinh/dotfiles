@@ -48,37 +48,37 @@ is_ubuntu() {
         . /etc/os-release
         [[ "$ID" == "ubuntu" ]] && return 0
     fi
-    
+
     # Fallback to lsb_release if available
     if command -v lsb_release &> /dev/null; then
         [[ "$(lsb_release -si)" == "Ubuntu" ]] && return 0
     fi
-    
+
     # Check /etc/issue as another fallback
     if [[ -f /etc/issue ]] && grep -qi ubuntu /etc/issue; then
         return 0
     fi
-    
+
     # Check if we're in a Ubuntu container (CI environment)
     if [[ "${CI:-}" == "true" ]] && [[ -f /etc/debian_version ]]; then
         log_info "Detected Ubuntu-based container in CI environment"
         return 0
     fi
-    
+
     return 1
 }
 
 # Install modern CLI tools with proper repositories
 install_modern_cli_tools() {
     log_info "Installing modern CLI tools..."
-    
+
     # Install tools available in default repositories
     sudo apt install -y -qq \
         ripgrep \
         fd-find \
         fzf \
         jq || log_warning "Some packages from default repositories failed to install"
-    
+
     # Install bat (available in Ubuntu 20.04+)
     if sudo apt install -y -qq bat 2>/dev/null; then
         log_success "bat installed from repository"
@@ -86,7 +86,7 @@ install_modern_cli_tools() {
         # Fallback: install batcat (older Ubuntu versions)
         sudo apt install -y -qq batcat || log_warning "Failed to install bat/batcat"
     fi
-    
+
     # Install eza from GitHub releases (not in Ubuntu repos)
     if ! command -v eza &> /dev/null; then
         log_info "Installing eza from GitHub releases..."
@@ -96,7 +96,7 @@ install_modern_cli_tools() {
             log_warning "Failed to install eza, will use ls with aliases"
         fi
     fi
-    
+
     # Install fastfetch (modern neofetch replacement)
     if ! command -v fastfetch &> /dev/null; then
         log_info "Installing fastfetch..."
@@ -106,7 +106,7 @@ install_modern_cli_tools() {
             log_warning "Failed to install fastfetch"
         fi
     fi
-    
+
     # Create symlinks for Ubuntu-specific naming
     create_cli_symlinks
 }
@@ -118,33 +118,33 @@ install_eza_from_github() {
         log_info "CI environment detected, skipping eza installation"
         return 1
     fi
-    
+
     local eza_version
     local architecture
     local temp_dir
-    
+
     # Detect architecture
     case "$(uname -m)" in
         x86_64) architecture="x86_64" ;;
         aarch64|arm64) architecture="aarch64" ;;
-        *) 
+        *)
             log_warning "Unsupported architecture for eza: $(uname -m)"
             return 1
             ;;
     esac
-    
+
     # Get latest version
     eza_version=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o '"tag_name": "v[^"]*' | cut -d'"' -f4 | cut -d'v' -f2) || {
         log_warning "Failed to get eza version from GitHub"
         return 1
     }
-    
+
     # Download and install
     temp_dir=$(mktemp -d)
     cd "$temp_dir"
-    
+
     local download_url="https://github.com/eza-community/eza/releases/download/v${eza_version}/eza_${architecture}-unknown-linux-gnu.tar.gz"
-    
+
     if curl -L "$download_url" -o eza.tar.gz && tar -xzf eza.tar.gz; then
         sudo mv eza /usr/local/bin/eza
         sudo chmod +x /usr/local/bin/eza
@@ -169,31 +169,31 @@ install_fastfetch() {
             fi
         fi
     fi
-    
+
     # Fallback: install from GitHub releases
     local temp_dir
     temp_dir=$(mktemp -d)
     cd "$temp_dir"
-    
+
     local architecture
     case "$(uname -m)" in
         x86_64) architecture="amd64" ;;
         aarch64|arm64) architecture="arm64" ;;
-        *) 
+        *)
             log_warning "Unsupported architecture for fastfetch: $(uname -m)"
             cd - > /dev/null
             rm -rf "$temp_dir"
             return 1
             ;;
     esac
-    
+
     # Get Ubuntu version
     local ubuntu_version
     ubuntu_version=$(lsb_release -rs | cut -d'.' -f1,2)
-    
+
     # Try to download appropriate .deb package
     local download_url="https://github.com/fastfetch-cli/fastfetch/releases/latest/download/fastfetch-linux-${architecture}.deb"
-    
+
     if curl -L "$download_url" -o fastfetch.deb && sudo dpkg -i fastfetch.deb; then
         # Fix any dependency issues
         sudo apt-get install -f -y || true

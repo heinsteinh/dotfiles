@@ -59,7 +59,7 @@ update_system() {
 # Install essential packages
 install_essential_packages() {
     log_info "Installing essential packages..."
-    
+
     sudo pacman -S --needed --noconfirm \
         base-devel \
         curl \
@@ -84,14 +84,14 @@ install_essential_packages() {
         man-pages \
         openssh \
         rsync
-    
+
     log_success "Essential packages installed"
 }
 
 # Install modern CLI tools
 install_modern_cli_tools() {
     log_info "Installing modern CLI tools..."
-    
+
     sudo pacman -S --needed --noconfirm \
         ripgrep \
         fd \
@@ -115,7 +115,7 @@ install_modern_cli_tools() {
         zoxide \
         mcfly \
         starship
-    
+
     log_success "Modern CLI tools installed"
 }
 
@@ -126,23 +126,23 @@ install_aur_helper() {
         log_info "CI environment detected, skipping AUR helper installation"
         return 0
     fi
-    
+
     if ! command -v yay &> /dev/null; then
         log_info "Installing yay AUR helper..."
-        
+
         # Create temporary directory
         local temp_dir=$(mktemp -d)
         cd "$temp_dir"
-        
+
         # Clone and build yay
         git clone https://aur.archlinux.org/yay.git
         cd yay
         makepkg -si --noconfirm
-        
+
         # Cleanup
         cd "$HOME"
         rm -rf "$temp_dir"
-        
+
         log_success "yay AUR helper installed"
     else
         log_info "yay AUR helper already installed"
@@ -152,19 +152,19 @@ install_aur_helper() {
 # Install AUR packages
 install_aur_packages() {
     log_info "Installing AUR packages..."
-    
+
     # Skip AUR packages in CI environment
     if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]]; then
         log_info "CI environment detected, skipping AUR packages"
         return 0
     fi
-    
+
     # Check if yay is available
     if ! command -v yay &> /dev/null; then
         log_warning "yay not found, skipping AUR packages"
         return
     fi
-    
+
     yay -S --needed --noconfirm \
         lazydocker \
         nvm \
@@ -183,14 +183,14 @@ install_aur_packages() {
         inkscape \
         blender \
         obs-studio
-    
+
     log_success "AUR packages installed"
 }
 
 # Install development tools
 install_development_tools() {
     log_info "Installing development tools..."
-    
+
     # Programming languages and runtimes
     sudo pacman -S --needed --noconfirm \
         python \
@@ -210,7 +210,7 @@ install_development_tools() {
         php \
         lua \
         luarocks
-    
+
     # Development utilities
     sudo pacman -S --needed --noconfirm \
         docker \
@@ -233,14 +233,14 @@ install_development_tools() {
         valgrind \
         perf \
         iperf3
-    
+
     # Enable Docker service (skip in CI)
     if [[ "${CI:-}" != "true" ]]; then
         sudo systemctl enable docker.service
         sudo systemctl start docker.service
         sudo usermod -aG docker "$USER"
     fi
-    
+
     log_success "Development tools installed"
     log_warning "Please log out and back in for Docker group changes to take effect"
 }
@@ -248,13 +248,13 @@ install_development_tools() {
 # Install multimedia and graphics packages
 install_multimedia_packages() {
     log_info "Installing multimedia and graphics packages..."
-    
+
     # Skip audio packages in CI environment
     local audio_packages=""
     if [[ "${CI:-}" != "true" ]]; then
         audio_packages="alsa-utils pulseaudio pulseaudio-alsa pavucontrol"
     fi
-    
+
     sudo pacman -S --needed --noconfirm \
         ${audio_packages} \
         ffmpeg \
@@ -269,14 +269,14 @@ install_multimedia_packages() {
         x265 \
         libvpx \
         opus
-    
+
     log_success "Multimedia packages installed"
 }
 
 # Install fonts
 install_fonts() {
     log_info "Installing fonts..."
-    
+
     # System fonts
     sudo pacman -S --needed --noconfirm \
         ttf-dejavu \
@@ -295,7 +295,7 @@ install_fonts() {
         adobe-source-code-pro-fonts \
         adobe-source-sans-fonts \
         adobe-source-serif-fonts
-    
+
     # Nerd fonts (if yay is available)
     if command -v yay &> /dev/null; then
         log_info "Installing Nerd Fonts via AUR..."
@@ -306,7 +306,7 @@ install_fonts() {
             ttf-meslo-nerd \
             ttf-sourcecodepro-nerd
     fi
-    
+
     log_success "Fonts installed"
 }
 
@@ -328,7 +328,7 @@ set_zsh_default() {
         log_info "CI environment detected, skipping shell change"
         return
     fi
-    
+
     if [[ "$SHELL" != */zsh ]]; then
         log_info "Setting zsh as default shell..."
         chsh -s "$(which zsh)"
@@ -384,39 +384,39 @@ install_zsh_plugins() {
 # Configure system settings
 configure_system_settings() {
     log_info "Configuring system settings..."
-    
+
     # Enable multilib repository (for 32-bit support)
     if ! grep -q "^\[multilib\]" /etc/pacman.conf; then
         log_info "Enabling multilib repository..."
         sudo sed -i '/^#\[multilib\]/,/^#Include/ { s/^#//; }' /etc/pacman.conf
         sudo pacman -Sy
     fi
-    
+
     # Configure makepkg for faster builds
     log_info "Optimizing makepkg configuration..."
     local cpu_cores=$(nproc)
     sudo sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$cpu_cores\"/" /etc/makepkg.conf
     sudo sed -i 's/^COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T 0 -z -)/' /etc/makepkg.conf
-    
+
     # Configure pacman for parallel downloads
     if ! grep -q "^ParallelDownloads" /etc/pacman.conf; then
         log_info "Enabling parallel downloads in pacman..."
         sudo sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
     fi
-    
+
     # Enable color output in pacman
     if ! grep -q "^Color" /etc/pacman.conf; then
         log_info "Enabling color output in pacman..."
         sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
     fi
-    
+
     log_success "System settings configured"
 }
 
 # Install security tools
 install_security_tools() {
     log_info "Installing security tools..."
-    
+
     sudo pacman -S --needed --noconfirm \
         ufw \
         fail2ban \
@@ -426,68 +426,68 @@ install_security_tools() {
         checksec \
         nftables \
         iptables-nft
-    
+
     # Enable and configure UFW (skip in CI)
     if [[ "${CI:-}" != "true" ]]; then
         sudo ufw --force reset
         sudo ufw default deny incoming
         sudo ufw default allow outgoing
         sudo ufw enable
-        
+
         # Enable fail2ban
         sudo systemctl enable fail2ban.service
     fi
-    
+
     log_success "Security tools installed and configured"
 }
 
 # Cleanup
 cleanup() {
     log_info "Cleaning up..."
-    
+
     # Clean pacman cache
     sudo pacman -Sc --noconfirm
-    
+
     # Clean yay cache if available
     if command -v yay &> /dev/null; then
         yay -Sc --noconfirm
     fi
-    
+
     # Remove orphaned packages
     local orphans=$(pacman -Qdtq 2>/dev/null || true)
     if [[ -n "$orphans" ]]; then
         log_info "Removing orphaned packages..."
         sudo pacman -Rns $orphans --noconfirm
     fi
-    
+
     log_success "Cleanup completed"
 }
 
 # Main function
 main() {
     log_info "Starting Arch Linux-specific setup..."
-    
+
     # Check CI environment
     if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]]; then
         log_info "CI environment detected (CI=${CI:-false}, DOTFILES_CI_MODE=${DOTFILES_CI_MODE:-false})"
     fi
-    
+
     # Verification and core setup
     check_arch_linux
     update_system
     install_essential_packages
     install_modern_cli_tools
     configure_system_settings
-    
+
     # AUR setup
     install_aur_helper
-    
+
     # Shell setup
     install_starship
     set_zsh_default
     install_oh_my_zsh
     install_zsh_plugins
-    
+
     # Optional installations based on arguments
     # Always respect CI environment regardless of flags
     if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]]; then
@@ -513,18 +513,18 @@ main() {
             install_fonts
         fi
     fi
-    
+
     # Always install fonts for better terminal experience (unless minimal CI)
     if [[ "${1:-}" != "--minimal" ]] && [[ "${CI:-}" != "true" ]]; then
         install_fonts
     fi
-    
+
     # Cleanup
     cleanup
-    
+
     log_success "Arch Linux setup completed successfully!"
     log_info "Please run 'source ~/.zshrc' or restart your terminal to apply changes"
-    
+
     # Show post-installation information
     log_info "Post-installation notes:"
     echo "  - Reboot is recommended for all changes to take effect"

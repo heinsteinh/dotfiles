@@ -129,7 +129,7 @@ Every contribution undergoes automated security scanning:
 
 **Common Bug Categories:**
 - **OS Compatibility**: Platform-specific issues
-- **Package Management**: Installation/update problems  
+- **Package Management**: Installation/update problems
 - **Configuration**: Symlink or config file issues
 - **Performance**: Startup time or resource usage
 - **Security**: Vulnerability or exposure concerns
@@ -172,16 +172,16 @@ set -euo pipefail  # Exit on error, undefined vars, pipe failures
 function_name() {
     local arg1="$1"
     local arg2="${2:-default_value}"
-    
+
     # Validation
     [[ -z "$arg1" ]] && { echo "Error: Missing argument"; return 1; }
-    
+
     # Implementation with error checking
     if ! command -v some_tool >/dev/null 2>&1; then
         echo "Error: some_tool not found"
         return 1
     fi
-    
+
     # Success indicator
     echo "✅ Operation completed successfully"
 }
@@ -225,13 +225,13 @@ create_config_symlink() {
     local config_name="$1"
     local source_path="${DOTFILES_DIR}/config/${config_name}"
     local target_path="${HOME}/.${config_name}"
-    
+
     # Backup existing configuration
     if [[ -e "$target_path" && ! -L "$target_path" ]]; then
         mv "$target_path" "${target_path}.backup.$(date +%Y%m%d_%H%M%S)"
         echo "📋 Backed up existing $config_name configuration"
     fi
-    
+
     # Create symlink
     ln -sf "$source_path" "$target_path"
     echo "🔗 Created symlink: $target_path -> $source_path"
@@ -245,7 +245,7 @@ install_zsh_plugin() {
     local plugin_name="$1"
     local plugin_repo="$2"
     local plugin_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/$plugin_name"
-    
+
     if [[ ! -d "$plugin_dir" ]]; then
         git clone "$plugin_repo" "$plugin_dir"
         echo "📦 Installed plugin: $plugin_name"
@@ -262,9 +262,9 @@ install_zsh_plugin() {
 test_feature() {
     local feature_name="$1"
     local test_passed=true
-    
+
     echo "🧪 Testing $feature_name..."
-    
+
     # Test implementation
     if ! validate_feature; then
         echo "❌ $feature_name test failed"
@@ -272,7 +272,7 @@ test_feature() {
     else
         echo "✅ $feature_name test passed"
     fi
-    
+
     return $([[ "$test_passed" == true ]] && echo 0 || echo 1)
 }
 ```
@@ -358,7 +358,7 @@ Include relevant screenshots or command output.
 ### Contributors
 We maintain a contributors list recognizing all contributions:
 - **Code Contributors**: Feature development and bug fixes
-- **Documentation Contributors**: Guides, examples, and clarity improvements  
+- **Documentation Contributors**: Guides, examples, and clarity improvements
 - **Testing Contributors**: Platform validation and issue identification
 - **Community Contributors**: Issue reporting, discussions, and feedback
 

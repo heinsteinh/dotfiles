@@ -15,14 +15,14 @@ cd ~/.dotfiles
 
 # Or direct platform-specific setup
 ./scripts/setup/setup-ubuntu.sh    # Ubuntu/Debian
-./scripts/setup/setup-macos.sh     # macOS  
+./scripts/setup/setup-macos.sh     # macOS
 ./scripts/setup/setup-fedora.sh    # Fedora
 ./scripts/setup/setup-arch.sh      # Arch Linux
 ```
 
 ### 🛡️ What Gets Installed
 - **Essential tools**: Git, Zsh, Vim, Tmux, modern CLI utilities
-- **Development tools**: Node.js, Python, Go, Rust toolchains  
+- **Development tools**: Node.js, Python, Go, Rust toolchains
 - **Modern CLI**: ripgrep, fzf, eza, bat, fd, starship, htop
 - **Zsh plugins**: Oh My Zsh, autosuggestions, syntax highlighting, fast-syntax-highlighting, autocomplete
 - **Fonts**: Nerd Fonts (MesloLGS, FiraCode, JetBrains Mono, Hack)
@@ -32,7 +32,7 @@ cd ~/.dotfiles
 
 ### 🏗️ Automated Setup & CI/CD
 - **🤖 Intelligent OS Detection**: Automatically detects Ubuntu, macOS, Fedora, Arch Linux
-- **⚡ New Machine Workflow**: Interactive setup for minimal/full installations  
+- **⚡ New Machine Workflow**: Interactive setup for minimal/full installations
 - **🔄 CI/CD Testing**: Multi-OS testing on GitHub Actions (Ubuntu 22.04/24.04, macOS 14, Fedora, Arch)
 - **🛡️ Security Scanning**: GitLeaks, TruffleHog, Trivy integration with SARIF reports
 - **📋 Comprehensive Testing**: 17-test validation suite for all components
@@ -45,7 +45,7 @@ cd ~/.dotfiles
 - **🔀 Git**: Advanced configuration with hooks, aliases, and security
 
 ### 🚀 Modern CLI Arsenal
-- **🔍 Search & Find**: `ripgrep` (rg), `fzf` (fuzzy finder), `fd` (find alternative)  
+- **🔍 Search & Find**: `ripgrep` (rg), `fzf` (fuzzy finder), `fd` (find alternative)
 - **📁 File Management**: `eza` (modern ls), `bat` (syntax-highlighted cat), `tree`
 - **⚡ Performance**: `htop`/`btop` (system monitoring), `starship` (fast prompt)
 - **🛠️ Development**: `lazygit` (git UI), language toolchains (Node.js, Python, Go, Rust)
@@ -54,7 +54,7 @@ cd ~/.dotfiles
 ### 🆕 Latest Major Improvements
 - **✅ Ubuntu 24.04 Full Support** - Updated package management and tool compatibility
 - **🔧 Enhanced Setup Scripts** - Comprehensive OS-specific installation with error handling
-- **🧪 CI-Aware Testing** - Smart test framework that adapts to CI vs local environments  
+- **🧪 CI-Aware Testing** - Smart test framework that adapts to CI vs local environments
 - **🔐 Advanced Security** - Multi-tool secret scanning with artifact preservation
 - **📦 Modular Architecture** - Clean separation of concerns with extensible structure
 - **🎯 Performance Optimized** - Lazy loading and efficient resource management
@@ -69,7 +69,7 @@ git clone https://github.com/heinsteinh/dotfiles.git ~/.dotfiles && cd ~/.dotfil
 # Run interactive setup wizard
 ./tools/workflows/new-machine.sh
 # - Prompts for user info (name, email)
-# - Offers minimal vs full installation  
+# - Offers minimal vs full installation
 # - Automatically detects and configures OS
 # - Handles all dependencies and setup
 ```
@@ -79,7 +79,7 @@ git clone https://github.com/heinsteinh/dotfiles.git ~/.dotfiles && cd ~/.dotfil
 # Ubuntu/Debian Systems
 ./scripts/setup/setup-ubuntu.sh
 
-# macOS Systems  
+# macOS Systems
 ./scripts/setup/setup-macos.sh
 
 # Fedora Systems
@@ -340,13 +340,13 @@ Our GitHub Actions workflow ensures reliability across all supported platforms:
 ```yaml
 ✅ Multi-OS Testing:
   - Ubuntu 22.04 & 24.04 (in containers)
-  - macOS 14 (native runners)  
+  - macOS 14 (native runners)
   - Fedora Latest (container)
   - Arch Linux Latest (container)
 
 🔍 Security Scanning:
   - GitLeaks: Repository secret detection
-  - TruffleHog: Advanced secret scanning  
+  - TruffleHog: Advanced secret scanning
   - Trivy: Vulnerability & secret analysis
   - Custom patterns: Dotfiles-specific checks
 
@@ -367,7 +367,7 @@ Our GitHub Actions workflow ensures reliability across all supported platforms:
 ### ✅ Test Coverage
 17 comprehensive tests covering:
 - Essential command availability
-- Modern CLI tool installation  
+- Modern CLI tool installation
 - Configuration file validity
 - Symlink creation and integrity
 - Plugin functionality

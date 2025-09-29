@@ -226,7 +226,7 @@ set_zsh_default() {
         log_info "CI environment detected, skipping shell change"
         return 0
     fi
-    
+
     if [[ "$SHELL" != */zsh ]]; then
         if command_exists zsh; then
             log_info "Setting zsh as default shell..."
