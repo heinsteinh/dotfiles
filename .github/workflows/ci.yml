@@ -114,10 +114,10 @@ jobs:
         chmod +x scripts/setup/setup-macos.sh
         ./scripts/setup/setup-macos.sh || true
         
-    # - name: Run installation tests
-    #   run: |
-    #     chmod +x tests/test-installation.sh
-    #     env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
+    - name: Run installation tests
+      run: |
+        chmod +x tests/test-installation.sh
+        env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
 
   test-fedora:
     name: Test on Fedora
