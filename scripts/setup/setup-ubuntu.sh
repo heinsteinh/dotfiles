@@ -27,8 +27,34 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Check if running on Ubuntu
-if ! command -v lsb_release &> /dev/null || [[ "$(lsb_release -si)" != "Ubuntu" ]]; then
+# Check if running on Ubuntu (container-aware)
+is_ubuntu() {
+    # Check multiple ways to detect Ubuntu (container-friendly)
+    if [[ -f /etc/os-release ]]; then
+        . /etc/os-release
+        [[ "$ID" == "ubuntu" ]] && return 0
+    fi
+    
+    # Fallback to lsb_release if available
+    if command -v lsb_release &> /dev/null; then
+        [[ "$(lsb_release -si)" == "Ubuntu" ]] && return 0
+    fi
+    
+    # Check /etc/issue as another fallback
+    if [[ -f /etc/issue ]] && grep -qi ubuntu /etc/issue; then
+        return 0
+    fi
+    
+    # Check if we're in a Ubuntu container (CI environment)
+    if [[ "${CI:-}" == "true" ]] && [[ -f /etc/debian_version ]]; then
+        log_info "Detected Ubuntu-based container in CI environment"
+        return 0
+    fi
+    
+    return 1
+}
+
+if ! is_ubuntu; then
     log_error "This script is designed for Ubuntu systems only"
     exit 1
 fi
