@@ -12,13 +12,22 @@ Before installing the dotfiles, ensure you have:
 - Terminal with 256 color support
 - Internet connection for downloading dependencies
 
-## Supported Platforms
+## 🌍 Supported Platforms
 
-- **Ubuntu 20.04+** (including 24.04 LTS)
-- **Debian 11+**
-- **Arch Linux** (and Arch-based distributions)
-- **macOS 12+** (Monterey or later)
-- **Fedora 35+**
+| Platform | Versions | CI Testing | Setup Script | Package Manager |
+|----------|----------|------------|--------------|-----------------|
+| **Ubuntu** | 22.04, 24.04 LTS | ✅ Automated | `setup-ubuntu.sh` | apt + snap |
+| **macOS** | 14+ (Sonoma+) | ✅ Automated | `setup-macos.sh` | Homebrew |
+| **Fedora** | Latest rolling | ✅ Automated | `setup-fedora.sh` | dnf + flatpak |
+| **Arch Linux** | Rolling release | ✅ Automated | `setup-arch.sh` | pacman + yay |
+| **Debian** | 11+ (Bullseye+) | 🟡 Compatible | Ubuntu script | apt |
+
+### 🧪 CI/CD Validation
+All platforms are automatically tested on every commit using GitHub Actions with:
+- Container-based testing for Linux distributions
+- Native macOS runners for Apple ecosystem
+- Comprehensive 17-test validation suite
+- Security scanning with multiple tools
 
 ## Before Installation
 
@@ -41,30 +50,62 @@ echo $SHELL
 # If not using zsh, the installer will offer to change it
 ```
 
-## Quick Start
+## 🚀 Installation Methods
 
-### Prerequisites
+### 🎯 Method 1: Interactive New Machine Setup (Recommended)
 
-- Git
-- Curl
-- Administrative privileges (sudo/admin)
-
-### Installation
+**Perfect for:** New systems, first-time users, or complete setups
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dotfiles.git ~/.dotfiles
+git clone https://github.com/heinsteinh/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 
-# Backup existing configurations
-make backup
+# Run the interactive setup wizard
+./tools/workflows/new-machine.sh
+```
 
-# Install everything
-make install
+**What the wizard does:**
+1. **🔍 OS Detection**: Automatically identifies your platform
+2. **👤 User Setup**: Prompts for Git user name and email
+3. **📦 Installation Type**: Choose between minimal or full installation
+4. **⚙️ Platform Setup**: Runs appropriate OS-specific scripts
+5. **🔗 Configuration**: Creates symlinks and configures tools
+6. **✅ Validation**: Tests the installation
 
-# Alternative: Platform-specific installation
-make install-arch    # Arch Linux
-make install-macos   # macOS
+### 🛠️ Method 2: Direct Platform-Specific Installation
+
+**Perfect for:** Advanced users, automation, or specific platform needs
+
+```bash
+# Clone first
+git clone https://github.com/heinsteinh/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
+
+# Choose your platform:
+./scripts/setup/setup-ubuntu.sh    # Ubuntu/Debian systems
+./scripts/setup/setup-macos.sh     # macOS systems  
+./scripts/setup/setup-fedora.sh    # Fedora systems
+./scripts/setup/setup-arch.sh      # Arch Linux systems
+
+# Then create symlinks
+./scripts/utils/create-symlinks.sh
+```
+
+### 🧪 Method 3: Testing & Development
+
+**Perfect for:** Contributors, testers, or validation
+
+```bash
+# Full installation with testing
+git clone https://github.com/heinsteinh/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
+./tools/workflows/new-machine.sh
+
+# Run comprehensive tests
+./tests/test-installation.sh --verbose
+
+# Individual component testing  
+./scripts/install/install-fonts.sh
+./tests/test-installation.sh --skip-interactive
 ```
 
 ### First-Time Setup
