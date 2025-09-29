@@ -59,7 +59,7 @@ install_essential_packages() {
         tree \
         htop \
         btop \
-        neofetch \
+        fastfetch \
         unzip \
         zip \
         tar \
@@ -107,6 +107,12 @@ install_modern_cli_tools() {
 
 # Install AUR helper (yay)
 install_aur_helper() {
+    # Skip AUR helper in CI environment
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "CI environment detected, skipping AUR helper installation"
+        return
+    fi
+    
     if ! command -v yay &> /dev/null; then
         log_info "Installing yay AUR helper..."
         
@@ -132,6 +138,12 @@ install_aur_helper() {
 # Install AUR packages
 install_aur_packages() {
     log_info "Installing AUR packages..."
+    
+    # Skip AUR packages in CI environment
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "CI environment detected, skipping AUR packages"
+        return
+    fi
     
     # Check if yay is available
     if ! command -v yay &> /dev/null; then
@@ -208,10 +220,12 @@ install_development_tools() {
         perf \
         iperf3
     
-    # Enable Docker service
-    sudo systemctl enable docker.service
-    sudo systemctl start docker.service
-    sudo usermod -aG docker "$USER"
+    # Enable Docker service (skip in CI)
+    if [[ "${CI:-}" != "true" ]]; then
+        sudo systemctl enable docker.service
+        sudo systemctl start docker.service
+        sudo usermod -aG docker "$USER"
+    fi
     
     log_success "Development tools installed"
     log_warning "Please log out and back in for Docker group changes to take effect"
@@ -221,11 +235,14 @@ install_development_tools() {
 install_multimedia_packages() {
     log_info "Installing multimedia and graphics packages..."
     
+    # Skip audio packages in CI environment
+    local audio_packages=""
+    if [[ "${CI:-}" != "true" ]]; then
+        audio_packages="alsa-utils pulseaudio pulseaudio-alsa pavucontrol"
+    fi
+    
     sudo pacman -S --needed --noconfirm \
-        alsa-utils \
-        pulseaudio \
-        pulseaudio-alsa \
-        pavucontrol \
+        ${audio_packages} \
         ffmpeg \
         imagemagick \
         graphicsmagick \
@@ -292,6 +309,12 @@ install_starship() {
 
 # Set zsh as default shell
 set_zsh_default() {
+    # Skip changing shell in CI environment
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "CI environment detected, skipping shell change"
+        return
+    fi
+    
     if [[ "$SHELL" != */zsh ]]; then
         log_info "Setting zsh as default shell..."
         chsh -s "$(which zsh)"
@@ -390,14 +413,16 @@ install_security_tools() {
         nftables \
         iptables-nft
     
-    # Enable and configure UFW
-    sudo ufw --force reset
-    sudo ufw default deny incoming
-    sudo ufw default allow outgoing
-    sudo ufw enable
-    
-    # Enable fail2ban
-    sudo systemctl enable fail2ban.service
+    # Enable and configure UFW (skip in CI)
+    if [[ "${CI:-}" != "true" ]]; then
+        sudo ufw --force reset
+        sudo ufw default deny incoming
+        sudo ufw default allow outgoing
+        sudo ufw enable
+        
+        # Enable fail2ban
+        sudo systemctl enable fail2ban.service
+    fi
     
     log_success "Security tools installed and configured"
 }
@@ -459,10 +484,15 @@ main() {
     elif [[ "${1:-}" == "--multimedia" ]]; then
         install_multimedia_packages
         install_fonts
+    elif [[ "${1:-}" == "--minimal" ]]; then
+        # In minimal mode (like CI), just install essential fonts
+        if [[ "${CI:-}" != "true" ]]; then
+            install_fonts
+        fi
     fi
     
-    # Always install fonts for better terminal experience
-    if [[ "${1:-}" != "--minimal" ]]; then
+    # Always install fonts for better terminal experience (unless minimal CI)
+    if [[ "${1:-}" != "--minimal" ]] && [[ "${CI:-}" != "true" ]]; then
         install_fonts
     fi
     

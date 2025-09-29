@@ -95,7 +95,19 @@ install_rpmfusion() {
 install_flathub() {
     log_info "Installing Flathub repository..."
     
-    if ! flatpak remote-list | grep -q flathub; then
+    # Install flatpak if not already installed
+    if ! command -v flatpak &> /dev/null; then
+        log_info "Installing Flatpak..."
+        sudo dnf install -y flatpak
+    fi
+    
+    # Skip Flathub setup in CI environment (requires systemd)
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "CI environment detected, skipping Flathub remote setup"
+        return
+    fi
+    
+    if ! flatpak remote-list | grep -q flathub 2>/dev/null; then
         sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         log_success "Flathub repository added"
     else
@@ -235,10 +247,12 @@ install_development_tools() {
         mtr \
         traceroute
     
-    # Enable and start libvirt
-    sudo systemctl enable libvirtd
-    sudo systemctl start libvirtd
-    sudo usermod -aG libvirt "$USER"
+    # Enable and start libvirt (skip in CI)
+    if [[ "${CI:-}" != "true" ]]; then
+        sudo systemctl enable libvirtd
+        sudo systemctl start libvirtd
+        sudo usermod -aG libvirt "$USER"
+    fi
     
     log_success "Development tools installed"
     log_warning "Please log out and back in for group changes to take effect"
@@ -247,6 +261,12 @@ install_development_tools() {
 # Install multimedia packages
 install_multimedia_packages() {
     log_info "Installing multimedia packages..."
+    
+    # Skip audio packages in CI environment
+    local audio_packages=""
+    if [[ "${CI:-}" != "true" ]]; then
+        audio_packages="pulseaudio pulseaudio-utils pavucontrol alsa-utils pipewire pipewire-pulseaudio wireplumber"
+    fi
     
     # Multimedia codecs and tools
     sudo dnf install -y \
@@ -270,17 +290,8 @@ install_multimedia_packages() {
         opus \
         vorbis-tools \
         flac \
-        sox
-    
-    # Audio system
-    sudo dnf install -y \
-        pulseaudio \
-        pulseaudio-utils \
-        pavucontrol \
-        alsa-utils \
-        pipewire \
-        pipewire-pulseaudio \
-        wireplumber
+        sox \
+        ${audio_packages}
     
     log_success "Multimedia packages installed"
 }
@@ -288,6 +299,12 @@ install_multimedia_packages() {
 # Install GUI applications via DNF
 install_gui_applications_dnf() {
     log_info "Installing GUI applications via DNF..."
+    
+    # Skip GUI apps in CI environment
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "CI environment detected, skipping GUI applications"
+        return
+    fi
     
     sudo dnf install -y \
         firefox \
@@ -319,6 +336,12 @@ install_gui_applications_dnf() {
 # Install GUI applications via Flatpak
 install_gui_applications_flatpak() {
     log_info "Installing GUI applications via Flatpak..."
+    
+    # Skip Flatpak apps in CI environment
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "CI environment detected, skipping Flatpak GUI applications"
+        return
+    fi
     
     if ! command -v flatpak &> /dev/null; then
         log_warning "Flatpak not available, skipping Flatpak applications"
@@ -467,6 +490,12 @@ install_zsh_plugins() {
 configure_firewall() {
     log_info "Configuring firewall..."
     
+    # Skip firewall configuration in CI
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "CI environment detected, skipping firewall configuration"
+        return
+    fi
+    
     # Enable firewalld
     sudo systemctl enable firewalld
     sudo systemctl start firewalld
@@ -499,12 +528,16 @@ install_security_tools() {
         chkrootkit \
         nftables
     
-    # Configure fail2ban
-    sudo systemctl enable fail2ban
-    sudo systemctl start fail2ban
+    # Configure fail2ban (skip in CI)
+    if [[ "${CI:-}" != "true" ]]; then
+        sudo systemctl enable fail2ban
+        sudo systemctl start fail2ban
+    fi
     
-    # Update ClamAV database
-    sudo freshclam || log_warning "ClamAV database update failed, will try later"
+    # Update ClamAV database (skip in CI)
+    if [[ "${CI:-}" != "true" ]]; then
+        sudo freshclam || log_warning "ClamAV database update failed, will try later"
+    fi
     
     log_success "Security tools installed"
 }
@@ -586,7 +619,9 @@ main() {
     
     # Shell setup
     install_starship
-    set_zsh_default
+    if [[ "${CI:-}" != "true" ]]; then
+        set_zsh_default
+    fi
     install_oh_my_zsh
     install_zsh_plugins
     

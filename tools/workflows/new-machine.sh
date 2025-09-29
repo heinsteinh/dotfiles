@@ -3,12 +3,34 @@
 
 set -euo pipefail
 
-# Colors for output
-readonly RED='\033[0;31m'
-readonly GREEN='\033[0;32m'
-readonly YELLOW='\033[1;33m'
-readonly BLUE='\033[0;34m'
-readonly NC='\033[0m'
+# Set TERM if not set (for CI environments)
+if [[ -z "${TERM:-}" ]]; then
+    export TERM=xterm-256color
+fi
+
+# Detect CI environment
+if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]] || [[ "${DOTFILES_SKIP_INTERACTIVE:-}" == "true" ]]; then
+    DOTFILES_CI_MODE=true
+    DOTFILES_SKIP_INTERACTIVE=true
+else
+    DOTFILES_CI_MODE=false
+    DOTFILES_SKIP_INTERACTIVE=false
+fi
+
+# Colors for output (disable in CI)
+if [[ "$DOTFILES_CI_MODE" == "true" ]]; then
+    readonly RED=''
+    readonly GREEN=''
+    readonly YELLOW=''
+    readonly BLUE=''
+    readonly NC=''
+else
+    readonly RED='\033[0;31m'
+    readonly GREEN='\033[0;32m'
+    readonly YELLOW='\033[1;33m'
+    readonly BLUE='\033[0;34m'
+    readonly NC='\033[0m'
+fi
 
 log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
 log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
@@ -36,8 +58,9 @@ USER_EMAIL=""
 USER_NAME=""
 
 welcome_message() {
-    clear
-    cat << 'EOF'
+    if [[ "$DOTFILES_CI_MODE" != "true" ]]; then
+        clear
+        cat << 'EOF'
     ╔══════════════════════════════════════════════════╗
     ║                                                  ║
     ║            🚀 New Machine Setup                  ║
@@ -46,10 +69,35 @@ welcome_message() {
     ║                                                  ║
     ╚══════════════════════════════════════════════════╝
 EOF
-    echo
+        echo
+    else
+        log_info "Starting New Machine Setup (CI Mode)"
+    fi
 }
 
 collect_user_info() {
+    if [[ "$DOTFILES_SKIP_INTERACTIVE" == "true" ]]; then
+        # CI Mode: Use defaults from stdin or environment
+        MACHINE_NAME=${MACHINE_NAME:-$(hostname)}
+        INSTALL_TYPE=${INSTALL_TYPE:-"minimal"}
+        USER_NAME=${USER_NAME:-"testuser"}
+        USER_EMAIL=${USER_EMAIL:-"test@example.com"}
+        
+        # Try to read from stdin if available (for echo piping)
+        if [[ -p /dev/stdin ]]; then
+            read -r MACHINE_NAME || true
+            read -r USER_EMAIL || true
+            read -r INSTALL_TYPE || true
+        fi
+        
+        log_info "CI Mode - Using configuration:"
+        echo "  Machine name: $MACHINE_NAME"
+        echo "  Installation type: $INSTALL_TYPE"
+        echo "  Git name: ${USER_NAME:-<not set>}"
+        echo "  Git email: ${USER_EMAIL:-<not set>}"
+        return
+    fi
+    
     log_info "Let's gather some information about your setup..."
     echo
 
@@ -98,6 +146,12 @@ collect_user_info() {
 confirm() {
     local message="$1"
     local response
+    
+    # Auto-confirm in CI mode
+    if [[ "$DOTFILES_SKIP_INTERACTIVE" == "true" ]]; then
+        log_info "Auto-confirming: $message"
+        return 0
+    fi
 
     while true; do
         read -p "$message (y/n): " response
@@ -457,11 +511,13 @@ final_setup() {
         common_setup
     fi
 
-    # Set zsh as default shell (this is also done in common_setup but ensure it's done)
-    set_zsh_default
+    # Set zsh as default shell (skip in CI)
+    if [[ "$DOTFILES_CI_MODE" != "true" ]]; then
+        set_zsh_default
+    fi
 
-    # Source configurations
-    if [[ -f "$HOME/.zshrc" ]]; then
+    # Source configurations (skip in CI to avoid issues)
+    if [[ "$DOTFILES_CI_MODE" != "true" ]] && [[ -f "$HOME/.zshrc" ]]; then
         log_info "Sourcing zsh configuration..."
         zsh -c "source ~/.zshrc" || true
     fi
@@ -476,9 +532,18 @@ final_setup() {
     cleanup_temp_files
 }
 
+cleanup_temp_files() {
+    log_info "Cleaning up temporary files..."
+    # Remove any temporary files created during installation
+    rm -rf /tmp/dotfiles-*
+    rm -rf /tmp/install-*
+    log_success "Temporary files cleaned up"
+}
+
 show_completion_message() {
-    clear
-    cat << 'EOF'
+    if [[ "$DOTFILES_CI_MODE" != "true" ]]; then
+        clear
+        cat << 'EOF'
     ╔══════════════════════════════════════════════════╗
     ║                                                  ║
     ║            🎉 Installation Complete!             ║
@@ -487,6 +552,7 @@ show_completion_message() {
     ║                                                  ║
     ╚══════════════════════════════════════════════════╝
 EOF
+    fi
 
     echo
     log_success "Installation completed successfully!"
