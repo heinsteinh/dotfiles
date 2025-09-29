@@ -314,7 +314,6 @@ If you create useful customizations:
 
 ## Additional Resources
 
-- [Vim Configuration Guide](vim-config-guide.md)
-- [Tmux Best Practices](tmux-best-practices.md)
-- [Zsh Plugin Directory](zsh-plugins.md)
-- [Color Scheme Gallery](color-schemes.md)
+- [Installation Guide](INSTALLATION.md) - Complete setup instructions
+- [CLI Tools Reference](CLI-TOOLS.md) - Modern CLI tools documentation
+- [Troubleshooting Guide](TROUBLESHOOTING.md) - Common issues and solutions
