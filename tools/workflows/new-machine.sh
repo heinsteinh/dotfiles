@@ -193,7 +193,9 @@ manual_macos_setup() {
         htop tree || log_warning "Some packages failed to install"
 
     log_success "macOS manual setup complete"
-}run_installation() {
+}
+
+run_installation() {
     log_info "Starting $INSTALL_TYPE installation..."
 
     case "$INSTALL_TYPE" in
