@@ -9,6 +9,12 @@ on:
     # Run tests daily at 2 AM UTC to catch dependency issues
     - cron: '0 2 * * *'
 
+# Add permissions for security scanning
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 env:
   CI: true
   DOTFILES_CI_MODE: true
@@ -250,19 +256,95 @@ jobs:
         format: 'sarif'
         output: 'trivy-secrets.sarif'
         
+    - name: Check GitHub Advanced Security availability
+      id: check_security
+      continue-on-error: true
+      run: |
+        echo "Checking if GitHub Advanced Security is available..."
+        
+        # Try to check repository security settings via GitHub API
+        REPO_SECURITY=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${{ github.repository }}" | \
+          jq -r '.security_and_analysis.advanced_security.status // "disabled"')
+        
+        echo "Advanced Security status: $REPO_SECURITY"
+        
+        if [[ "$REPO_SECURITY" == "enabled" ]]; then
+          echo "✅ GitHub Advanced Security is enabled - SARIF uploads will be attempted"
+          echo "upload_sarif=true" >> $GITHUB_OUTPUT
+        else
+          echo "ℹ️ GitHub Advanced Security is not available - skipping SARIF uploads"
+          echo "📁 Security results will be available as workflow artifacts instead"
+          echo "upload_sarif=false" >> $GITHUB_OUTPUT
+        fi
+        
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v3
-      if: always()
+      if: always() && hashFiles('trivy-results.sarif') != ''
+      continue-on-error: true
       with:
         sarif_file: 'trivy-results.sarif'
         category: 'trivy-vulnerabilities'
         
     - name: Upload Trivy secret scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v3
-      if: always()
+      if: always() && hashFiles('trivy-secrets.sarif') != ''
+      continue-on-error: true
       with:
         sarif_file: 'trivy-secrets.sarif'
         category: 'trivy-secrets'
+        
+    - name: Generate security summary (fallback)
+      if: always()
+      run: |
+        echo "## 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Check Trivy vulnerability results
+        if [[ -f trivy-results.sarif ]]; then
+          VULN_COUNT=$(jq '.runs[0].results | length' trivy-results.sarif 2>/dev/null || echo "0")
+          echo "### 🛡️ Vulnerability Scan" >> $GITHUB_STEP_SUMMARY
+          echo "- **Issues found**: $VULN_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        # Check Trivy secret results
+        if [[ -f trivy-secrets.sarif ]]; then
+          SECRET_COUNT=$(jq '.runs[0].results | length' trivy-secrets.sarif 2>/dev/null || echo "0")
+          echo "### 🔐 Secret Scan" >> $GITHUB_STEP_SUMMARY
+          echo "- **Secrets found**: $SECRET_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        # Check GitLeaks results
+        if [[ -f gitleaks-report.sarif ]]; then
+          GITLEAKS_COUNT=$(jq '.runs[0].results | length' gitleaks-report.sarif 2>/dev/null || echo "0")
+          echo "### 🔍 GitLeaks Scan" >> $GITHUB_STEP_SUMMARY
+          echo "- **Git secrets found**: $GITLEAKS_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "### 📋 Available Reports" >> $GITHUB_STEP_SUMMARY
+        echo "Security scan results are available as workflow artifacts:" >> $GITHUB_STEP_SUMMARY
+        echo "- Download the \`security-scan-results\` artifact for detailed reports" >> $GITHUB_STEP_SUMMARY
+        echo "- SARIF files can be manually uploaded to GitHub Security tab if needed" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Add note about SARIF upload limitations
+        echo "### ℹ️ GitHub Security Integration" >> $GITHUB_STEP_SUMMARY
+        
+        # Check if Advanced Security is available by looking at upload results
+        UPLOAD_STATUS="${{ steps.check_security.outputs.upload_sarif }}"
+        if [[ "$UPLOAD_STATUS" == "true" ]]; then
+          echo "✅ SARIF files were uploaded to GitHub Security tab" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "ℹ️ SARIF uploads may not be available (requires GitHub Advanced Security)" >> $GITHUB_STEP_SUMMARY
+          echo "📋 All detailed results are available in workflow artifacts below" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📁 **All scan results are preserved as artifacts for manual review**" >> $GITHUB_STEP_SUMMARY
 
   password-leak-check:
     name: Password & Secrets Leak Check
@@ -438,9 +520,63 @@ jobs:
     - name: Upload GitLeaks SARIF results
       uses: github/codeql-action/upload-sarif@v3
       if: always() && hashFiles('gitleaks-report.sarif') != ''
+      continue-on-error: true
       with:
         sarif_file: 'gitleaks-report.sarif'
         category: 'gitleaks-secrets'
+        
+    - name: Display security scan results
+      if: always()
+      run: |
+        echo "=== SECURITY SCAN RESULTS ==="
+        echo ""
+        
+        # Show Trivy vulnerability results
+        if [[ -f trivy-results.sarif ]]; then
+          echo "🛡️ Trivy Vulnerability Scan:"
+          VULN_COUNT=$(jq '.runs[0].results | length' trivy-results.sarif 2>/dev/null || echo "0")
+          echo "   Found $VULN_COUNT potential vulnerabilities"
+          if [[ "$VULN_COUNT" != "0" ]]; then
+            echo "   ⚠️ Review trivy-results.sarif for details"
+          fi
+          echo ""
+        fi
+        
+        # Show Trivy secret results
+        if [[ -f trivy-secrets.sarif ]]; then
+          echo "🔐 Trivy Secret Scan:"
+          SECRET_COUNT=$(jq '.runs[0].results | length' trivy-secrets.sarif 2>/dev/null || echo "0")
+          echo "   Found $SECRET_COUNT potential secrets"
+          if [[ "$SECRET_COUNT" != "0" ]]; then
+            echo "   ⚠️ Review trivy-secrets.sarif for details"
+          fi
+          echo ""
+        fi
+        
+        # Show GitLeaks results
+        if [[ -f gitleaks-report.sarif ]]; then
+          echo "🔍 GitLeaks Scan:"
+          GITLEAKS_COUNT=$(jq '.runs[0].results | length' gitleaks-report.sarif 2>/dev/null || echo "0")
+          echo "   Found $GITLEAKS_COUNT potential git secrets"
+          if [[ "$GITLEAKS_COUNT" != "0" ]]; then
+            echo "   ⚠️ Review gitleaks-report.sarif for details"
+          fi
+          echo ""
+        fi
+        
+        # Show TruffleHog results if available
+        if [[ -f trufflehog-results.json ]]; then
+          echo "🐷 TruffleHog Scan:"
+          TRUFFLE_COUNT=$(jq '. | length' trufflehog-results.json 2>/dev/null || echo "0")
+          echo "   Found $TRUFFLE_COUNT potential secrets"
+          if [[ "$TRUFFLE_COUNT" != "0" ]]; then
+            echo "   ⚠️ Review trufflehog-results.json for details"
+          fi
+          echo ""
+        fi
+        
+        echo "📁 All results saved as artifacts for detailed review"
+        echo "================================="
         
     - name: Archive security scan results
       uses: actions/upload-artifact@v4
