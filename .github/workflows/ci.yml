@@ -55,7 +55,7 @@ jobs:
     
     strategy:
       matrix:
-        ubuntu-version: [20.04, 22.04, 24.04]
+        ubuntu-version: [22.04, 24.04]
     
     container:
       image: ubuntu:${{ matrix.ubuntu-version }}
@@ -92,7 +92,7 @@ jobs:
     
     strategy:
       matrix:
-        macos-version: [macos-12, macos-13, macos-14]
+        macos-version: [macos-13, macos-14]
     
     steps:
     - name: Checkout repository

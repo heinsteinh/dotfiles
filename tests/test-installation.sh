@@ -21,10 +21,9 @@ fi
 
 # Test configuration
 readonly TEST_DIR="${TEST_DIR:-$(mktemp -d)}"
-readonly VERBOSE="${VERBOSE:-false}"
-# Use DOTFILES_SKIP_INTERACTIVE from CI or fallback to SKIP_INTERACTIVE
-SKIP_INTERACTIVE="${DOTFILES_SKIP_INTERACTIVE:-${SKIP_INTERACTIVE:-${CI:-false}}}"
-readonly SKIP_INTERACTIVE
+VERBOSE="${VERBOSE:-false}"
+# Use a safe internal variable name to avoid readonly conflicts
+DOTFILES_SKIP_INTERACTIVE_MODE="${DOTFILES_SKIP_INTERACTIVE:-${SKIP_INTERACTIVE:-${CI:-false}}}"
 
 # Counters for test results
 TESTS_RUN=0
@@ -201,7 +200,7 @@ test_zsh_config() {
     fi
     
     # Check for Oh My Zsh
-    if [[ ! -d "$HOME/.oh-my-zsh" ]] && [[ "${SKIP_INTERACTIVE}" != "true" ]]; then
+    if [[ ! -d "$HOME/.oh-my-zsh" ]] && [[ "${DOTFILES_SKIP_INTERACTIVE_MODE}" != "true" ]]; then
         log_warning "Oh My Zsh not installed"
     fi
     
@@ -406,8 +405,8 @@ test_script_permissions() {
 test_cicd_compatibility() {
     if [[ "${CI:-}" == "true" ]]; then
         # Test that installation works in non-interactive mode
-        if [[ "${SKIP_INTERACTIVE}" != "true" ]]; then
-            log_error "CI environment detected but SKIP_INTERACTIVE not set"
+        if [[ "${DOTFILES_SKIP_INTERACTIVE_MODE}" != "true" ]]; then
+            log_error "CI environment detected but DOTFILES_SKIP_INTERACTIVE_MODE not set"
             return 1
         fi
         
@@ -541,7 +540,7 @@ main() {
                 shift
                 ;;
             --skip-interactive)
-                SKIP_INTERACTIVE=true
+                DOTFILES_SKIP_INTERACTIVE_MODE=true
                 shift
                 ;;
             -h|--help)
