@@ -1,4 +1,4 @@
-#!/usr/bin/env }
+#!/usr/bin/env bash
 
 if ! declare -f log_success > /dev/null 2>&1; then
     log_success() { echo "[SUCCESS] $1"; }
