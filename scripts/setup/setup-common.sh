@@ -181,6 +181,18 @@ install_zsh_plugins() {
         git clone https://github.com/zsh-users/zsh-syntax-highlighting "$zsh_custom/plugins/zsh-syntax-highlighting"
     fi
 
+    # zsh-fast-syntax-highlighting
+    if [[ ! -d "$zsh_custom/plugins/fast-syntax-highlighting" ]]; then
+        log_info "Installing zsh-fast-syntax-highlighting plugin..."
+        git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git "$zsh_custom/plugins/fast-syntax-highlighting"
+    fi
+
+    # zsh-autocomplete
+    if [[ ! -d "$zsh_custom/plugins/zsh-autocomplete" ]]; then
+        log_info "Installing zsh-autocomplete plugin..."
+        git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git "$zsh_custom/plugins/zsh-autocomplete"
+    fi
+
     # powerlevel10k theme
     if [[ ! -d "$zsh_custom/themes/powerlevel10k" ]]; then
         log_info "Installing powerlevel10k theme..."

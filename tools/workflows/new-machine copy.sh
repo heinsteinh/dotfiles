@@ -131,69 +131,42 @@ install_prerequisites() {
     log_info "Installing prerequisites for $os..."
 
     case "$os" in
-    esac
-}
-
-# New function to handle OS-specific setup
-run_os_setup() {
-    local os
-    os=$(detect_os)
-
-    log_info "Running $os-specific setup..."
-
-    case "$os" in
         macos)
-            if [[ -x "$DOTFILES_DIR/scripts/setup/setup-macos.sh" ]]; then
-                "$DOTFILES_DIR/scripts/setup/setup-macos.sh"
-            else
-                log_warning "macOS setup script not found, running manual setup..."
-                manual_macos_setup
+            # Install Xcode command line tools
+            if ! xcode-select -p &> /dev/null; then
+                log_info "Installing Xcode command line tools..."
+                xcode-select --install
+                log_info "Please complete the Xcode installation and run this script again"
+                exit 0
+            fi
+
+            # Install Homebrew
+            if ! command -v brew &> /dev/null; then
+                log_info "Installing Homebrew..."
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+                # Add Homebrew to PATH
+                echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+                eval "$(/opt/homebrew/bin/brew shellenv)"
             fi
             ;;
         ubuntu|debian)
-            if [[ -x "$DOTFILES_DIR/scripts/setup/setup-ubuntu.sh" ]]; then
-                "$DOTFILES_DIR/scripts/setup/setup-ubuntu.sh"
-            else
-                log_warning "Ubuntu/Debian setup script not found"
-            fi
+            sudo apt update
+            sudo apt install -y curl wget git zsh
             ;;
         fedora)
-            if [[ -x "$DOTFILES_DIR/scripts/setup/setup-fedora.sh" ]]; then
-                "$DOTFILES_DIR/scripts/setup/setup-fedora.sh"
-            else
-                log_warning "Fedora setup script not found"
-            fi
+            sudo dnf install -y curl wget git zsh
+            ;;
+        arch)
+            sudo pacman -Sy --noconfirm curl wget git zsh
             ;;
         *)
-            log_warning "No specific setup for OS: $os"
+            log_warning "Unknown OS, skipping prerequisites"
             ;;
     esac
 }
 
-# Fallback manual macOS setup
-manual_macos_setup() {
-    log_info "Running manual macOS setup..."
-
-    # Install Homebrew if not present
-    if ! command -v brew &> /dev/null; then
-        log_info "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        
-        # Add Homebrew to PATH
-        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    fi
-
-    # Install essential packages
-    log_info "Installing essential packages..."
-    brew install \
-        git curl wget \
-        zsh tmux vim \
-        fzf ripgrep fd eza bat \
-        htop tree || log_warning "Some packages failed to install"
-
-    log_success "macOS manual setup complete"
-}run_installation() {
+run_installation() {
     log_info "Starting $INSTALL_TYPE installation..."
 
     case "$INSTALL_TYPE" in
@@ -218,12 +191,6 @@ run_minimal_installation() {
     # Change to dotfiles directory
     cd "$DOTFILES_DIR"
 
-    # Run OS-specific setup first
-    run_os_setup
-
-    # Run common setup (Oh My Zsh, plugins, etc.)
-    common_setup
-
     # Core configurations only
     if [[ -x "./scripts/utils/create-symlinks.sh" ]]; then
         ./scripts/utils/create-symlinks.sh
@@ -247,12 +214,6 @@ run_full_installation() {
 
     # Change to dotfiles directory to ensure relative paths work
     cd "$DOTFILES_DIR"
-
-    # Run OS-specific setup first
-    run_os_setup
-
-    # Run common setup (Oh My Zsh, plugins, etc.)
-    common_setup
 
     # Run the main install script
     if [[ -x "./install.sh" ]]; then
@@ -352,8 +313,6 @@ create_core_symlinks() {
 
 setup_shell_configs() {
     log_info "Setting up shell configurations..."
-    # Run common setup which includes Oh My Zsh and plugins
-    common_setup
     # Zsh configs are handled by symlinks
     create_core_symlinks
 }
@@ -449,14 +408,11 @@ EOF
 final_setup() {
     log_info "Performing final setup steps..."
 
-    # Ensure common setup is complete
-    if ! command -v zsh &> /dev/null; then
-        log_warning "Zsh not found, running common setup again..."
-        common_setup
+    # Set zsh as default shell
+    if [[ "$SHELL" != */zsh ]] && command -v zsh &> /dev/null; then
+        log_info "Setting zsh as default shell..."
+        chsh -s "$(which zsh)"
     fi
-
-    # Set zsh as default shell (this is also done in common_setup but ensure it's done)
-    set_zsh_default
 
     # Source configurations
     if [[ -f "$HOME/.zshrc" ]]; then
@@ -469,9 +425,6 @@ final_setup() {
         log_info "Running system health check..."
         "$DOTFILES_DIR/tools/doctor.sh" --quiet || true
     fi
-
-    # Clean up temporary files
-    cleanup_temp_files
 }
 
 show_completion_message() {
