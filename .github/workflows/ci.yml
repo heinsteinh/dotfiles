@@ -86,10 +86,10 @@ jobs:
         sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-ubuntu.sh"
         sudo -u testuser bash -c "cd /home/testuser && ./scripts/setup/setup-ubuntu.sh" || true
         
-   # - name: Run installation tests
-   #   run: |
-   #     sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
-   #     sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
+    - name: Run installation tests
+      run: |
+        sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
+        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
 
   test-macos:
     name: Test on macOS
