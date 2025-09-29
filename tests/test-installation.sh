@@ -62,15 +62,22 @@ run_test() {
     ((TESTS_RUN++))
     log_verbose "Running test: $test_name"
     
-    if $test_function; then
+    # Capture test function output and exit code
+    local test_output
+    local test_exit_code=0
+    
+    if test_output=$($test_function 2>&1); then
         ((TESTS_PASSED++))
         log_success "$test_name"
+        [[ -n "$test_output" ]] && log_verbose "Test output: $test_output"
         return 0
     else
+        test_exit_code=$?
         ((TESTS_FAILED++))
         FAILED_TESTS+=("$test_name")
-        log_error "$test_name"
-        return 1
+        log_error "$test_name (exit code: $test_exit_code)"
+        [[ -n "$test_output" ]] && log_error "Test output: $test_output"
+        return 0  # Don't propagate the failure to avoid script exit
     fi
 }
 
@@ -463,8 +470,14 @@ test_system_health() {
 # Main test runner
 run_all_tests() {
     log_info "Starting comprehensive dotfiles installation tests..."
-    log_info "Test environment: ${CI:+CI/CD}${CI:-Local}"
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "Test environment: CI/CD"
+    else
+        log_info "Test environment: Local"
+    fi
     log_info "Test directory: $TEST_DIR"
+    log_info "Skip interactive mode: ${DOTFILES_SKIP_INTERACTIVE_MODE}"
+    log_info "Verbose mode: ${VERBOSE}"
     
     # Core functionality tests
     run_test "Essential Commands" test_essential_commands
