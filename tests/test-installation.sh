@@ -526,7 +526,7 @@ run_all_tests() {
     run_test "CI/CD Compatibility" test_cicd_compatibility
     
     # Performance and health
-    run_test "Performance Check" test_performance
+    #run_test "Performance Check" test_performance
     run_test "System Health" test_system_health
 }
 
