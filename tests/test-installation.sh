@@ -22,7 +22,9 @@ fi
 # Test configuration
 readonly TEST_DIR="${TEST_DIR:-$(mktemp -d)}"
 readonly VERBOSE="${VERBOSE:-false}"
-readonly SKIP_INTERACTIVE="${SKIP_INTERACTIVE:-${CI:-false}}"
+# Use DOTFILES_SKIP_INTERACTIVE from CI or fallback to SKIP_INTERACTIVE
+SKIP_INTERACTIVE="${DOTFILES_SKIP_INTERACTIVE:-${SKIP_INTERACTIVE:-${CI:-false}}}"
+readonly SKIP_INTERACTIVE
 
 # Counters for test results
 TESTS_RUN=0

@@ -11,7 +11,7 @@ on:
 
 env:
   CI: true
-  SKIP_INTERACTIVE: true
+  DOTFILES_CI_MODE: true
 
 jobs:
   lint:
@@ -83,7 +83,7 @@ jobs:
     - name: Run installation tests
       run: |
         sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
-        sudo -u testuser bash -c "cd /home/testuser && ./tests/test-installation.sh --skip-interactive --verbose"
+        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
 
   test-macos:
     name: Test on macOS
@@ -111,7 +111,7 @@ jobs:
     - name: Run installation tests
       run: |
         chmod +x tests/test-installation.sh
-        ./tests/test-installation.sh --skip-interactive --verbose
+        env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
 
   test-fedora:
     name: Test on Fedora
@@ -144,7 +144,7 @@ jobs:
     - name: Run installation tests
       run: |
         sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
-        sudo -u testuser bash -c "cd /home/testuser && ./tests/test-installation.sh --skip-interactive --verbose"
+        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
 
   test-arch:
     name: Test on Arch Linux
@@ -177,7 +177,7 @@ jobs:
     - name: Run installation tests
       run: |
         sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
-        sudo -u testuser bash -c "cd /home/testuser && ./tests/test-installation.sh --skip-interactive --verbose"
+        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
 
   test-minimal-install:
     name: Test Minimal Installation
@@ -201,7 +201,7 @@ jobs:
     - name: Test minimal installation
       run: |
         chmod +x tests/test-installation.sh
-        ./tests/test-installation.sh --skip-interactive --verbose
+        env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
 
   test-full-install:
     name: Test Full Installation
@@ -220,7 +220,7 @@ jobs:
     - name: Test full installation
       run: |
         chmod +x tests/test-installation.sh
-        ./tests/test-installation.sh --skip-interactive --verbose
+        env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
 
   security-scan:
     name: Security Scan
