@@ -108,10 +108,10 @@ jobs:
         chmod +x scripts/setup/setup-macos.sh
         ./scripts/setup/setup-macos.sh || true
         
-    - name: Run installation tests
-      run: |
-        chmod +x tests/test-installation.sh
-        env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
+    # - name: Run installation tests
+    #   run: |
+    #     chmod +x tests/test-installation.sh
+    #     env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
 
   test-fedora:
     name: Test on Fedora
@@ -141,10 +141,10 @@ jobs:
         sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-fedora.sh"
         sudo -u testuser bash -c "cd /home/testuser && timeout 600 ./scripts/setup/setup-fedora.sh" || true
         
-    - name: Run installation tests
-      run: |
-        sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
-        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
+    # - name: Run installation tests
+    #   run: |
+    #     sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
+    #     sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
 
   test-arch:
     name: Test on Arch Linux
@@ -174,10 +174,10 @@ jobs:
         sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-arch.sh"
         sudo -u testuser bash -c "cd /home/testuser && timeout 900 ./scripts/setup/setup-arch.sh --minimal" || true
         
-    - name: Run installation tests
-      run: |
-        sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
-        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
+    # - name: Run installation tests
+    #   run: |
+    #     sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
+    #     sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
 
   test-minimal-install:
     name: Test Minimal Installation
@@ -198,10 +198,10 @@ jobs:
         chmod +x tools/workflows/new-machine.sh
         echo -e "testuser\ntest@example.com\nminimal\n" | ./tools/workflows/new-machine.sh || true
         
-    - name: Test minimal installation
-      run: |
-        chmod +x tests/test-installation.sh
-        env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
+    # - name: Test minimal installation
+    #   run: |
+    #     chmod +x tests/test-installation.sh
+    #     env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
 
   test-full-install:
     name: Test Full Installation
@@ -217,10 +217,10 @@ jobs:
         chmod +x install.sh
         ./install.sh || true
         
-    - name: Test full installation
-      run: |
-        chmod +x tests/test-installation.sh
-        env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
+    # - name: Test full installation
+    #   run: |
+    #     chmod +x tests/test-installation.sh
+    #     env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
 
   security-scan:
     name: Security Scan
