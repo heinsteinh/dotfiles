@@ -18,7 +18,7 @@ set -euo pipefail
 
 # Source common setup functions for colors and logging
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DOTFILES_DIR="$(dirname "$(dirname "$SCRIPT_DIR)")"
+DOTFILES_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 
 if [[ -f "$DOTFILES_DIR/scripts/setup/setup-common.sh" ]]; then
     source "$DOTFILES_DIR/scripts/setup/setup-common.sh"
