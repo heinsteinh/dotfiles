@@ -215,7 +215,7 @@ configure_macos_settings() {
     defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
     # Energy saving
-    sudo pmset -a displaytimeout 10
+    sudo pmset -a displaysleep 10
     sudo pmset -a disksleep 10
     sudo pmset -a sleep 30
 
