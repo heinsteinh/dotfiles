@@ -369,11 +369,10 @@ jobs:
         # Get the latest GitLeaks version dynamically
         GITLEAKS_VERSION=$(curl -s https://api.github.com/repos/gitleaks/gitleaks/releases/latest | grep '"tag_name"' | sed 's/.*"tag_name": "v\([^"]*\)".*/\1/')
         echo "Installing GitLeaks version: $GITLEAKS_VERSION"
-        wget "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_v${GITLEAKS_VERSION}_linux_x64.tar.gz"
-        tar -xzf "gitleaks_v${GITLEAKS_VERSION}_linux_x64.tar.gz"
+        wget "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+        tar -xzf "gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
         sudo mv gitleaks /usr/local/bin/
         gitleaks version
-
     - name: Run GitLeaks secret detection
       run: |
         echo "Running GitLeaks to detect secrets in repository..."
