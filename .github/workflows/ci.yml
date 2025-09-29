@@ -337,7 +337,7 @@ jobs:
         echo "### 📋 Available Reports" >> $GITHUB_STEP_SUMMARY
         echo "Security scan results are available as workflow artifacts:" >> $GITHUB_STEP_SUMMARY
         echo "- Download the \`security-scan-results\` artifact for detailed reports" >> $GITHUB_STEP_SUMMARY
-        echo "- SARIF files can be manually uploaded to GitHub Security tab if needed" >>
+        echo "- SARIF files can be manually uploaded to GitHub Security tab if needed" >> $GITHUB_STEP_SUMMARY
         # Add note about SARIF upload limitations
         echo "### ℹ️ GitHub Security Integration" >> $GITHUB_STEP_SUMMARY
         
