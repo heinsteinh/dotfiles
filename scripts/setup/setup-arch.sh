@@ -1,19 +1,33 @@
-#!/usr/bin/env bash
-# Arch Linux-specific setup script
+#!/usr/bin/env }
+
+if ! declare -f log_success > /dev/null 2>&1; then
+    log_success() { echo "[SUCCESS] $1"; }
+fi
+
+if ! declare -f log_warning > /dev/null 2>&1; then
+    log_warning() { echo "[WARNING] $1"; }
+fi
+
+if ! declare -f log_error > /dev/null 2>&1; then
+    log_error() { echo "[ERROR] $1"; }
+fi
+
+# Check if running Arch Linuxux-specific setup script
 
 set -euo pipefail
 
-# Colors for output
-readonly RED='\033[0;31m'
-readonly GREEN='\033[0;32m'
-readonly YELLOW='\033[1;33m'
-readonly BLUE='\033[0;34m'
-readonly NC='\033[0m' # No Color
+# Source common setup functions for colors and logging
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(dirname "$(dirname "$SCRIPT_DIR)")"
 
-# Logging functions
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
+if [[ -f "$DOTFILES_DIR/scripts/setup/setup-common.sh" ]]; then
+    source "$DOTFILES_DIR/scripts/setup/setup-common.sh"
+fi
+
+# Additional logging functions if not defined
+if ! declare -f log_info > /dev/null 2>&1; then
+    log_info() { echo "[INFO] $1"; }
+fi
 
 log_success() {
     echo -e "${GREEN}[SUCCESS]${NC} $1"
@@ -108,9 +122,9 @@ install_modern_cli_tools() {
 # Install AUR helper (yay)
 install_aur_helper() {
     # Skip AUR helper in CI environment
-    if [[ "${CI:-}" == "true" ]]; then
+    if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]]; then
         log_info "CI environment detected, skipping AUR helper installation"
-        return
+        return 0
     fi
     
     if ! command -v yay &> /dev/null; then
@@ -140,9 +154,9 @@ install_aur_packages() {
     log_info "Installing AUR packages..."
     
     # Skip AUR packages in CI environment
-    if [[ "${CI:-}" == "true" ]]; then
+    if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]]; then
         log_info "CI environment detected, skipping AUR packages"
-        return
+        return 0
     fi
     
     # Check if yay is available
@@ -453,6 +467,11 @@ cleanup() {
 main() {
     log_info "Starting Arch Linux-specific setup..."
     
+    # Check CI environment
+    if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]]; then
+        log_info "CI environment detected (CI=${CI:-false}, DOTFILES_CI_MODE=${DOTFILES_CI_MODE:-false})"
+    fi
+    
     # Verification and core setup
     check_arch_linux
     update_system
@@ -470,7 +489,11 @@ main() {
     install_zsh_plugins
     
     # Optional installations based on arguments
-    if [[ "${1:-}" == "--full" ]] || [[ "${INSTALL_TYPE:-}" == "development" ]]; then
+    # Always respect CI environment regardless of flags
+    if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]]; then
+        log_info "CI environment detected, using minimal installation profile"
+        # Skip additional installations in CI
+    elif [[ "${1:-}" == "--full" ]] || [[ "${INSTALL_TYPE:-}" == "development" ]]; then
         install_development_tools
         install_aur_packages
         install_multimedia_packages

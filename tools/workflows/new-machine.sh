@@ -17,36 +17,15 @@ else
     DOTFILES_SKIP_INTERACTIVE=false
 fi
 
-# Colors for output (disable in CI)
-if [[ "$DOTFILES_CI_MODE" == "true" ]]; then
-    readonly RED=''
-    readonly GREEN=''
-    readonly YELLOW=''
-    readonly BLUE=''
-    readonly NC=''
-else
-    readonly RED='\033[0;31m'
-    readonly GREEN='\033[0;32m'
-    readonly YELLOW='\033[1;33m'
-    readonly BLUE='\033[0;34m'
-    readonly NC='\033[0m'
-fi
-
-log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
-
 # Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 
-
-# Source common setup functions
+# Source common setup functions first (this defines colors and logging)
 if [[ -f "$DOTFILES_DIR/scripts/setup/setup-common.sh" ]]; then
     source "$DOTFILES_DIR/scripts/setup/setup-common.sh"
 else
-    log_error "Common setup script not found: $DOTFILES_DIR/scripts/setup/setup-common.sh"
+    echo "ERROR: Common setup script not found: $DOTFILES_DIR/scripts/setup/setup-common.sh"
     exit 1
 fi
 

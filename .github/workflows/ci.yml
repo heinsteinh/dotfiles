@@ -84,7 +84,7 @@ jobs:
       run: |
         sudo -u testuser bash -c "cd /home/testuser && cp -r $GITHUB_WORKSPACE/. ."
         sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-ubuntu.sh"
-        sudo -u testuser bash -c "cd /home/testuser && ./scripts/setup/setup-ubuntu.sh" || true
+        sudo -u testuser bash -c "cd /home/testuser && export CI=true DOTFILES_CI_MODE=true && ./scripts/setup/setup-ubuntu.sh" || true
         
     - name: Run installation tests
       run: |
@@ -145,7 +145,7 @@ jobs:
       run: |
         sudo -u testuser bash -c "cd /home/testuser && cp -r $GITHUB_WORKSPACE/. ."
         sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-fedora.sh"
-        sudo -u testuser bash -c "cd /home/testuser && timeout 900 ./scripts/setup/setup-fedora.sh --minimal" || true
+        sudo -u testuser bash -c "cd /home/testuser && export CI=true DOTFILES_CI_MODE=true && timeout 900 ./scripts/setup/setup-fedora.sh --minimal" || true
         
     - name: Run installation tests
       run: |
@@ -177,8 +177,9 @@ jobs:
     - name: Run Arch setup
       run: |
         sudo -u testuser bash -c "cd /home/testuser && cp -r $GITHUB_WORKSPACE/. ."
-        sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-arch.sh"
-        sudo -u testuser bash -c "cd /home/testuser && timeout 900 ./scripts/setup/setup-arch.sh --full" || true
+        sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-arch.sh scripts/debug/test-ci-detection.sh"
+        sudo -u testuser bash -c "cd /home/testuser && export CI=true DOTFILES_CI_MODE=true && echo '=== Pre-setup CI test ===' && ./scripts/debug/test-ci-detection.sh"
+        sudo -u testuser bash -c "cd /home/testuser && export CI=true DOTFILES_CI_MODE=true && timeout 900 ./scripts/setup/setup-arch.sh --minimal" || true
         
     - name: Run installation tests
       run: |

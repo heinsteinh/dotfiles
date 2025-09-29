@@ -5,11 +5,20 @@ set -euo pipefail
 
 # Colors for output (only define if not already defined)
 if [[ -z "${RED:-}" ]]; then
-    readonly RED='\033[0;31m'
-    readonly GREEN='\033[0;32m'
-    readonly YELLOW='\033[1;33m'
-    readonly BLUE='\033[0;34m'
-    readonly NC='\033[0m' # No Color
+    # Disable colors in CI mode for better output
+    if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]] || [[ "${DOTFILES_SKIP_INTERACTIVE:-}" == "true" ]]; then
+        readonly RED=''
+        readonly GREEN=''
+        readonly YELLOW=''
+        readonly BLUE=''
+        readonly NC=''
+    else
+        readonly RED='\033[0;31m'
+        readonly GREEN='\033[0;32m'
+        readonly YELLOW='\033[1;33m'
+        readonly BLUE='\033[0;34m'
+        readonly NC='\033[0m' # No Color
+    fi
 fi
 
 # Logging functions (only define if not already defined)

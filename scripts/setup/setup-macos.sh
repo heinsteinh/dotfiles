@@ -3,29 +3,30 @@
 
 set -euo pipefail
 
-# Colors for output
-readonly RED='\033[0;31m'
-readonly GREEN='\033[0;32m'
-readonly YELLOW='\033[1;33m'
-readonly BLUE='\033[0;34m'
-readonly NC='\033[0m' # No Color
+# Source common setup functions for colors and logging
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 
-# Logging functions
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
+if [[ -f "$DOTFILES_DIR/scripts/setup/setup-common.sh" ]]; then
+    source "$DOTFILES_DIR/scripts/setup/setup-common.sh"
+fi
 
-log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
+# Additional logging functions if not defined
+if ! declare -f log_info > /dev/null 2>&1; then
+    log_info() { echo "[INFO] $1"; }
+fi
 
-log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
+if ! declare -f log_success > /dev/null 2>&1; then
+    log_success() { echo "[SUCCESS] $1"; }
+fi
 
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
+if ! declare -f log_warning > /dev/null 2>&1; then
+    log_warning() { echo "[WARNING] $1"; }
+fi
+
+if ! declare -f log_error > /dev/null 2>&1; then
+    log_error() { echo "[ERROR] $1"; }
+fi
 
 # Check if running on macOS
 if [[ "$(uname)" != "Darwin" ]]; then
