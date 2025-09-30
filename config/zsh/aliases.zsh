@@ -264,10 +264,10 @@ alias watch-load='watch uptime'
 alias watch-network='watch ss -tuln'
 
 # Logs
-alias log-system='sudo journalctl -f'
+alias log-system='sudo journalctl -f | ccze -A'
 alias log-kernel='sudo dmesg -T'
 alias log-auth='sudo tail -f /var/log/auth.log'
-alias log-boot='sudo journalctl -b'
+alias log-boot='sudo journalctl -b | ccze -A'
 
 # ============================================================================
 # Storage & Disk Management
@@ -278,6 +278,12 @@ alias du='du -h'
 alias du-summary='du -sh'
 alias du-top='du -sh * | sort -hr | head -10'
 alias du-depth='du -h --max-depth=1'
+
+# Improved disk usage and drive aliases
+alias dusub1='du -h --max-depth=1 | sort -hr'
+alias dusub2='du -h --max-depth=2 | sort -hr'
+alias disks-info='echo "╓───── m o u n t . p o i n t s"; echo "╙────────────────────────────────────── ─ ─ "; lsblk -a; echo ""; echo "╓───── d i s k . u s a g e"; echo "╙────────────────────────────────────── ─ ─ "; df -h; echo ""; echo "╓───── U.U.I.D.s"; echo "╙────────────────────────────────────── ─ ─ "; lsblk -f;'
+alias drives-list="echo -n '\e[1;32mListing connected drives:\e[0m'  | pv -qL 10 && lsblk -f"
 
 # Find large files
 alias find-large='find . -type f -size +100M -exec ls -lh {} \; | sort -k 5 -hr'
@@ -293,6 +299,8 @@ alias umount-lazy='sudo umount -l'
 alias disk-speed='sudo hdparm -t'
 alias disk-info-detail='sudo fdisk -l'
 alias disk-smart='sudo smartctl -a'
+
+
 
 # ============================================================================
 # Network Operations
@@ -327,6 +335,24 @@ alias wget-spider='wget --spider'
 alias curl-headers='curl -I'
 alias curl-follow='curl -L'
 alias curl-time='curl -w "@/dev/stdin" -o /dev/null -s'
+
+# Systemd service management
+#alias sstatus="systemctl status"
+alias systemd-start="sudo systemctl start"
+alias systemd-stop="sudo systemctl stop"
+alias systemd-enable="sudo systemctl enable"
+alias systemd-disable="sudo systemctl disable"
+alias systemd-reload="sudo systemctl reload"
+alias systemd-restart="sudo systemctl restart"
+alias systemd-daemon-reload="sudo systemctl --system daemon-reload"
+alias sstatus="systemctl status"
+alias sstart="sudo systemctl start"
+alias sstop="sudo systemctl stop"
+alias senable="sudo systemctl enable"
+alias sdisable="sudo systemctl disable"
+alias sreload="sudo systemctl reload"
+alias srestart="sudo systemctl restart"
+alias sdaemonreload="sudo systemctl --system daemon-reload"
 
 # ============================================================================
 # Development Tools
@@ -419,6 +445,18 @@ alias live-server='npx live-server'
 
 # ============================================================================
 # Text Editing & Quick Access
+# Vim and fuzzy editing
+alias vi='vim'
+alias vim-today='vim $(date +"%Y-%m-%d")'
+#v() { (cd-git-root; vim "$(fzf --query=\"$(echo $@ | tr ' ' '\\ ' )\" )"); }
+alias vim-recent='vim +:FZFMru'
+
+# Tmux session management
+alias tmux2='tmux -2'
+alias tmux-attach='tmux attach -t'
+alias tmux-new='tmux new -s'
+alias tmux-list='tmux ls'
+alias tmux-kill='tmux kill-session -t'
 # ============================================================================
 # Quick edits
 alias zshrc='${EDITOR:-vim} ~/.zshrc'
@@ -441,6 +479,18 @@ alias now='date +"%Y-%m-%d %H:%M:%S"'
 alias timestamp='date +%s'
 alias iso-date='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 alias week='date +%V'
+
+
+# Directory and process tree visualization
+alias tree-find='find . -not -wholename "*/.git/*" -not -wholename "*/.bzr/*" -not -name ".bzr" -not -name ".git" -not -name "*.sw?" -not -name "*~" -print | sed -e "s;[^/]*/;|__;g;s;__|; |;g"'
+alias tree-all='tree -A'
+alias tree-dirs='tree -d'
+alias tree-d1='tree -d -L 1'
+alias tree-d2='tree -d -L 2'
+alias pstree-color='pstree -U "$@" | sed '\''s/[-a-zA-Z]\+/\x1B[32m&\x1B[0m/g; s/[{}]/\x1B[31m&\x1B[0m/g; s/[─┬─├─└│]/\x1B[34m&\x1B[0m/g'\'''
+
+
+
 
 # Clipboard (cross-platform)
 case "$(uname -s)" in
@@ -542,6 +592,9 @@ fi
 case "$(uname -s)" in
     Darwin)
         # macOS specific
+        # Clean up macOS metadata files
+        alias cleanup-dsstore="find . -type f -name '*.DS_Store' -ls -exec /bin/rm {} \;"
+        alias cleanup-appledouble="find . -type d -name .AppleDouble -ls -exec /bin/rm -r {} \;"
         alias flush-dns='sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
         alias show-hidden='defaults write com.apple.finder AppleShowAllFiles YES && killall Finder'
         alias hide-hidden='defaults write com.apple.finder AppleShowAllFiles NO && killall Finder'
