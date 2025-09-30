@@ -312,7 +312,7 @@ alias localip='hostname -I | cut -d" " -f1'
 alias whois-ip='whois'
 
 # Speed tests
-alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
+alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -'
 alias speedtest-fast='curl -s https://fast.com'
 
 # Port operations
