@@ -319,7 +319,7 @@ ouch list archive.7z                   # List contents without extracting
 
 # Traditional tools (with fallbacks)
 tar -czf archive.tar.gz files/         # Create compressed tar
-tar -xzf archive.tar.gz                # Extract compressed tar  
+tar -xzf archive.tar.gz                # Extract compressed tar
 unzip archive.zip                      # Extract zip files
 7z x archive.7z                        # 7-zip extraction
 ```
@@ -348,7 +348,7 @@ df -h                                  # Disk free space
 ```bash
 # Homebrew (macOS/Linux)
 brew install package                   # Install packages
-brew search pattern                    # Search packages  
+brew search pattern                    # Search packages
 brew update && brew upgrade            # Update system
 brew cleanup                          # Clean cache
 
@@ -357,7 +357,7 @@ npm install -g package                 # Global npm packages
 yarn global add package               # Global yarn packages
 pnpm install -g package               # Fast alternative
 
-# Python ecosystem  
+# Python ecosystem
 pip install package                    # Python packages
 pipx install package                   # Isolated CLI tools
 poetry add package                     # Project dependencies
@@ -471,7 +471,7 @@ gitleaks detect --source . --verbose   # Git secret scanning
 trufflebot --source .                  # Entropy-based detection
 trivy fs .                            # Vulnerability scanning
 
-# Code quality  
+# Code quality
 shellcheck script.sh                   # Shell script linting
 markdownlint *.md                     # Markdown formatting
 yamllint .github/workflows/           # YAML validation
@@ -509,7 +509,7 @@ k9s                                   # Terminal UI for Kubernetes
 
 # Cloud CLI tools (optional installs)
 aws --version                         # AWS CLI
-az --version                          # Azure CLI  
+az --version                          # Azure CLI
 gcloud version                        # Google Cloud CLI
 ```
 
@@ -519,7 +519,7 @@ gcloud version                        # Google Cloud CLI
 ```bash
 # New modular installation approach
 ./scripts/install/install-cli-tools.sh    # 70+ CLI utilities only
-./scripts/install/install-dev-tools.sh    # Development environments  
+./scripts/install/install-dev-tools.sh    # Development environments
 ./scripts/install/install-fonts.sh        # Complete Nerd Fonts collection
 
 # Interactive wizard (recommended)
@@ -541,7 +541,7 @@ make health                              # System health check
 ```bash
 # Update all tools and packages
 ./scripts/maintenance/update-all.sh       # Update everything
-brew update && brew upgrade               # Update Homebrew packages  
+brew update && brew upgrade               # Update Homebrew packages
 npm update -g                            # Update global npm packages
 cargo install-update -a                  # Update Rust tools
 pipx upgrade-all                         # Update Python CLI tools
@@ -578,7 +578,7 @@ export VERBOSE=1
 
 # Tool availability checking
 command -v tool || echo "Tool not found"    # Check tool existence
-which -a python                            # Show all Python locations  
+which -a python                            # Show all Python locations
 type -a git                                # Show git type and location
 
 # Verbose tool output
@@ -593,7 +593,7 @@ rg --version                               # Ripgrep version and features
 ### 🎯 Core Utilities (20 tools)
 Essential replacements for classic UNIX tools with modern features and intelligent fallbacks.
 
-### 🚀 Development Tools (25 tools)  
+### 🚀 Development Tools (25 tools)
 Language runtimes, package managers, and development utilities for multiple programming languages.
 
 ### 🔍 Search & Navigation (10 tools)
@@ -602,7 +602,7 @@ Advanced file finding, content searching, and directory navigation with fuzzy fi
 ### 📊 Monitoring & Performance (15 tools)
 System monitoring, performance analysis, and benchmarking tools with real-time capabilities.
 
-### 🛡️ Security & DevOps (10 tools) 
+### 🛡️ Security & DevOps (10 tools)
 Security scanning, code quality, and CI/CD integration tools for enterprise development.
 
 ---
@@ -611,17 +611,17 @@ Security scanning, code quality, and CI/CD integration tools for enterprise deve
 
 ### ✅ Enhanced Tool Support
 - **Ubuntu 24.04**: Full compatibility with `exa` → `eza` migration
-- **macOS Apple Silicon**: Optimized Homebrew paths and native tool support  
+- **macOS Apple Silicon**: Optimized Homebrew paths and native tool support
 - **Fedora Latest**: Enhanced DNF and RPM Fusion integration
 - **Arch Linux**: Improved AUR support via yay helper
 
 ### 🔧 Smart Installation Features
 - **Intelligent Fallbacks**: Graceful degradation when tools unavailable
-- **CI/CD Awareness**: Tools adapt behavior for headless environments  
+- **CI/CD Awareness**: Tools adapt behavior for headless environments
 - **Performance Optimization**: Lazy loading and caching for faster startup
 - **Cross-Platform**: Consistent experience across all supported platforms
 
-### 🛡️ Security & Reliability  
+### 🛡️ Security & Reliability
 - **Multi-Tool Scanning**: Integrated security validation in installation
 - **Timeout Handling**: Prevents hanging during installation or testing
 - **Error Recovery**: Robust error handling with detailed logging

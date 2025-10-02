@@ -14,7 +14,7 @@ echo "Installing CLI tools for software development..."
 if command -v pacman &> /dev/null; then
     # Arch Linux
     echo "Installing tools for Arch Linux..."
-    
+
     # Core development tools
     sudo pacman -S --needed --noconfirm \
         ranger \
@@ -44,7 +44,7 @@ if command -v pacman &> /dev/null; then
         sd \
         tealdeer
 
-    # Development and debugging tools  
+    # Development and debugging tools
     sudo pacman -S --needed --noconfirm \
         strace \
         ltrace \
@@ -88,9 +88,9 @@ if command -v pacman &> /dev/null; then
     fi
 
 elif command -v brew &> /dev/null; then
-    # macOS  
+    # macOS
     echo "Installing tools for macOS..."
-    
+
     # Core development tools (avoiding duplicates from main setup)
     brew install \
         ranger \
@@ -131,7 +131,7 @@ elif command -v brew &> /dev/null; then
         tcpdump \
         wireshark
 
-    # Text processing and data tools  
+    # Text processing and data tools
     brew install \
         miller \
         pandoc \
@@ -169,7 +169,7 @@ elif command -v apt &> /dev/null; then
     # Debian/Ubuntu
     echo "Installing tools for Debian/Ubuntu..."
     sudo apt update
-    
+
     # Core development tools
     sudo apt install -y \
         ranger \
@@ -227,7 +227,7 @@ elif command -v apt &> /dev/null; then
         direnv \
         entr \
         watchexec
-        
+
     # Note: Some modern tools might need manual installation on older Ubuntu versions
     echo "Note: Some modern CLI tools may require manual installation on this system."
 fi
@@ -352,7 +352,7 @@ else
     echo "Rust/Cargo not found, skipping Rust packages"
 fi
 
-# Install Ruby gems (if Ruby is available)  
+# Install Ruby gems (if Ruby is available)
 if command -v gem &> /dev/null; then
     echo "Installing Ruby development tools..."
     gem install \
@@ -387,13 +387,13 @@ fi
 # Install additional useful scripts
 if command -v curl &> /dev/null; then
     echo "Installing additional useful scripts..."
-    
+
     # Install fzf-git if not already installed
     if [ ! -f ~/.local/bin/fzf-git.sh ]; then
         curl -fsSL https://raw.githubusercontent.com/junegunn/fzf-git.sh/main/fzf-git.sh -o ~/.local/bin/fzf-git.sh
         chmod +x ~/.local/bin/fzf-git.sh
     fi
-    
+
     # Install diff-so-fancy for better git diffs
     if [ ! -f ~/.local/bin/diff-so-fancy ]; then
         curl -fsSL https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy -o ~/.local/bin/diff-so-fancy
@@ -405,7 +405,7 @@ echo "✅ CLI tools installation complete!"
 echo ""
 echo "📋 Installed categories:"
 echo "  • Core development tools and utilities"
-echo "  • Network and system monitoring tools"  
+echo "  • Network and system monitoring tools"
 echo "  • Text processing and data manipulation tools"
 echo "  • Modern alternatives to classic CLI tools"
 echo "  • Language-specific development tools (Node.js, Python, Go, Rust, Ruby)"

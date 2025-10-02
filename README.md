@@ -374,7 +374,7 @@ Our advanced GitHub Actions workflow ensures production reliability:
 
 ### 🛡️ Enterprise Security Features
 - **SARIF Integration**: GitHub Security tab with detailed reporting
-- **Multi-Tool Validation**: Layered security approach with fallback mechanisms  
+- **Multi-Tool Validation**: Layered security approach with fallback mechanisms
 - **Artifact Preservation**: 30-day retention of security scan results
 - **Timeout Handling**: Prevents CI hangs with intelligent timeout detection
 - **Zero-Trust Approach**: Every script execution validated in isolated containers

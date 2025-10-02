@@ -131,7 +131,7 @@ btm                    # Modern system monitor (bottom)
 du -sh */             # Directory sizes
 df -h                 # Disk usage
 
-# Network monitoring  
+# Network monitoring
 ss -tuln              # Network connections
 lsof -i :3000         # What's using port 3000
 bandwhich             # Network usage by process
@@ -196,7 +196,7 @@ extract() {
 ```bash
 # Docker shortcuts (pre-configured aliases)
 dps                   # docker ps
-dim                   # docker images  
+dim                   # docker images
 dex container_id sh   # docker exec -it container_id sh
 dlogs container_id    # docker logs -f container_id
 

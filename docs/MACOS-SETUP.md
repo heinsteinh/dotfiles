@@ -40,7 +40,7 @@ cd ~/.dotfiles
 All fonts include Nerd Font variants for terminal icons:
 - **Fira Code** - Programming font with ligatures
 - **JetBrains Mono** - Modern monospace font
-- **Hack** - Classic programming font  
+- **Hack** - Classic programming font
 - **Meslo LG** - Optimized for Powerline/Starship
 - **Source Code Pro** - Adobe's programming font
 - **Cascadia Code** - Microsoft's modern programming font
@@ -192,7 +192,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 - **Starship** prompt for fast, informative display
 - **4 Essential Plugins**:
   - `zsh-autosuggestions` - Command suggestions
-  - `zsh-syntax-highlighting` - Real-time syntax coloring  
+  - `zsh-syntax-highlighting` - Real-time syntax coloring
   - `fast-syntax-highlighting` - Faster syntax highlighting
   - `zsh-autocomplete` - Advanced tab completion
 
@@ -205,7 +205,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 ### Color Schemes Available
 - **Gruvbox** (default) - Warm, retro developer colors
-- **Dracula** - Dark theme with purple accents  
+- **Dracula** - Dark theme with purple accents
 - **Nord** - Arctic blue color palette
 
 ### Font Features
@@ -397,7 +397,7 @@ git config --global https.proxy http://proxy.company.com:8080
 ### Security Restrictions
 Some corporate environments may restrict:
 - Homebrew installation (requires admin rights)
-- Font installation (security policy)  
+- Font installation (security policy)
 - System preference changes (managed devices)
 
 ### Alternative Installation
@@ -434,7 +434,7 @@ Configure Raycast as a Spotlight replacement:
 3. Set `Cmd+Space` as Raycast hotkey
 4. Disable Spotlight keyboard shortcut in System Preferences
 
-### Alfred Workflows  
+### Alfred Workflows
 Set up Alfred with custom workflows:
 1. Install Powerpack for workflow support
 2. Import development workflows from community
@@ -443,7 +443,7 @@ Set up Alfred with custom workflows:
 ### Rectangle Window Management
 Configure advanced window snapping:
 - **Halves**: `Ctrl+Opt+Left/Right`
-- **Quarters**: `Ctrl+Opt+U/I/J/K`  
+- **Quarters**: `Ctrl+Opt+U/I/J/K`
 - **Center**: `Ctrl+Opt+C`
 - **Maximize**: `Ctrl+Opt+Enter`
 

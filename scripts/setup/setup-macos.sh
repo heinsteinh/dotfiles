@@ -42,22 +42,22 @@ export HOMEBREW_NO_ENV_HINTS=1
 cleanup_problematic_taps() {
     if command -v brew &> /dev/null; then
         log_info "Cleaning up problematic Homebrew taps..."
-        
+
         # Fix Homebrew cache permissions to prevent cleanup issues
         log_info "Fixing Homebrew cache permissions..."
         sudo chown -R $(whoami) ~/Library/Caches/Homebrew/ 2>/dev/null || {
             log_warning "Could not fix Homebrew cache permissions, continuing..."
         }
-        
+
         # Remove the old deprecated font tap if it exists
         brew untap homebrew/homebrew-cask-fonts 2>/dev/null || true
-        
+
         # Update Homebrew after cleaning taps
         log_info "Updating Homebrew..."
         brew update 2>/dev/null || {
             log_warning "Homebrew update had some issues, but continuing..."
         }
-        
+
         log_success "Homebrew taps cleaned up"
     fi
 }
@@ -258,70 +258,70 @@ configure_macos_settings() {
 
     # Developer-specific settings
     log_info "Applying developer-specific settings..."
-    
+
     # Show hidden files and file extensions
     defaults write com.apple.finder AppleShowAllFiles -bool true
     defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-    
+
     # Disable the warning when changing a file extension
     defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-    
+
     # Show full POSIX path as Finder window title
     defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
-    
+
     # Keep folders on top when sorting by name
     defaults write com.apple.finder _FXSortFoldersFirst -bool true
-    
+
     # Disable the "Are you sure you want to open this application?" dialog
     defaults write com.apple.LaunchServices LSQuarantine -bool false
-    
+
     # Enable text selection in Quick Look/Preview
     defaults write com.apple.finder QLEnableTextSelection -bool true
-    
+
     # Show Library folder
     chflags nohidden ~/Library
-    
+
     # Show /Volumes folder
     sudo chflags nohidden /Volumes
-    
+
     # Terminal settings
     defaults write com.apple.terminal StringEncodings -array 4
     defaults write com.apple.terminal "Default Window Settings" -string "Pro"
     defaults write com.apple.terminal "Startup Window Settings" -string "Pro"
-    
+
     # Security settings - disable Gatekeeper (be careful with this)
     # sudo spctl --master-disable
-    
+
     # Menu bar settings - show battery percentage
     defaults write com.apple.menuextra.battery ShowPercent -string "YES"
-    
+
     # Xcode settings (if Xcode is used)
     defaults write com.apple.dt.Xcode ShowBuildOperationDuration -bool true
     defaults write com.apple.dt.Xcode IDEIndexShowLog -bool true
-    
+
     # Git and development file handling
     # Set VS Code as default editor for various file types
     # This will be handled by individual app configurations
-    
+
     # Disable sudden motion sensor (not needed for SSDs)
     sudo pmset -a sms 0
-    
+
     # Increase window resize speed for accessibility
     defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
-    
+
     # Disable automatic capitalization and smart quotes (important for coding)
     defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
     defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
     defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
     defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-    
+
     # Enable full keyboard access for all controls
     defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
-    
+
     # Set a fast key repeat rate (requires restart)
     defaults write NSGlobalDomain KeyRepeat -int 1
     defaults write NSGlobalDomain InitialKeyRepeat -int 10
-    
+
     # Hot corners - set bottom right to show desktop
     defaults write com.apple.dock wvous-br-corner -int 4
     defaults write com.apple.dock wvous-br-modifier -int 0

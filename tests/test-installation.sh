@@ -81,7 +81,7 @@ run_test() {
     test_output=$($test_function 2>&1)
     test_exit_code=$?
     set -e  # Re-enable exit on error
-    
+
     if [[ $test_exit_code -eq 0 ]]; then
         ((TESTS_PASSED++))
         log_success "$test_name"
@@ -92,14 +92,14 @@ run_test() {
         FAILED_TESTS+=("$test_name")
         log_error "$test_name (exit code: $test_exit_code)"
         [[ -n "$test_output" ]] && log_error "Test output: $test_output"
-        
+
         # In CI, show more details about the failure
         if [[ "${CI:-}" == "true" ]]; then
             log_error "CI Debug - Test function: $test_function"
             log_error "CI Debug - Working directory: $(pwd)"
             log_error "CI Debug - User: $(whoami)"
         fi
-        
+
         return 0  # Don't propagate the failure to avoid script exit
     fi
 }
@@ -136,7 +136,7 @@ is_headless() {
     local ssh_connection="${SSH_CONNECTION:-}"
     local ssh_client="${SSH_CLIENT:-}"
     local ssh_tty="${SSH_TTY:-}"
-    
+
     [[ -z "$display_var" ]] && [[ -n "${ssh_connection}${ssh_client}${ssh_tty}" ]]
 }
 
@@ -150,7 +150,7 @@ test_essential_commands() {
 
     local missing_commands=()
     local found_commands=()
-    
+
     for cmd in "${essential_commands[@]}"; do
         if command_exists "$cmd"; then
             found_commands+=("$cmd")
@@ -166,7 +166,7 @@ test_essential_commands() {
 
     if [[ ${#missing_commands[@]} -gt 0 ]]; then
         log_warning "Missing essential commands: ${missing_commands[*]}"
-        
+
         # In CI, be more lenient - only fail if ALL commands are missing
         if [[ "${CI:-}" == "true" ]]; then
             if [[ ${#found_commands[@]} -gt 0 ]]; then
@@ -246,7 +246,7 @@ test_core_symlinks() {
     # Check if any symlinks exist
     local existing_symlinks=()
     local missing_symlinks=()
-    
+
     for file in "${core_files[@]}"; do
         if is_symlink "$file"; then
             existing_symlinks+=("$file")
@@ -725,16 +725,16 @@ run_all_tests() {
 
     # Core functionality tests
     log_verbose "Starting core functionality tests..."
-    
+
     log_verbose "About to run Essential Commands test"
     run_test "Essential Commands" test_essential_commands || log_error "Essential Commands test crashed"
-    
+
     log_verbose "About to run Modern CLI Tools test"
     run_test "Modern CLI Tools" test_modern_cli_tools || log_error "Modern CLI Tools test crashed"
-    
+
     log_verbose "About to run Core Symlinks test"
     run_test "Core Symlinks" test_core_symlinks || log_error "Core Symlinks test crashed"
-    
+
     log_verbose "About to run Config Directories test"
     run_test "Config Directories" test_config_directories || log_error "Config Directories test crashed"
 

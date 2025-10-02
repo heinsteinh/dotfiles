@@ -31,7 +31,7 @@ brew tap --list-official | head -5  # Verify taps are working
 
 ### Ubuntu 24.04 Package Issues (Fixed in v2.0)
 ```bash
-# Error: Package 'exa' has no installation candidate  
+# Error: Package 'exa' has no installation candidate
 # Solution: Automatic migration to 'eza' (handled by setup scripts)
 sudo apt update
 sudo apt install eza  # Modern replacement for exa
@@ -39,7 +39,7 @@ sudo apt install eza  # Modern replacement for exa
 # Legacy fallback if eza unavailable (backup in aliases.zsh)
 if command -v eza >/dev/null 2>&1; then
     alias ls='eza --group-directories-first'
-elif command -v exa >/dev/null 2>&1; then  
+elif command -v exa >/dev/null 2>&1; then
     alias ls='exa --group-directories-first'
 else
     alias ls='ls --color=auto'  # Traditional fallback
@@ -138,7 +138,7 @@ source ~/.config/zsh/aliases.zsh    # Should load after functions
 sudo atsutil databases -remove  # Clear font cache
 # System Preferences → Displays → Color → Calibrate (if colors look off)
 
-# Linux font issues  
+# Linux font issues
 fc-cache -fv  # Refresh font cache
 fc-list | grep -i nerd  # Verify Nerd Fonts
 
@@ -302,7 +302,7 @@ if ! command -v tool >/dev/null 2>&1; then
     exit 0  # Don't fail CI for optional tools
 fi
 
-# Memory issues in containers  
+# Memory issues in containers
 ulimit -v 2048000  # Limit virtual memory
 export NODE_OPTIONS="--max-old-space-size=1024"
 ```
@@ -363,7 +363,7 @@ brew cleanup         # macOS
 
 ### Support Channels
 1. **📚 Documentation**: Check comprehensive guides in `docs/`
-2. **🔍 Search Issues**: Review existing GitHub issues and solutions  
+2. **🔍 Search Issues**: Review existing GitHub issues and solutions
 3. **🧪 Run Tests**: Use built-in diagnostic tools
 4. **🆕 Create Issue**: Report bugs with system info and logs
 5. **💬 Discussion**: Join community discussions for tips and tricks
@@ -373,6 +373,6 @@ brew cleanup         # macOS
 # Include this information when reporting issues:
 uname -a                    # System information
 echo $SHELL                 # Shell version
-cat /etc/os-release        # OS details  
+cat /etc/os-release        # OS details
 ./tests/test-installation.sh --verbose  # Test results
 ```
