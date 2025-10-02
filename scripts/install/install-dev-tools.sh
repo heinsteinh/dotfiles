@@ -8,26 +8,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=../setup/setup-common.sh
 source "$SCRIPT_DIR/../setup/setup-common.sh"
 
-# Development tools to install
-declare -A DEV_TOOLS=(
-    ["git"]="Version control system"
-    ["vim"]="Text editor"
-    ["neovim"]="Modern vim"
-    ["tmux"]="Terminal multiplexer"
-    ["docker"]="Container platform"
-    ["docker-compose"]="Container orchestration"
-    ["nodejs"]="JavaScript runtime"
-    ["npm"]="Node package manager"
-    ["yarn"]="Fast package manager"
-    ["python3"]="Python language"
-    ["pip3"]="Python package manager"
-    ["golang"]="Go language"
-    ["rust"]="Rust language"
-    ["cargo"]="Rust package manager"
-    ["java"]="Java development kit"
-    ["maven"]="Java build tool"
-    ["gradle"]="Build automation tool"
-)
+# Development tools installation script
+# Tool lists are defined inline within each OS-specific function
 
 install_development_tools() {
     local os
@@ -236,8 +218,13 @@ main() {
 
     install_development_tools
 
-    if confirm "Do you want to install Visual Studio Code?"; then
-        install_vscode
+    # Skip interactive prompts in CI mode
+    if [[ "${CI:-}" != "true" ]] && [[ "${DOTFILES_CI_MODE:-}" != "true" ]] && [[ "${DOTFILES_SKIP_INTERACTIVE:-}" != "true" ]]; then
+        if confirm "Do you want to install Visual Studio Code?"; then
+            install_vscode
+        fi
+    else
+        log_info "Skipping Visual Studio Code installation in CI mode"
     fi
 
     log_success "Development tools installation completed!"

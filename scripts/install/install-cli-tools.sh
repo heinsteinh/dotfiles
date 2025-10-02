@@ -103,13 +103,19 @@ elif command -v brew &> /dev/null; then
     # Network and system monitoring
     brew install \
         nload \
-        iotop-c \
         nethogs \
         duf \
         broot \
         choose \
         sd \
         tealdeer
+
+    # Try to install iotop-c (may not be available on newer macOS)
+    if brew search iotop-c | grep -q "iotop-c"; then
+        brew install iotop-c
+    else
+        log_warning "iotop-c is not available for this macOS version, skipping..."
+    fi
 
     # Development and debugging tools
     brew install \
