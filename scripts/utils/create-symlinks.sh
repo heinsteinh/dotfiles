@@ -7,10 +7,25 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 echo "Creating symbolic links from $DOTFILES_DIR"
 
+# Environment detection
+if [[ "${CI:-}" == "true" ]]; then
+    echo "CI environment detected - creating symlinks for testing"
+fi
+
+if [[ "${DOTFILES_SKIP_INTERACTIVE:-}" == "true" ]]; then
+    echo "Non-interactive mode - skipping user prompts"
+fi
+
 # Function to create symlink safely
 create_symlink() {
     local source="$1"
     local target="$2"
+
+    # Check if source exists
+    if [[ ! -e "$source" ]]; then
+        echo "Warning: Source file does not exist: $source"
+        return 1
+    fi
 
     # Create target directory if it doesn't exist
     mkdir -p "$(dirname "$target")"
@@ -19,8 +34,12 @@ create_symlink() {
     [[ -e "$target" || -L "$target" ]] && rm -f "$target"
 
     # Create symlink
-    ln -sf "$source" "$target"
-    echo "Created: $target -> $source"
+    if ln -sf "$source" "$target"; then
+        echo "Created: $target -> $source"
+    else
+        echo "Error: Failed to create symlink: $target -> $source"
+        return 1
+    fi
 }
 
 # Vim

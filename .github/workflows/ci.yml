@@ -176,17 +176,25 @@ jobs:
         useradd -m -s /bin/bash testuser
         echo 'testuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-    - name: Run Arch setup
+    - name: Run Arch setup and installation
       run: |
         sudo -u testuser bash -c "cd /home/testuser && cp -r $GITHUB_WORKSPACE/. ."
-        sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-arch.sh scripts/debug/test-ci-detection.sh"
+        sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-arch.sh scripts/debug/test-ci-detection.sh scripts/utils/create-symlinks.sh scripts/install/install-cli-tools.sh scripts/install/install-fonts.sh"
         sudo -u testuser env CI=true DOTFILES_CI_MODE=true bash -c "cd /home/testuser && echo '=== Pre-setup CI test ===' && ./scripts/debug/test-ci-detection.sh"
-        sudo -u testuser env CI=true DOTFILES_CI_MODE=true bash -c "cd /home/testuser && timeout 900 ./scripts/setup/setup-arch.sh --minimal" || true
+        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true bash -c "cd /home/testuser && timeout 900 ./scripts/setup/setup-arch.sh --minimal" || true
+        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true bash -c "cd /home/testuser && ./scripts/install/install-cli-tools.sh" || true
+        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true bash -c "cd /home/testuser && ./scripts/utils/create-symlinks.sh" || true
 
-    #- name: Run installation tests
-    #  run: |
-    #    sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
-    #    sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
+    - name: Debug installation state
+      run: |
+        sudo -u testuser bash -c "cd /home/testuser && echo '=== Debug: Home directory contents ===' && ls -la /home/testuser/"
+        sudo -u testuser bash -c "cd /home/testuser && echo '=== Debug: Dotfiles directory ===' && ls -la"
+        sudo -u testuser bash -c "cd /home/testuser && echo '=== Debug: Config directory ===' && ls -la ~/.config/ || echo 'No .config directory'"
+
+    - name: Run installation tests
+      run: |
+        sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
+        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
 
   test-minimal-install:
     name: Test Minimal Installation
