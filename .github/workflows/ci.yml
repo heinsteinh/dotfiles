@@ -88,8 +88,8 @@ jobs:
         sudo -u testuser bash -c "cd /home/testuser && cp -r $GITHUB_WORKSPACE/. ."
         sudo -u testuser bash -c "cd /home/testuser && chmod +x install.sh scripts/setup/setup-ubuntu.sh scripts/utils/create-symlinks.sh scripts/install/install-cli-tools.sh scripts/install/install-fonts.sh"
         
-        # Run the full installation process
-        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true bash -c "cd /home/testuser && timeout 900 ./install.sh" || true
+        # Run the full installation process with non-interactive frontend
+        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true DEBIAN_FRONTEND=noninteractive bash -c "cd /home/testuser && timeout 900 ./install.sh" || true
 
     - name: Debug Ubuntu installation state
       shell: bash
@@ -102,7 +102,7 @@ jobs:
       shell: bash
       run: |
         sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
-        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true INSTALL_TYPE=platform ./tests/test-installation.sh --skip-interactive --verbose"
+        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true INSTALL_TYPE=platform DEBIAN_FRONTEND=noninteractive ./tests/test-installation.sh --skip-interactive --verbose"
 
   test-macos:
     name: Test on macOS
@@ -257,11 +257,13 @@ jobs:
 
     - name: Run full installation
       run: |
+        export DEBIAN_FRONTEND=noninteractive
         chmod +x install.sh
         ./install.sh || true
 
     - name: Test full installation
       run: |
+        export DEBIAN_FRONTEND=noninteractive
         chmod +x tests/test-installation.sh
         env CI=true DOTFILES_SKIP_INTERACTIVE=true INSTALL_TYPE=full ./tests/test-installation.sh --skip-interactive --verbose
 
