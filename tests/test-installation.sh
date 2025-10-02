@@ -76,13 +76,18 @@ run_test() {
         log_verbose "About to execute test function: $test_function"
     fi
 
-    if test_output=$($test_function 2>&1); then
+    # Safer test execution with explicit error handling
+    set +e  # Temporarily disable exit on error for test execution
+    test_output=$($test_function 2>&1)
+    test_exit_code=$?
+    set -e  # Re-enable exit on error
+    
+    if [[ $test_exit_code -eq 0 ]]; then
         ((TESTS_PASSED++))
         log_success "$test_name"
         [[ -n "$test_output" ]] && log_verbose "Test output: $test_output"
         return 0
     else
-        test_exit_code=$?
         ((TESTS_FAILED++))
         FAILED_TESTS+=("$test_name")
         log_error "$test_name (exit code: $test_exit_code)"
@@ -126,7 +131,13 @@ dir_exists() {
 
 is_headless() {
     # Check if we're in a headless environment (no display, SSH connection, etc.)
-    [[ -z "${DISPLAY:-}" ]] && [[ -n "${SSH_CONNECTION:-}${SSH_CLIENT:-}${SSH_TTY:-}" ]]
+    # Use safer parameter expansion to avoid unbound variable errors
+    local display_var="${DISPLAY:-}"
+    local ssh_connection="${SSH_CONNECTION:-}"
+    local ssh_client="${SSH_CLIENT:-}"
+    local ssh_tty="${SSH_TTY:-}"
+    
+    [[ -z "$display_var" ]] && [[ -n "${ssh_connection}${ssh_client}${ssh_tty}" ]]
 }
 
 # Test functions
@@ -654,18 +665,30 @@ run_all_tests() {
     if [[ "${CI:-}" == "true" ]]; then
         log_verbose "CI Debug - Current working directory: $(pwd)"
         log_verbose "CI Debug - Current user: $(whoami)"
-        log_verbose "CI Debug - Available commands: $(compgen -c | head -10 | tr '\n' ' ')..."
+        log_verbose "CI Debug - Shell: $SHELL"
         log_verbose "CI Debug - PATH: $PATH"
         if command -v git >/dev/null 2>&1; then
             log_verbose "CI Debug - Git available: $(git --version)"
         fi
+        if command -v bash >/dev/null 2>&1; then
+            log_verbose "CI Debug - Bash available: $(bash --version | head -1)"
+        fi
     fi
 
     # Core functionality tests
-    run_test "Essential Commands" test_essential_commands
-    run_test "Modern CLI Tools" test_modern_cli_tools
-    run_test "Core Symlinks" test_core_symlinks
-    run_test "Config Directories" test_config_directories
+    log_verbose "Starting core functionality tests..."
+    
+    log_verbose "About to run Essential Commands test"
+    run_test "Essential Commands" test_essential_commands || log_error "Essential Commands test crashed"
+    
+    log_verbose "About to run Modern CLI Tools test"
+    run_test "Modern CLI Tools" test_modern_cli_tools || log_error "Modern CLI Tools test crashed"
+    
+    log_verbose "About to run Core Symlinks test"
+    run_test "Core Symlinks" test_core_symlinks || log_error "Core Symlinks test crashed"
+    
+    log_verbose "About to run Config Directories test"
+    run_test "Config Directories" test_config_directories || log_error "Config Directories test crashed"
 
     # Configuration validity tests
     run_test "Zsh Configuration" test_zsh_config
@@ -764,13 +787,21 @@ main() {
     fi
 
     # Detect environment and set appropriate modes
+    log_verbose "Checking if environment is headless..."
     if is_headless; then
         log_info "Headless/remote environment detected - enabling safe mode"
         DOTFILES_SKIP_INTERACTIVE_MODE=true
+    else
+        log_verbose "Non-headless environment detected"
     fi
+    log_verbose "Environment detection complete"
 
-    # Run tests
-    run_all_tests
+    # Run tests with error handling
+    if run_all_tests; then
+        log_verbose "All tests completed successfully"
+    else
+        log_error "Some tests encountered errors during execution"
+    fi
 
     # Print summary and exit with appropriate code
     print_test_summary
