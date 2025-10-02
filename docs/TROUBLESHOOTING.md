@@ -1,36 +1,54 @@
-# Troubleshooting Guide
+# 🔧 Troubleshooting Guide
 
-Complete troubleshooting guide for common issues across all supported platforms.
+Comprehensive troubleshooting guide for resolving issues across all supported platforms. Updated with latest CI/CD fixes and platform-specific solutions.
 
 ## 🔧 Installation Issues
 
-### macOS Homebrew Issues
+### macOS Homebrew Issues (Enhanced with v2.0 fixes)
 ```bash
 # Error: homebrew/homebrew-cask-fonts does not exist!
-# Solution: Clean up deprecated taps (automatically handled by setup)
-brew untap homebrew/homebrew-cask-fonts
+# Solution: Automated cleanup in setup-macos.sh handles deprecated taps
+brew untap homebrew/homebrew-cask-fonts 2>/dev/null || true
 brew tap homebrew/cask-fonts
 
-# Permission denied errors during brew cleanup
+# Permission denied errors during brew cleanup (fixed in setup script)
 sudo chown -R $(whoami) ~/Library/Caches/Homebrew/
+export HOMEBREW_NO_INSTALL_CLEANUP=1
+export HOMEBREW_NO_ENV_HINTS=1
 brew cleanup
 
-# Homebrew PATH issues (Apple Silicon)
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-source ~/.zprofile
+# Homebrew PATH issues (Apple Silicon) - auto-detected
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -f /usr/local/bin/brew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+# Tap already exists issues (fixed)
+brew tap --repair
+brew tap --list-official | head -5  # Verify taps are working
 ```
 
-### Ubuntu 24.04 Package Issues
+### Ubuntu 24.04 Package Issues (Fixed in v2.0)
 ```bash
-# Error: Package 'exa' has no installation candidate
-# Solution: Use eza instead (automatically handled by setup scripts)
+# Error: Package 'exa' has no installation candidate  
+# Solution: Automatic migration to 'eza' (handled by setup scripts)
 sudo apt update
-sudo apt install eza
+sudo apt install eza  # Modern replacement for exa
 
-# If eza is not available in repositories
-wget https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.tar.gz
-tar -xzf eza_*.tar.gz
+# Legacy fallback if eza unavailable (backup in aliases.zsh)
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza --group-directories-first'
+elif command -v exa >/dev/null 2>&1; then  
+    alias ls='exa --group-directories-first'
+else
+    alias ls='ls --color=auto'  # Traditional fallback
+fi
+
+# Manual eza installation if needed
+curl -L https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.tar.gz | tar -xz
 sudo mv eza /usr/local/bin/
+chmod +x /usr/local/bin/eza
 ```
 
 ### Permission Issues
@@ -261,9 +279,100 @@ sudo dnf update
 which apt || which pacman || which dnf || which brew
 ```
 
-## Getting Help
+## 🆕 CI/CD & Testing Issues (New in v2.0)
 
-1. Check the documentation in \`docs/\`
-2. Review configuration files
-3. Run health check: \`make health\`
-4. Create an issue on GitHub
+### Test Script Hanging
+```bash
+# Error: Tests hang on remote systems or CI
+# Solution: Enhanced timeout handling (fixed in test-installation.sh)
+export CI=true  # Enable CI-aware mode
+export INSTALLATION_TYPE="minimal"  # Skip heavy configurations
+./tests/test-installation.sh --timeout=30
+
+# Debug test hanging
+./tests/test-installation.sh --verbose --debug
+```
+
+### GitHub Actions Failures
+```bash
+# Container resource issues (fixed)
+# Enhanced error handling with proper exit codes
+if ! command -v tool >/dev/null 2>&1; then
+    echo "Warning: tool not available in CI environment"
+    exit 0  # Don't fail CI for optional tools
+fi
+
+# Memory issues in containers  
+ulimit -v 2048000  # Limit virtual memory
+export NODE_OPTIONS="--max-old-space-size=1024"
+```
+
+### Security Scanning False Positives
+```bash
+# GitLeaks/TruffleHog false positives
+# Add to .gitleaksignore or .truffletogignore
+echo "path/to/false/positive:generic-api-key" >> .gitleaksignore
+
+# Review security scan results
+find .github/sarif-results/ -name "*.sarif" | head -3
+```
+
+## 🧪 Performance Troubleshooting
+
+### Shell Startup Time Issues
+```bash
+# Profile zsh startup (should be <500ms)
+time zsh -i -c exit
+
+# Identify slow components
+zsh -xvs 2>&1 | head -20
+
+# Disable heavy plugins temporarily
+sed -i 's/plugins=(/plugins=(#/' ~/.zshrc
+source ~/.zshrc
+# Re-enable: sed -i 's/plugins=(#/plugins=(/' ~/.zshrc
+```
+
+### System Resource Issues
+```bash
+# Monitor resource usage
+htop        # Interactive process viewer
+btop        # Modern alternative
+iostat 1    # I/O statistics
+free -h     # Memory usage
+
+# Clean up system resources
+./scripts/maintenance/cleanup.sh
+sudo apt autoremove  # Ubuntu/Debian
+brew cleanup         # macOS
+```
+
+## 🆘 Getting Help
+
+### Self-Diagnosis Tools
+```bash
+# Run comprehensive health check
+./tools/doctor.sh
+
+# Test specific components
+./tests/test-installation.sh --verbose
+
+# Check system compatibility
+./scripts/debug/test-ci-detection.sh
+```
+
+### Support Channels
+1. **📚 Documentation**: Check comprehensive guides in `docs/`
+2. **🔍 Search Issues**: Review existing GitHub issues and solutions  
+3. **🧪 Run Tests**: Use built-in diagnostic tools
+4. **🆕 Create Issue**: Report bugs with system info and logs
+5. **💬 Discussion**: Join community discussions for tips and tricks
+
+### Bug Report Template
+```bash
+# Include this information when reporting issues:
+uname -a                    # System information
+echo $SHELL                 # Shell version
+cat /etc/os-release        # OS details  
+./tests/test-installation.sh --verbose  # Test results
+```

@@ -1,6 +1,7 @@
-# Installation Guide
+````markdown
+# 📋 Installation Guide
 
-Complete installation instructions for setting up the dotfiles across different platforms.
+Complete installation instructions for setting up the dotfiles across different platforms with comprehensive CI/CD testing and automated validation.
 
 ## Prerequisites
 

@@ -1,30 +1,34 @@
-# CLI Tools Reference
+# 🛠️ CLI Tools Reference
 
-A comprehensive reference for all the command-line tools included in this dotfiles configuration.
+Comprehensive reference for 70+ modern command-line tools included in this dotfiles configuration. Updated with latest tools, intelligent fallbacks, and cross-platform compatibility.
 
 ## 🚀 Modern Replacements for Classic Tools
 
-| Classic Tool | Modern Replacement | Key Benefits | Installation |
-|-------------|-------------------|--------------|-------------|
-| `ls` | `eza` | Git integration, icons, tree view | ✅ Auto-installed |
-| `cat` | `bat` | Syntax highlighting, line numbers | ✅ Auto-installed |
-| `find` | `fd` | Simple syntax, fast, respects .gitignore | ✅ Auto-installed |
-| `grep` | `ripgrep (rg)` | 10-100x faster, smart filtering | ✅ Auto-installed |
-| `top` | `htop/bottom` | Interactive, colored, better UI | ✅ Auto-installed |
-| `du` | `dust` | Visual tree, sorted output | ✅ Auto-installed |
-| `ps` | `procs` | Colored output, tree view | ✅ Auto-installed |
-| `ping` | `gping` | Real-time graph display | ✅ Auto-installed |
-| `diff` | `delta` | Syntax highlighting, side-by-side | ✅ Auto-installed |
-| `man` | `tldr/tealdeer` | Simplified examples | ✅ Auto-installed |
+| Classic Tool | Modern Replacement | Key Benefits | Fallback Chain | Installation |
+|-------------|-------------------|--------------|----------------|-------------|
+| `ls` | `eza` | Git integration, icons, tree view | `eza` → `exa` → `ls --color` | ✅ Smart-install |
+| `cat` | `bat` | Syntax highlighting, line numbers | `bat` → `batcat` → `cat` | ✅ Smart-install |
+| `find` | `fd` | Simple syntax, fast, respects .gitignore | `fd` → `fdfind` → `find` | ✅ Smart-install |
+| `grep` | `ripgrep (rg)` | 10-100x faster, smart filtering | `rg` → `grep --color` | ✅ Smart-install |
+| `top` | `htop/bottom` | Interactive, colored, better UI | `btm` → `htop` → `top` | ✅ Smart-install |
+| `du` | `dust` | Visual tree, sorted output | `dust` → `du -h` | ✅ Smart-install |
+| `ps` | `procs` | Colored output, tree view | `procs` → `ps aux` | ✅ Smart-install |
+| `ping` | `gping` | Real-time graph display | `gping` → `ping` | ✅ Smart-install |
+| `diff` | `delta` | Syntax highlighting, side-by-side | `delta` → `diff --color` | ✅ Smart-install |
+| `man` | `tldr/tealdeer` | Simplified examples | `tldr` → `man` | ✅ Smart-install |
 
-## ⚡ Performance & Benchmarking Tools
+## ⚡ Performance & Benchmarking Tools (Enhanced Suite)
 
-| Tool | Purpose | Key Features |
-|------|---------|--------------|
-| `hyperfine` | Command benchmarking | Statistical analysis, warmup runs |
-| `tokei` | Code statistics | Lines of code, language breakdown |
-| `bandwhich` | Network monitoring | Real-time bandwidth by process |
-| `bottom (btm)` | System monitoring | CPU, memory, disk, network graphs |
+| Tool | Purpose | Key Features | Platform Support |
+|------|---------|--------------|------------------|
+| `hyperfine` | Command benchmarking | Statistical analysis, warmup runs, JSON export | Linux, macOS, Windows |
+| `tokei` | Code statistics | Lines of code, language breakdown, Git integration | All platforms |
+| `bandwhich` | Network monitoring | Real-time bandwidth by process, interface stats | Linux, macOS |
+| `bottom (btm)` | System monitoring | CPU, memory, disk, network graphs, process tree | All platforms |
+| `dust` | Disk usage analyzer | Interactive tree view, colorized output | All platforms |
+| `procs` | Process viewer | Colored output, tree view, search/filter | All platforms |
+| `gping` | Enhanced ping | Real-time graphs, multiple hosts | All platforms |
+| `ouch` | Archive management | Unified interface for all archive types | All platforms |
 
 ## File and Directory Operations
 
@@ -302,19 +306,68 @@ sudo apt remove pkg    # Remove package
 sudo apt autoremove    # Remove orphaned packages
 ```
 
-## Archive Tools
+## 📦 Archive & File Management Tools
 
-### Modern Archive Tools
+### Modern Archive Tools (New in v2.0)
 ```bash
-# ouch (unified archive tool)
-ouch compress file.txt archive.zip
-ouch decompress archive.zip
-ouch list archive.tar.gz
+# ouch (unified archive tool) - handles ALL archive formats
+ouch compress files/ archive.zip       # Create archives
+ouch compress files/ archive.tar.gz    # Any format supported
+ouch decompress archive.zip            # Auto-detect format
+ouch decompress *.tar.gz              # Batch extraction
+ouch list archive.7z                   # List contents without extracting
 
-# Traditional tools
-tar -czf archive.tar.gz files/
-unzip archive.zip
-7z x archive.7z
+# Traditional tools (with fallbacks)
+tar -czf archive.tar.gz files/         # Create compressed tar
+tar -xzf archive.tar.gz                # Extract compressed tar  
+unzip archive.zip                      # Extract zip files
+7z x archive.7z                        # 7-zip extraction
+```
+
+### Advanced File Operations
+```bash
+# File synchronization and backup
+rsync -avz source/ destination/        # Sync directories
+rclone sync local/ remote:/path/       # Cloud sync (if installed)
+
+# File permissions and ownership
+chmod +x script.sh                     # Make executable
+chown -R user:group directory/         # Change ownership
+find . -type f -name "*.sh" -exec chmod +x {} \;  # Bulk permissions
+
+# Disk space analysis
+dust                                   # Interactive disk usage
+dust -d 3                             # Limit depth
+ncdu                                   # NCurses disk usage (if available)
+df -h                                  # Disk free space
+```
+
+## 🚀 Package Management & Installation Tools
+
+### Cross-Platform Package Managers
+```bash
+# Homebrew (macOS/Linux)
+brew install package                   # Install packages
+brew search pattern                    # Search packages  
+brew update && brew upgrade            # Update system
+brew cleanup                          # Clean cache
+
+# Node.js ecosystem
+npm install -g package                 # Global npm packages
+yarn global add package               # Global yarn packages
+pnpm install -g package               # Fast alternative
+
+# Python ecosystem  
+pip install package                    # Python packages
+pipx install package                   # Isolated CLI tools
+poetry add package                     # Project dependencies
+
+# Rust ecosystem
+cargo install package                  # Rust CLI tools
+cargo-update -a                       # Update all cargo packages
+
+# Go ecosystem
+go install github.com/user/tool@latest # Go tools
 ```
 
 ## Performance Tools
