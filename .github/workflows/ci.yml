@@ -80,18 +80,27 @@ jobs:
         useradd -m -s /bin/bash testuser
         echo 'testuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-    - name: Run Ubuntu setup
+    - name: Run Ubuntu setup and installation
       shell: bash
       run: |
         sudo -u testuser bash -c "cd /home/testuser && cp -r $GITHUB_WORKSPACE/. ."
-        sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-ubuntu.sh"
-        sudo -u testuser env CI=true DOTFILES_CI_MODE=true bash -c "cd /home/testuser && ./scripts/setup/setup-ubuntu.sh" || true
+        sudo -u testuser bash -c "cd /home/testuser && chmod +x install.sh scripts/setup/setup-ubuntu.sh scripts/utils/create-symlinks.sh scripts/install/install-cli-tools.sh scripts/install/install-fonts.sh"
+        
+        # Run the full installation process
+        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true bash -c "cd /home/testuser && timeout 900 ./install.sh" || true
 
-    #- name: Run installation tests
-    #  shell: bash
-    #  run: |
-    #    sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
-    #    sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
+    - name: Debug Ubuntu installation state
+      shell: bash
+      run: |
+        sudo -u testuser bash -c "cd /home/testuser && echo '=== Debug: Home directory contents ===' && ls -la /home/testuser/"
+        sudo -u testuser bash -c "cd /home/testuser && echo '=== Debug: Dotfiles directory ===' && ls -la"
+        sudo -u testuser bash -c "cd /home/testuser && echo '=== Debug: Config directory ===' && ls -la ~/.config/ || echo 'No .config directory'"
+
+    - name: Run Ubuntu installation tests
+      shell: bash
+      run: |
+        sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
+        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
 
   test-macos:
     name: Test on macOS
@@ -143,16 +152,24 @@ jobs:
         useradd -m -s /bin/bash testuser
         echo 'testuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-    - name: Run Fedora setup
+    - name: Run Fedora setup and installation
       run: |
         sudo -u testuser bash -c "cd /home/testuser && cp -r $GITHUB_WORKSPACE/. ."
-        sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-fedora.sh"
-        sudo -u testuser env CI=true DOTFILES_CI_MODE=true bash -c "cd /home/testuser && timeout 900 ./scripts/setup/setup-fedora.sh --minimal" || true
+        sudo -u testuser bash -c "cd /home/testuser && chmod +x install.sh scripts/setup/setup-fedora.sh scripts/utils/create-symlinks.sh scripts/install/install-cli-tools.sh scripts/install/install-fonts.sh"
+        
+        # Run the full installation process
+        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true bash -c "cd /home/testuser && timeout 900 ./install.sh" || true
 
-    #- name: Run installation tests
-    #  run: |
-    #    sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
-    #    sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
+    - name: Debug Fedora installation state
+      run: |
+        sudo -u testuser bash -c "cd /home/testuser && echo '=== Debug: Home directory contents ===' && ls -la /home/testuser/"
+        sudo -u testuser bash -c "cd /home/testuser && echo '=== Debug: Dotfiles directory ===' && ls -la"
+        sudo -u testuser bash -c "cd /home/testuser && echo '=== Debug: Config directory ===' && ls -la ~/.config/ || echo 'No .config directory'"
+
+    - name: Run Fedora installation tests
+      run: |
+        sudo -u testuser bash -c "cd /home/testuser && chmod +x tests/test-installation.sh"
+        sudo -u testuser bash -c "cd /home/testuser && env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose"
 
   test-arch:
     name: Test on Arch Linux
@@ -179,11 +196,11 @@ jobs:
     - name: Run Arch setup and installation
       run: |
         sudo -u testuser bash -c "cd /home/testuser && cp -r $GITHUB_WORKSPACE/. ."
-        sudo -u testuser bash -c "cd /home/testuser && chmod +x scripts/setup/setup-arch.sh scripts/debug/test-ci-detection.sh scripts/utils/create-symlinks.sh scripts/install/install-cli-tools.sh scripts/install/install-fonts.sh"
+        sudo -u testuser bash -c "cd /home/testuser && chmod +x install.sh scripts/setup/setup-arch.sh scripts/debug/test-ci-detection.sh scripts/utils/create-symlinks.sh scripts/install/install-cli-tools.sh scripts/install/install-fonts.sh"
         sudo -u testuser env CI=true DOTFILES_CI_MODE=true bash -c "cd /home/testuser && echo '=== Pre-setup CI test ===' && ./scripts/debug/test-ci-detection.sh"
-        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true bash -c "cd /home/testuser && timeout 900 ./scripts/setup/setup-arch.sh --minimal" || true
-        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true bash -c "cd /home/testuser && ./scripts/install/install-cli-tools.sh" || true
-        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true bash -c "cd /home/testuser && ./scripts/utils/create-symlinks.sh" || true
+        
+        # Run the full installation process
+        sudo -u testuser env CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true bash -c "cd /home/testuser && timeout 900 ./install.sh" || true
 
     - name: Debug installation state
       run: |
@@ -221,10 +238,10 @@ jobs:
         export INSTALL_TYPE="minimal"
         ./tools/workflows/new-machine.sh || true
 
-    #- name: Test minimal installation
-    #  run: |
-    #    chmod +x tests/test-installation.sh
-    #    env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
+    - name: Test minimal installation
+      run: |
+        chmod +x tests/test-installation.sh
+        env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
 
   test-full-install:
     name: Test Full Installation
@@ -240,10 +257,10 @@ jobs:
         chmod +x install.sh
         ./install.sh || true
 
-    # - name: Test full installation
-    #   run: |
-    #     chmod +x tests/test-installation.sh
-    #     env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
+    - name: Test full installation
+      run: |
+        chmod +x tests/test-installation.sh
+        env CI=true DOTFILES_SKIP_INTERACTIVE=true ./tests/test-installation.sh --skip-interactive --verbose
 
   security-scan:
     name: Security Scan
