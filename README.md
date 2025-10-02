@@ -1,4 +1,19 @@
-# 🚀 Modern Cross-Platform Dotfiles
+# 🚀 Modern Cross-Plat### 🛠️ What Gets Installed
+- **Essential tools**: Git, Zsh, Vim, Tmux, modern CLI utilities
+- **Development tools**: Node.js, Python, Go, Rust toolchains  
+- **Modern CLI**: ripgrep, fzf, eza, bat, fd, starship, htop
+- **Zsh plugins**: Oh My Zsh, autosuggestions, syntax highlighting, fast-syntax-highlighting, autocomplete
+- **Fonts**: Nerd Fonts (MesloLGS, FiraCode, JetBrains Mono, Hack, Cascadia Code)| Document | Description |
+|----------|-------------|
+| [📋 Installation Guide](docs/INSTALLATION.md) | Comprehensive setup instructions for all platforms |
+| [🍎 macOS Setup Guide](docs/MACOS-SETUP.md) | Complete macOS configuration with developer optimizations |
+| [🚀 Developer Workflows](docs/DEVELOPER-WORKFLOWS.md) | Practical workflows and productivity tips for daily development |
+| [🎨 Customization Guide](docs/CUSTOMIZATION.md) | Learn how to personalize your setup |
+| [🔧 Troubleshooting](docs/TROUBLESHOOTING.md) | Solutions to common issues |
+| [🏗️ Architecture Guide](docs/ARCHITECTURE.md) | System design and technical implementation |
+| [🤝 Contributing Guide](docs/CONTRIBUTING.md) | How to contribute to the project |
+| [📜 CLI Tools Reference](docs/CLI-TOOLS.md) | Complete list of included modern CLI tools |S optimizations**: 20+ developer settings for enhanced productivity
+- **Security**: Comprehensive scanning and validationtfiles
 
 A comprehensive, battle-tested dotfiles configuration with automated setup, extensive CI/CD testing, and advanced security scanning. Works seamlessly across Ubuntu, macOS, Fedora, and Arch Linux with intelligent OS detection and modern CLI tools.
 
@@ -54,10 +69,12 @@ cd ~/.dotfiles
 ### 🆕 Latest Major Improvements
 - **✅ Ubuntu 24.04 Full Support** - Updated package management and tool compatibility
 - **🔧 Enhanced Setup Scripts** - Comprehensive OS-specific installation with error handling
+- **🍎 macOS Developer Optimizations** - 20+ developer-specific settings for improved productivity
+- **🛠️ Homebrew Stability** - Robust tap management and cache permission fixes
+- **⚡ Performance Enhancements** - Optimized key repeat, window resizing, and startup times
 - **🧪 CI-Aware Testing** - Smart test framework that adapts to CI vs local environments
 - **🔐 Advanced Security** - Multi-tool secret scanning with artifact preservation
 - **📦 Modular Architecture** - Clean separation of concerns with extensible structure
-- **🎯 Performance Optimized** - Lazy loading and efficient resource management
 
 ## 🔧 Installation Options
 
@@ -408,10 +425,11 @@ Our GitHub Actions workflow ensures reliability across all supported platforms:
 ## 📈 Project Statistics
 
 - **🔧 Setup Scripts**: 5 OS-specific installation scripts
-- **⚙️ Configuration Files**: 15+ carefully tuned dotfiles
+- **⚙️ Configuration Files**: 15+ carefully tuned dotfiles  
 - **🧪 Test Suite**: 17 comprehensive validation tests
 - **🛡️ Security Tools**: 4 integrated scanning tools
-- **📚 Documentation**: 6 comprehensive guides + inline help
+- **📚 Documentation**: 7 comprehensive guides + inline help
+- **🍎 macOS Settings**: 20+ developer-optimized system preferences
 - **🚀 CI Jobs**: 12 automated testing jobs per commit
 
 ## � Documentation
@@ -419,7 +437,8 @@ Our GitHub Actions workflow ensures reliability across all supported platforms:
 | Document | Description |
 |----------|-------------|
 | [📋 Installation Guide](docs/INSTALLATION.md) | Comprehensive setup instructions for all platforms |
-| [🎨 Customization Guide](docs/CUSTOMIZATION.md) | Learn how to personalize your setup |
+| [� macOS Setup Guide](docs/MACOS-SETUP.md) | Complete macOS configuration with developer optimizations |
+| [�🎨 Customization Guide](docs/CUSTOMIZATION.md) | Learn how to personalize your setup |
 | [🔧 Troubleshooting](docs/TROUBLESHOOTING.md) | Solutions to common issues |
 | [🏗️ Architecture Guide](docs/ARCHITECTURE.md) | System design and technical implementation |
 | [🤝 Contributing Guide](docs/CONTRIBUTING.md) | How to contribute to the project |

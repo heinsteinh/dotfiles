@@ -1,6 +1,24 @@
 # Troubleshooting Guide
 
-## Installation Issues
+Complete troubleshooting guide for common issues across all supported platforms.
+
+## 🔧 Installation Issues
+
+### macOS Homebrew Issues
+```bash
+# Error: homebrew/homebrew-cask-fonts does not exist!
+# Solution: Clean up deprecated taps (automatically handled by setup)
+brew untap homebrew/homebrew-cask-fonts
+brew tap homebrew/cask-fonts
+
+# Permission denied errors during brew cleanup
+sudo chown -R $(whoami) ~/Library/Caches/Homebrew/
+brew cleanup
+
+# Homebrew PATH issues (Apple Silicon)
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+source ~/.zprofile
+```
 
 ### Ubuntu 24.04 Package Issues
 ```bash
@@ -25,6 +43,10 @@ sudo chown -R $USER:$USER ~/.config/
 
 # Fix symlink permissions
 find ~/.config -type l -exec ls -la {} \;
+
+# macOS-specific permission fixes
+sudo chown -R $(whoami) ~/Library/Fonts/
+sudo chown -R $(whoami) ~/Library/Caches/Homebrew/
 ```
 
 ## Shell Configuration Issues
@@ -92,15 +114,25 @@ source ~/.config/zsh/aliases.zsh    # Should load after functions
 ### Fonts Not Displaying Correctly
 ```bash
 # Reinstall fonts
-make install-fonts
+./scripts/install/install-fonts.sh
+
+# macOS-specific font issues
+sudo atsutil databases -remove  # Clear font cache
+# System Preferences → Displays → Color → Calibrate (if colors look off)
+
+# Linux font issues  
+fc-cache -fv  # Refresh font cache
+fc-list | grep -i nerd  # Verify Nerd Fonts
 
 # Verify font installation
 fc-list | grep -i meslo
 fc-list | grep -i "JetBrains Mono"
+fc-list | grep -i "Fira Code"
 
 # Configure terminal to use Nerd Font
-# For Kitty: font_family JetBrainsMono Nerd Font
+# For Kitty: font_family JetBrainsMono Nerd Font Mono
 # For iTerm2: Preferences → Profiles → Text → Font
+# For VS Code: "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono"
 ```
 
 ### Zsh Plugins Not Working
@@ -167,9 +199,24 @@ ln -sf ~/dotfiles/config/tmux/.tmux.conf ~/.tmux.conf
 ls -la ~/.zshrc ~/.tmux.conf
 ```
 
-## Platform-Specific Issues
+## 🍎 macOS-Specific Issues
 
-### macOS Issues
+### System Settings Not Applied
+```bash
+# Settings require restart to take effect
+sudo shutdown -r now
+
+# Force reload system services
+killall Dock
+killall Finder
+killall SystemUIServer
+
+# Check if settings were applied
+defaults read com.apple.dock autohide
+defaults read com.apple.finder AppleShowAllFiles
+```
+
+### macOS Development Issues
 ```bash
 # Install Xcode command line tools
 xcode-select --install
@@ -177,9 +224,27 @@ xcode-select --install
 # Install Homebrew if missing
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Fix PATH for Homebrew
+# Fix PATH for Homebrew (Apple Silicon)
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+source ~/.zprofile
+
+# Corporate/managed Mac issues
+# Some settings may be restricted by IT policies
+# Check: System Preferences → Profiles for management restrictions
 ```
+
+### macOS Key Repeat Issues
+```bash
+# If key repeat settings don't work:
+# System Preferences → Keyboard → Key Repeat (set to Fast)
+# System Preferences → Keyboard → Delay Until Repeat (set to Short)
+
+# Force apply via defaults (requires restart)
+defaults write NSGlobalDomain KeyRepeat -int 1
+defaults write NSGlobalDomain InitialKeyRepeat -int 10
+```
+
+## 🐧 Linux-Specific Issues
 
 ### Linux Distribution Issues
 ```bash

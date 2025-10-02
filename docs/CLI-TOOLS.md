@@ -2,17 +2,29 @@
 
 A comprehensive reference for all the command-line tools included in this dotfiles configuration.
 
-## Modern Replacements for Classic Tools
+## 🚀 Modern Replacements for Classic Tools
 
-| Classic Tool | Modern Replacement | Description |
-|-------------|-------------------|-------------|
-| `ls` | `eza` | Modern replacement with colors and git integration |
-| `cat` | `bat` | Syntax highlighting and git integration |
-| `find` | `fd` | Fast and user-friendly alternative |
-| `grep` | `ripgrep (rg)` | Extremely fast text search |
-| `top` | `htop` | Interactive process viewer |
-| `du` | `dust` | Intuitive disk usage analyzer |
-| `ps` | `procs` | Modern process information |
+| Classic Tool | Modern Replacement | Key Benefits | Installation |
+|-------------|-------------------|--------------|-------------|
+| `ls` | `eza` | Git integration, icons, tree view | ✅ Auto-installed |
+| `cat` | `bat` | Syntax highlighting, line numbers | ✅ Auto-installed |
+| `find` | `fd` | Simple syntax, fast, respects .gitignore | ✅ Auto-installed |
+| `grep` | `ripgrep (rg)` | 10-100x faster, smart filtering | ✅ Auto-installed |
+| `top` | `htop/bottom` | Interactive, colored, better UI | ✅ Auto-installed |
+| `du` | `dust` | Visual tree, sorted output | ✅ Auto-installed |
+| `ps` | `procs` | Colored output, tree view | ✅ Auto-installed |
+| `ping` | `gping` | Real-time graph display | ✅ Auto-installed |
+| `diff` | `delta` | Syntax highlighting, side-by-side | ✅ Auto-installed |
+| `man` | `tldr/tealdeer` | Simplified examples | ✅ Auto-installed |
+
+## ⚡ Performance & Benchmarking Tools
+
+| Tool | Purpose | Key Features |
+|------|---------|--------------|
+| `hyperfine` | Command benchmarking | Statistical analysis, warmup runs |
+| `tokei` | Code statistics | Lines of code, language breakdown |
+| `bandwhich` | Network monitoring | Real-time bandwidth by process |
+| `bottom (btm)` | System monitoring | CPU, memory, disk, network graphs |
 
 ## File and Directory Operations
 
