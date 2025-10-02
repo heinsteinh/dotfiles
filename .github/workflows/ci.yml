@@ -35,6 +35,7 @@ jobs:
 
     - name: Install linting tools
       run: |
+        export DEBIAN_FRONTEND=noninteractive
         sudo apt-get update
         sudo apt-get install -y shellcheck
         npm install -g markdownlint-cli
@@ -69,6 +70,7 @@ jobs:
     steps:
     - name: Install Git and basic tools
       run: |
+        export DEBIAN_FRONTEND=noninteractive
         apt-get update
         apt-get install -y git curl sudo
 
@@ -224,6 +226,7 @@ jobs:
 
     - name: Install minimal dependencies
       run: |
+        export DEBIAN_FRONTEND=noninteractive
         sudo apt-get update
         sudo apt-get install -y git curl zsh vim tmux
 

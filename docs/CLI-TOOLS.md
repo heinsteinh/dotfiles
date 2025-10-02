@@ -462,22 +462,95 @@ $TERMINAL             # Default terminal
 $PATH                 # Executable search path
 ```
 
-## Tool Installation
+## 🧪 CI/CD & DevOps Tools (New in v2.0)
 
-### Quick Installation Commands
+### Security & Scanning Tools
 ```bash
-# Install everything
-make install
+# Secret detection (integrated in CI)
+gitleaks detect --source . --verbose   # Git secret scanning
+trufflebot --source .                  # Entropy-based detection
+trivy fs .                            # Vulnerability scanning
 
-# Install specific categories
-make fonts            # Install fonts only
-make cli-tools        # Install CLI tools only
-make dev-tools        # Install development tools
+# Code quality  
+shellcheck script.sh                   # Shell script linting
+markdownlint *.md                     # Markdown formatting
+yamllint .github/workflows/           # YAML validation
+```
 
-# OS-specific setup
-make setup-macos      # macOS specific
-make setup-ubuntu     # Ubuntu specific
-make setup-arch       # Arch Linux specific
+### Testing & Validation
+```bash
+# Performance benchmarking
+hyperfine 'command1' 'command2'       # Command comparison
+time zsh -i -c exit                   # Shell startup time
+ulimit -a                             # System resource limits
+
+# Network diagnostics
+gping google.com github.com           # Multi-host ping visualization
+bandwhich                             # Real-time network usage by process
+ss -tuln                              # Network connections
+curl -w "@curl-format.txt" url        # Detailed HTTP timing
+
+# System monitoring
+btm                                   # Modern system monitor
+htop                                  # Interactive process viewer
+iotop                                 # I/O usage monitor (Linux)
+```
+
+### Container & Cloud Tools
+```bash
+# Docker operations
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
+docker-compose up -d                  # Start services
+docker system prune                   # Clean unused resources
+
+# Kubernetes (if available)
+kubectl get pods                      # List pods
+k9s                                   # Terminal UI for Kubernetes
+
+# Cloud CLI tools (optional installs)
+aws --version                         # AWS CLI
+az --version                          # Azure CLI  
+gcloud version                        # Google Cloud CLI
+```
+
+## 🔧 Tool Installation & Management
+
+### Enhanced Installation Commands (v2.0)
+```bash
+# New modular installation approach
+./scripts/install/install-cli-tools.sh    # 70+ CLI utilities only
+./scripts/install/install-dev-tools.sh    # Development environments  
+./scripts/install/install-fonts.sh        # Complete Nerd Fonts collection
+
+# Interactive wizard (recommended)
+./tools/workflows/new-machine.sh          # Guided setup with options
+
+# OS-specific optimized setup
+./scripts/setup/setup-ubuntu.sh           # Ubuntu 22.04/24.04 support
+./scripts/setup/setup-macos.sh            # Enhanced Homebrew + 20+ dev settings
+./scripts/setup/setup-fedora.sh           # DNF + RPM Fusion + Flatpak
+./scripts/setup/setup-arch.sh             # Pacman + AUR via yay
+
+# Legacy Makefile support (still available)
+make install                              # Full installation
+make test                                # Comprehensive testing
+make health                              # System health check
+```
+
+### Tool Management Commands
+```bash
+# Update all tools and packages
+./scripts/maintenance/update-all.sh       # Update everything
+brew update && brew upgrade               # Update Homebrew packages  
+npm update -g                            # Update global npm packages
+cargo install-update -a                  # Update Rust tools
+pipx upgrade-all                         # Update Python CLI tools
+
+# System cleanup and maintenance
+./scripts/maintenance/cleanup.sh          # Clean temporary files
+brew cleanup                             # Clean Homebrew cache
+docker system prune -af                  # Clean Docker resources
+npm cache clean --force                  # Clean npm cache
 ```
 
 ## Troubleshooting
@@ -497,12 +570,61 @@ source ~/.zshrc       # Reload zsh config
 tmux source ~/.tmux.conf  # Reload tmux config
 ```
 
-### Debug Mode
+### Debug Mode & Diagnostics
 ```bash
-# Enable debug mode
+# Enable comprehensive debug mode
 export DEBUG=1
+export VERBOSE=1
 
-# Verbose output
-command -v            # Verbose version
-ls -la               # Detailed listing
+# Tool availability checking
+command -v tool || echo "Tool not found"    # Check tool existence
+which -a python                            # Show all Python locations  
+type -a git                                # Show git type and location
+
+# Verbose tool output
+ls -la --color=always                      # Force colored output
+bat --version                              # Show version info
+fd --version                               # Check fd version
+rg --version                               # Ripgrep version and features
 ```
+
+## 📊 Tool Categories Summary
+
+### 🎯 Core Utilities (20 tools)
+Essential replacements for classic UNIX tools with modern features and intelligent fallbacks.
+
+### 🚀 Development Tools (25 tools)  
+Language runtimes, package managers, and development utilities for multiple programming languages.
+
+### 🔍 Search & Navigation (10 tools)
+Advanced file finding, content searching, and directory navigation with fuzzy finding integration.
+
+### 📊 Monitoring & Performance (15 tools)
+System monitoring, performance analysis, and benchmarking tools with real-time capabilities.
+
+### 🛡️ Security & DevOps (10 tools) 
+Security scanning, code quality, and CI/CD integration tools for enterprise development.
+
+---
+
+## 🆕 Recent Updates (v2.0)
+
+### ✅ Enhanced Tool Support
+- **Ubuntu 24.04**: Full compatibility with `exa` → `eza` migration
+- **macOS Apple Silicon**: Optimized Homebrew paths and native tool support  
+- **Fedora Latest**: Enhanced DNF and RPM Fusion integration
+- **Arch Linux**: Improved AUR support via yay helper
+
+### 🔧 Smart Installation Features
+- **Intelligent Fallbacks**: Graceful degradation when tools unavailable
+- **CI/CD Awareness**: Tools adapt behavior for headless environments  
+- **Performance Optimization**: Lazy loading and caching for faster startup
+- **Cross-Platform**: Consistent experience across all supported platforms
+
+### 🛡️ Security & Reliability  
+- **Multi-Tool Scanning**: Integrated security validation in installation
+- **Timeout Handling**: Prevents hanging during installation or testing
+- **Error Recovery**: Robust error handling with detailed logging
+- **Comprehensive Testing**: 17-category validation suite ensures reliability
+
+**Total Tools**: 70+ modern CLI utilities with intelligent installation and cross-platform support.
