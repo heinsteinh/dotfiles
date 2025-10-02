@@ -394,12 +394,33 @@ jobs:
 
     - name: Install GitLeaks
       run: |
-        # Get the latest GitLeaks version dynamically
-        GITLEAKS_VERSION=$(curl -s https://api.github.com/repos/gitleaks/gitleaks/releases/latest | grep '"tag_name"' | sed 's/.*"tag_name": "v\([^"]*\)".*/\1/')
+        # Get the latest GitLeaks version dynamically with better error handling
+        echo "Fetching GitLeaks release information..."
+        RELEASE_INFO=$(curl -s https://api.github.com/repos/gitleaks/gitleaks/releases/latest)
+        
+        if [[ -z "$RELEASE_INFO" ]]; then
+          echo "Failed to fetch release information, using fallback version 8.28.0"
+          GITLEAKS_VERSION="8.28.0"
+        else
+          GITLEAKS_VERSION=$(echo "$RELEASE_INFO" | grep '"tag_name"' | sed 's/.*"tag_name": "v\([^"]*\)".*/\1/')
+          if [[ -z "$GITLEAKS_VERSION" ]]; then
+            echo "Failed to parse version, using fallback version 8.28.0"
+            GITLEAKS_VERSION="8.28.0"
+          fi
+        fi
+        
         echo "Installing GitLeaks version: $GITLEAKS_VERSION"
-        wget "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+        
+        # Download and install GitLeaks
+        DOWNLOAD_URL="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+        echo "Download URL: $DOWNLOAD_URL"
+        
+        wget "$DOWNLOAD_URL"
         tar -xzf "gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
         sudo mv gitleaks /usr/local/bin/
+        chmod +x /usr/local/bin/gitleaks
+        
+        # Verify installation
         gitleaks version
     - name: Run GitLeaks secret detection
       run: |
