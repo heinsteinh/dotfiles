@@ -62,10 +62,12 @@ install_macos_dev_tools() {
         xcode-select --install
     fi
 
-    # Install Homebrew if not present
+    # Skip Homebrew installation if already exists
     if ! command_exists brew; then
         log_info "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    else
+        log_info "Homebrew already installed, skipping..."
     fi
 
     # Install development tools via Homebrew
@@ -195,6 +197,148 @@ install_docker_debian() {
     fi
 }
 
+install_language_packages() {
+    log_info "Installing language-specific development packages..."
+
+    # Install Node.js global packages (if Node.js is available)
+    if command_exists npm; then
+        log_info "Installing Node.js development tools..."
+        npm install -g \
+            http-server \
+            json-server \
+            live-server \
+            nodemon \
+            @angular/cli \
+            create-react-app \
+            vue-cli \
+            typescript \
+            ts-node \
+            eslint \
+            prettier \
+            webpack-cli \
+            vite \
+            serve \
+            npm-check-updates \
+            tldr \
+            fkill-cli \
+            gtop \
+            speed-test \
+            public-ip-cli \
+            is-up-cli \
+            fast-cli
+    else
+        log_warning "Node.js not found, skipping npm packages"
+    fi
+
+    # Install Python packages (user-level to avoid system package conflicts)
+    if command_exists pip3; then
+        log_info "Installing Python development tools..."
+        pip3 install --user \
+            httpie \
+            yt-dlp \
+            speedtest-cli \
+            howdoi \
+            pipenv \
+            poetry \
+            black \
+            flake8 \
+            mypy \
+            pytest \
+            jupyter \
+            ipython \
+            requests \
+            rich \
+            typer \
+            click \
+            pydantic \
+            fastapi \
+            flask \
+            django \
+            sqlalchemy \
+            alembic \
+            pre-commit \
+            bandit \
+            safety \
+            cookiecutter \
+            virtualenv \
+            tox
+    else
+        log_warning "Python3/pip3 not found, skipping Python packages"
+    fi
+
+    # Install Go packages (if Go is available)
+    if command_exists go; then
+        log_info "Installing Go development tools..."
+        go install github.com/charmbracelet/glow@latest
+        go install github.com/jesseduffield/lazydocker@latest
+        go install github.com/isacikgoz/gitbatch@latest
+        go install github.com/cli/cli/cmd/gh@latest
+        go install github.com/profclems/glab@latest
+        go install github.com/antonmedv/fx@latest
+        go install github.com/rs/curlie@latest
+        go install github.com/mikefarah/yq/v4@latest
+        go install github.com/charmbracelet/soft-serve/cmd/soft@latest
+    else
+        log_warning "Go not found, skipping Go packages"
+    fi
+
+    # Install Rust/Cargo packages (if Rust is available)
+    if command_exists cargo; then
+        log_info "Installing Rust development tools..."
+        cargo install \
+            exa \
+            bat \
+            ripgrep \
+            fd-find \
+            starship \
+            zoxide \
+            bottom \
+            procs \
+            dust \
+            tokei \
+            hyperfine \
+            bandwhich \
+            gping \
+            watchexec-cli \
+            gitui \
+            delta \
+            sd \
+            choose \
+            broot \
+            tealdeer \
+            zellij \
+            helix-term \
+            silicon \
+            xh \
+            just \
+            onefetch \
+            macchina \
+            viddy \
+            dog \
+            duf-utility
+    else
+        log_warning "Rust/Cargo not found, skipping Rust packages"
+    fi
+
+    # Install Ruby gems (if Ruby is available)  
+    if command_exists gem; then
+        log_info "Installing Ruby development tools..."
+        gem install \
+            colorls \
+            lolcat \
+            tmuxinator \
+            bundler \
+            rails \
+            jekyll \
+            rubocop \
+            pry \
+            rspec \
+            minitest
+    else
+        log_warning "Ruby/gem not found, skipping Ruby packages"
+    fi
+}
+
 install_vscode() {
     local os
     os=$(detect_os)
@@ -231,10 +375,44 @@ install_vscode() {
     esac
 }
 
+setup_development_directories() {
+    log_info "Setting up development directories..."
+
+    # Create useful directories
+    mkdir -p ~/.local/bin
+    mkdir -p ~/Projects/{personal,work,learning}
+    mkdir -p ~/Scripts
+    mkdir -p ~/.ssh
+
+    # Add ~/.local/bin to PATH if not already there
+    if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc.local || echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+    fi
+
+    # Install additional useful scripts
+    if command_exists curl; then
+        log_info "Installing additional useful scripts..."
+        
+        # Install fzf-git if not already installed
+        if [ ! -f ~/.local/bin/fzf-git.sh ]; then
+            curl -fsSL https://raw.githubusercontent.com/junegunn/fzf-git.sh/main/fzf-git.sh -o ~/.local/bin/fzf-git.sh
+            chmod +x ~/.local/bin/fzf-git.sh
+        fi
+        
+        # Install diff-so-fancy for better git diffs
+        if [ ! -f ~/.local/bin/diff-so-fancy ]; then
+            curl -fsSL https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy -o ~/.local/bin/diff-so-fancy
+            chmod +x ~/.local/bin/diff-so-fancy
+        fi
+    fi
+}
+
 main() {
     log_info "Starting development tools installation..."
 
     install_development_tools
+    install_language_packages
+    setup_development_directories
 
     if confirm "Do you want to install Visual Studio Code?"; then
         install_vscode
@@ -257,6 +435,13 @@ main() {
             esac
         fi
     done
+
+    log_info "📋 Installed development tools:"
+    log_info "  • Programming languages: Node.js, Python, Go, Rust, Java, Ruby"
+    log_info "  • Package managers: npm, pip3, cargo, maven, gradle, bundler"
+    log_info "  • Development frameworks and tools"
+    log_info "  • Container tools: Docker, Docker Compose"
+    log_info "  • Code editors and IDEs"
 }
 
 main "$@"
