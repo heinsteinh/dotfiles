@@ -1,11 +1,19 @@
 # 🚀 Modern Cross-Plat### 🛠️ What Gets Installed
 - **Essential tools**: Git, Zsh, Vim, Tmux, modern CLI utilities
-- **Development tools**: Node.js, Python, Go, Rust toolchains
-- **70+ Modern CLI tools**: ripgrep, fzf, eza, bat, fd, starship, htop, lazygit, and more
+- **Development tools**: Node.js, Python, Go, Rust toolchains  
+- **Modern CLI**: ripgrep, fzf, eza, bat, fd, starship, htop
 - **Zsh plugins**: Oh My Zsh, autosuggestions, syntax highlighting, fast-syntax-highlighting, autocomplete
-- **Programming fonts**: Nerd Fonts (MesloLGS, FiraCode, JetBrains Mono, Hack, Cascadia Code)
-- **macOS optimizations**: 20+ developer settings for enhanced productivity
-- **Security**: Comprehensive scanning and validationfiles
+- **Fonts**: Nerd Fonts (MesloLGS, FiraCode, JetBrains Mono, Hack, Cascadia Code)| Document | Description |
+|----------|-------------|
+| [📋 Installation Guide](docs/INSTALLATION.md) | Comprehensive setup instructions for all platforms |
+| [🍎 macOS Setup Guide](docs/MACOS-SETUP.md) | Complete macOS configuration with developer optimizations |
+| [🚀 Developer Workflows](docs/DEVELOPER-WORKFLOWS.md) | Practical workflows and productivity tips for daily development |
+| [🎨 Customization Guide](docs/CUSTOMIZATION.md) | Learn how to personalize your setup |
+| [🔧 Troubleshooting](docs/TROUBLESHOOTING.md) | Solutions to common issues |
+| [🏗️ Architecture Guide](docs/ARCHITECTURE.md) | System design and technical implementation |
+| [🤝 Contributing Guide](docs/CONTRIBUTING.md) | How to contribute to the project |
+| [📜 CLI Tools Reference](docs/CLI-TOOLS.md) | Complete list of included modern CLI tools |S optimizations**: 20+ developer settings for enhanced productivity
+- **Security**: Comprehensive scanning and validationtfiles
 
 A comprehensive, battle-tested dotfiles configuration with automated setup, extensive CI/CD testing, and advanced security scanning. Works seamlessly across Ubuntu, macOS, Fedora, and Arch Linux with intelligent OS detection and modern CLI tools.
 
@@ -27,13 +35,12 @@ cd ~/.dotfiles
 ./scripts/setup/setup-arch.sh      # Arch Linux
 ```
 
-### �️ What Gets Installed
+### 🛡️ What Gets Installed
 - **Essential tools**: Git, Zsh, Vim, Tmux, modern CLI utilities
 - **Development tools**: Node.js, Python, Go, Rust toolchains
 - **Modern CLI**: ripgrep, fzf, eza, bat, fd, starship, htop
 - **Zsh plugins**: Oh My Zsh, autosuggestions, syntax highlighting, fast-syntax-highlighting, autocomplete
-- **Fonts**: Nerd Fonts (MesloLGS, FiraCode, JetBrains Mono, Hack, Cascadia Code)
-- **macOS optimizations**: 20+ developer settings for enhanced productivity
+- **Fonts**: Nerd Fonts (MesloLGS, FiraCode, JetBrains Mono, Hack)
 - **Security**: Comprehensive scanning and validation
 
 ## ✨ Features
@@ -425,7 +432,7 @@ Our GitHub Actions workflow ensures reliability across all supported platforms:
 - **🍎 macOS Settings**: 20+ developer-optimized system preferences
 - **🚀 CI Jobs**: 12 automated testing jobs per commit
 
-## 📚 Documentation
+## � Documentation
 
 | Document | Description |
 |----------|-------------|
@@ -437,7 +444,7 @@ Our GitHub Actions workflow ensures reliability across all supported platforms:
 | [🤝 Contributing Guide](docs/CONTRIBUTING.md) | How to contribute to the project |
 | [📜 CLI Tools Reference](docs/CLI-TOOLS.md) | Complete list of included modern CLI tools |
 
-## 📄 License
+## �📄 License
 
 MIT License - Free to use, modify, and distribute. See [LICENSE](LICENSE) for details.
 
