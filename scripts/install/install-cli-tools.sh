@@ -8,11 +8,7 @@ log_warning() {
     echo "[WARNING] $1"
 }
 
-echo "Installi    # System monitoring and performance tools
-    echo "[INFO] Installing system monitoring tools..."
-    brew install htop btop
-    # iotop-c is Linux-specific, not available on macOS
-    echo "[INFO] Skipping iotop-c (Linux-specific tool)"I tools for software development..."
+echo "Installing CLI tools for software development..."
 
 # Detect package manager and install platform-specific tools
 if command -v pacman &> /dev/null; then
