@@ -6,7 +6,22 @@ set -euo pipefail
 # Source common functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=../setup/setup-common.sh
-source "$SCRIPT_DIR/../setup/setup-common.sh"
+source "$SCRIPT_DIR/..    # Show installed versions (only in non-CI mode to avoid issues)
+    if [[ "${CI:-}" != "true" ]] && [[ "${DOTFILES_CI_MODE:-}" != "true" ]]; then
+        log_info "Installed tool versions:"
+        for tool in git node python3 go rustc java; do
+            if command -v "$tool" >/dev/null 2>&1; then
+                case "$tool" in
+                    git) echo "  Git: $(git --version)" ;;
+                    node) echo "  Node.js: $(node --version)" ;;
+                    python3) echo "  Python: $(python3 --version)" ;;
+                    go) echo "  Go: $(go version | cut -d' ' -f3)" ;;
+                    rustc) echo "  Rust: $(rustc --version | cut -d' ' -f2)" ;;
+                    java) echo "  Java: $(java --version 2>&1 | head -1)" ;;
+                esac
+            fi
+        done
+    fiommon.sh"
 
 # Development tools installation script
 # Tool lists are defined inline within each OS-specific function

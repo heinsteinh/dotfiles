@@ -3,7 +3,16 @@
 
 set -euo pipefail
 
-echo "Installing additional CLI tools for software development..."
+# Simple logging function
+log_warning() {
+    echo "[WARNING] $1"
+}
+
+echo "Installi    # System monitoring and performance tools
+    echo "[INFO] Installing system monitoring tools..."
+    brew install htop btop
+    # iotop-c is Linux-specific, not available on macOS
+    echo "[INFO] Skipping iotop-c (Linux-specific tool)"I tools for software development..."
 
 # Detect package manager and install platform-specific tools
 if command -v pacman &> /dev/null; then
@@ -114,7 +123,7 @@ elif command -v brew &> /dev/null; then
     if brew search iotop-c | grep -q "iotop-c"; then
         brew install iotop-c
     else
-        log_warning "iotop-c is not available for this macOS version, skipping..."
+        echo "[WARNING] iotop-c is not available for this macOS version, skipping..."
     fi
 
     # Development and debugging tools
