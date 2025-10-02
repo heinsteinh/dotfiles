@@ -305,10 +305,8 @@ test_vim_config() {
 
     # Test vim configuration (with timeout for headless environments)
     if ! timeout 5 vim -u "$HOME/.vimrc" -T dumb -c 'syntax on' -c 'quit' >/dev/null 2>&1; then
-        log_warning "Vim configuration test skipped (headless environment or config issue)"
-        # Don't fail the test in headless environments
-        if [[ -z "${DISPLAY:-}" ]] && [[ -z "${SSH_TTY:-}" ]]; then
-            log_verbose "Headless environment detected - vim test passed with warnings"
+        if is_headless; then
+            log_warning "Vim configuration test skipped in headless environment"
         else
             log_error "Vim configuration error"
             return 1
@@ -650,23 +648,8 @@ cleanup() {
 # Signal handlers
 trap cleanup EXIT INT TERM
 
-# Test timeout handler
-test_timeout_handler() {
-    log_error "Test suite timed out after 300 seconds"
-    log_error "This usually indicates a hanging test in a remote/headless environment"
-    print_test_summary
-    exit 1
-}
-
 # Main execution
 main() {
-    # Set up timeout for the entire test suite (5 minutes)
-    trap test_timeout_handler ALRM
-    if command_exists timeout; then
-        # Use timeout command if available
-        exec timeout 300 "$0" --no-timeout "$@"
-    fi
-
     # Parse command line arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -676,10 +659,6 @@ main() {
                 ;;
             --skip-interactive)
                 DOTFILES_SKIP_INTERACTIVE_MODE=true
-                shift
-                ;;
-            --no-timeout)
-                # Internal flag to prevent recursive timeout calls
                 shift
                 ;;
             -h|--help)
