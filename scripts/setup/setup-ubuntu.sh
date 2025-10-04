@@ -241,6 +241,7 @@ main() {
         wget \
         git \
         vim \
+        neovim \
         ranger \
         zsh \
         tmux \

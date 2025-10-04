@@ -34,6 +34,26 @@ set relativenumber
 let g:airline_theme = 'dracula'
 ```
 
+### Neovim Customization
+
+Create `config/nvim/local.lua` for personal neovim settings:
+
+```lua
+-- Example local neovim config
+vim.cmd("colorscheme nord")
+vim.opt.relativenumber = true
+
+-- Custom keymaps
+vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "Save file" })
+
+-- LSP settings
+require("lspconfig").pyright.setup({
+  -- custom pyright settings
+})
+```
+
+The Neovim configuration uses Lua and provides more advanced customization options. See `config/nvim/README.md` for detailed documentation.
+
 ### Tmux Customization
 
 Create `config/tmux/local.tmux.conf` for tmux overrides:

@@ -140,18 +140,30 @@ Key features:
 - **Modern Tools**: Integrated eza, bat, ripgrep, fd with fallbacks
 - **Git Integration**: Advanced aliases and functions for git workflows
 
-### Vim Configuration
+### Vim & Neovim Configuration
+**Vim Configuration** (`~/.vimrc`):
 - **Enhanced search** with FZF integration
-- **File exploration** with NERDTree
+- **File exploration** with NERDTree  
 - **Git integration** with fugitive and gitgutter
 - **Code quality** with ALE linting
 - **Modern interface** with airline and devicons
 
-Key bindings (Leader: Space):
+**Neovim Configuration** (`~/.config/nvim/`):
+- **Modern LSP** with Mason.nvim for language servers
+- **Advanced search** with Telescope (FZF replacement)
+- **File exploration** with Neo-tree (NERDTree replacement)
+- **Treesitter** for superior syntax highlighting
+- **Autocompletion** with nvim-cmp and LuaSnip
+- **Git integration** with Gitsigns and Fugitive
+- **Modern UI** with Lualine and Which-key
+
+Key bindings (Leader: Space - consistent across both):
 - `<leader>f` - Find files
 - `<leader>n` - Toggle file tree
-- `<leader>rg` - Search in files
+- `<leader>rg` - Search in files  
 - `<leader>gs` - Git status
+
+> 📖 **See `config/nvim/README.md`** for complete Neovim documentation
 
 ### Tmux Configuration
 - **Vim-like navigation** and key bindings
@@ -211,6 +223,7 @@ Create these files for local customizations:
 ```bash
 ~/.zshrc.local      # Local zsh config
 ~/.vimrc.local      # Local vim config
+~/.config/nvim/local.lua  # Local neovim config
 ~/.tmux.conf.local  # Local tmux config
 ```
 
@@ -322,6 +335,14 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # Open vim and run
 :PlugInstall
 :PlugUpdate
+```
+
+**Neovim plugins not installing:**
+```bash
+# Open neovim and run
+:Lazy sync
+:Lazy update
+# Check LSP: :Mason
 ```
 
 ### Performance Issues

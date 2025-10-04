@@ -90,6 +90,7 @@ install_essential_packages() {
         wget \
         git \
         vim \
+        neovim \
         ranger \
         zsh \
         tmux \

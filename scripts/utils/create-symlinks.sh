@@ -45,6 +45,11 @@ create_symlink() {
 # Vim
 create_symlink "$DOTFILES_DIR/config/vim/.vimrc" "$HOME/.vimrc"
 
+# Neovim
+if [[ -d "$DOTFILES_DIR/config/nvim" ]]; then
+    create_symlink "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
+fi
+
 # Tmux
 create_symlink "$DOTFILES_DIR/config/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
