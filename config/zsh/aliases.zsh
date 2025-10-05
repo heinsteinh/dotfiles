@@ -71,28 +71,28 @@ else
     alias cat='cat -n'
 fi
 
-# Enhanced find
+# Enhanced find - use command to bypass any fd function
 if command -v fd &> /dev/null; then
-    alias find='fd'
-    alias findd='fd -t d'  # directories only
-    alias findf='fd -t f'  # files only
-    alias finde='fd -e'    # by extension
+    alias find='command fd'
+    alias findd='command fd -t d'  # directories only
+    alias findf='command fd -t f'  # files only
+    alias finde='command fd -e'    # by extension
 fi
 
-# Enhanced grep
+# Enhanced grep - use rg as separate command, not as grep alias
 if command -v rg &> /dev/null; then
-    alias grep='rg'
-    alias grepi='rg -i'
-    alias grepr='rg -r'
-    alias grepv='rg -v'
-    alias grepw='rg -w'
-    alias grepn='rg -n'
-else
-    alias grep='grep --color=auto'
-    alias grepi='grep -i --color=auto'
-    alias grepr='grep -r --color=auto'
-    alias grepv='grep -v --color=auto'
+    alias rg='rg'
+    alias rgi='rg -i'
+    alias rgr='rg -r'
+    alias rgv='rg -v'
+    alias rgw='rg -w'
+    alias rgn='rg -n'
 fi
+# Keep grep as grep with color
+alias grep='command grep --color=auto'
+alias grepi='command grep -i --color=auto'
+alias grepr='command grep -r --color=auto'
+alias grepv='command grep -v --color=auto'
 
 # Text manipulation
 alias lower="tr '[:upper:]' '[:lower:]'"

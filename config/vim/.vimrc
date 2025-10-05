@@ -63,7 +63,11 @@ set wildmenu
 set wildmode=longest:full,full
 set wildignore+=*.o,*.obj,*.pyc,*.class,*.git,*.svn,*.hg,*~,*.swp,*.swo,*.tmp,*.bak
 set mouse=a
-set clipboard=unnamedplus
+if has('macunix')
+  set clipboard=unnamed
+else
+  set clipboard=unnamedplus
+endif
 set updatetime=250
 set timeoutlen=500
 set splitbelow
