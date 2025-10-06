@@ -97,6 +97,7 @@ install_essential_packages() {
         tree \
         htop \
         neofetch \
+        newsboat \
         unzip \
         coreutils \
         findutils \

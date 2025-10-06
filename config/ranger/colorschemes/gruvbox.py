@@ -134,17 +134,30 @@ class Gruvbox(ColorScheme):
 
         if context.vcsfile and not context.selected:
             attr &= ~bold
-            if context.vcsconflicts:
+            # Some ranger versions expose 'vcsconflict' (singular) instead of 'vcsconflicts'.
+            vcs_conflict = False
+            if hasattr(context, 'vcsconflicts'):
+                try:
+                    vcs_conflict = bool(context.vcsconflicts)
+                except Exception:
+                    vcs_conflict = False
+            elif hasattr(context, 'vcsconflict'):
+                try:
+                    vcs_conflict = bool(context.vcsconflict)
+                except Exception:
+                    vcs_conflict = False
+
+            if vcs_conflict:
                 fg = 1  # red
-            elif context.vcschanged:
+            elif getattr(context, 'vcschanged', False):
                 fg = 11  # yellow
-            elif context.vcsunknown:
+            elif getattr(context, 'vcsunknown', False):
                 fg = 1  # red
-            elif context.vcsstaged:
+            elif getattr(context, 'vcsstaged', False):
                 fg = 10  # green
-            elif context.vcssync:
+            elif getattr(context, 'vcssync', False):
                 fg = 10  # green
-            elif context.vcsignored:
+            elif getattr(context, 'vcsignored', False):
                 fg = default
 
         elif context.vcsremote and not context.selected:

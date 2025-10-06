@@ -115,4 +115,14 @@ if [[ -d "$DOTFILES_DIR/config/ranger" ]]; then
     fi
 fi
 
+
+# Newsboat configuration
+if [[ -f "$DOTFILES_DIR/config/newsboat/config" ]]; then
+    create_symlink "$DOTFILES_DIR/config/newsboat/config" "$HOME/.config/newsboat/config"
+fi
+
+if [[ -f "$DOTFILES_DIR/config/newsboat/urls" ]]; then
+    create_symlink "$DOTFILES_DIR/config/newsboat/urls" "$HOME/.config/newsboat/urls"
+fi
+
 echo "Symlinks created successfully!"

@@ -243,6 +243,7 @@ main() {
         vim \
         neovim \
         ranger \
+        newsboat \
         zsh \
         tmux \
         tree \

@@ -24,6 +24,37 @@ backup() {
     echo "Backed up $1 to ${1}.bak.${timestamp}"
 }
 
+# Lightweight multi-file/directory backup helper
+# Usage: bak <path> [more_paths...]
+# Creates copies like path.YYYYMMDD-HHMMSS.bak preserving attributes (cp -a)
+bak() {
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: bak <file_or_dir> [more...]"
+        return 1
+    fi
+
+    local timestamp backup_path target rc=0
+    timestamp="$(date +%Y%m%d-%H%M%S)"
+
+    for target in "$@"; do
+        if [[ ! -e $target ]]; then
+            echo "bak: not found: $target" >&2
+            rc=1
+            continue
+        fi
+        # Strip trailing slash for directories to keep consistent naming
+        local trimmed=${target%/}
+        backup_path="${trimmed}.${timestamp}.bak"
+        if command cp -a -- "$target" "$backup_path" 2>/dev/null; then
+            echo "Backed up '$target' -> '$backup_path'"
+        else
+            echo "bak: failed to copy '$target'" >&2
+            rc=1
+        fi
+    done
+    return $rc
+}
+
 # Extract any archive format
 extract() {
     if [[ $# -eq 0 ]]; then
@@ -670,6 +701,7 @@ show_functions() {
     echo "File Operations:"
     echo "  mkcd <dir>          - Create directory and cd into it"
     echo "  backup <file>       - Backup file with timestamp"
+    echo "  bak <file/dir> [...] - Backup one or more items (timestamped .bak)"
     echo "  extract <archive>   - Extract any archive format"
     echo "  archive <name> <files> - Create archive"
     echo

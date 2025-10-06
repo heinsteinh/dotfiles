@@ -1,0 +1,27 @@
+# Newsboat RSS/Atom Feed URLs
+# Add your favorite feeds here
+
+# Technology News
+https://feeds.arstechnica.com/arstechnica/index "Tech" "News"
+https://rss.cnn.com/rss/edition.rss "CNN" "News"
+https://feeds.bbci.co.uk/news/rss.xml "BBC" "News"
+
+# Development
+https://github.blog/feed/ "GitHub" "Development"
+https://stackoverflow.blog/feed/ "Stack Overflow" "Development"
+https://news.ycombinator.com/rss "Hacker News" "Development"
+
+# Linux/Unix
+https://www.linuxjournal.com/node/feed "Linux Journal" "Linux"
+https://distrowatch.com/news/dwd.xml "DistroWatch" "Linux"
+
+# Programming
+https://dev.to/feed "DEV Community" "Programming"
+https://medium.com/feed/topic/programming "Medium Programming" "Programming"
+
+# Security
+https://krebsonsecurity.com/feed/ "Krebs on Security" "Security"
+https://feeds.feedburner.com/TheHackersNews "The Hacker News" "Security"
+
+# Add your personal feeds below this line
+# Format: URL "Title" "Category"

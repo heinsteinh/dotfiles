@@ -18,6 +18,7 @@ alias docs='cd ~/Documents'
 alias proj='cd ~/Projects'
 alias dotfiles='cd ~/.dotfiles'
 
+
 # Enhanced ls (with fallbacks)
 if command -v eza &> /dev/null; then
     alias ls='eza --group-directories-first'
@@ -521,11 +522,47 @@ alias vim-today='vim $(date +"%Y-%m-%d")'
 alias vim-recent='vim +:FZFMru'
 
 # Tmux session management
-alias tmux2='tmux -2'
-alias tmux-attach='tmux attach -t'
-alias tmux-new='tmux new -s'
-alias tmux-list='tmux ls'
-alias tmux-kill='tmux kill-session -t'
+#############################################################################
+# Tmux Session & Pane Management (sorted & enhanced)
+# Conventions:
+#   tmux-<verb>[-detail]
+#   Short legacy shorthands retained (tnew, tat, tmxvsplit, tmxkillall, tmxrename)
+#############################################################################
+
+# --- Core session operations ---
+alias tmux2='tmux -2'                                           # Force 256 colors
+alias tmux-attach='tmux attach -t'                              # Attach to: tmux-attach <name>
+alias tmux-attach-or-new='tmux new-session -As $(basename "$PWD" | tr . -)' # Attach or create session named after cwd
+alias tmux-kill='tmux kill-session -t'                          # Kill: tmux-kill <name>
+alias tmux-kill-all='tmux ls 2>/dev/null | cut -d: -f1 | while read -r s; do [ -n "$s" ] && tmux kill-session -t "$s"; done' # Kill all sessions
+alias tmux-list='tmux list-sessions'                            # List sessions
+alias tmux-new='tmux new -s'                                    # New named session: tmux-new <name>
+alias tmux-new-here='tmux new -s $(basename "$PWD" | tr . -)'  # New session using current dir name
+
+# --- Introspection helpers ---
+alias tmux-windows='tmux list-windows'                          # List windows in current session
+alias tmux-panes='tmux list-panes'                              # List panes in current window
+alias tmux-info='tmux display-message -p "Session: #S | Window: #I:#W | Pane: #P"'
+
+# --- Window / pane layouts ---
+alias tmux-layout-vsplit='tmux split-window -h \; select-pane -t 1 \; split-window -v \; select-pane -t 0' # 3-pane layout
+alias tmux-layout-even='tmux select-layout even-horizontal'
+alias tmux-layout-tiled='tmux select-layout tiled'
+
+# --- Quality of life ---
+alias tmux-rename-window='tmux rename-window $(basename "$PWD" | tr . -)'  # Rename window to current dir name
+alias tmux-sync-on='tmux set-window-option synchronize-panes on'
+alias tmux-sync-off='tmux set-window-option synchronize-panes off'
+alias tmux-copy-mode='tmux copy-mode -u'
+
+# --- Legacy short shorthands (kept for muscle memory) ---
+alias tnew='tmux new -s'                                        # Deprecated: prefer tmux-new
+alias tat='tmux new-session -As $(basename "$PWD" | tr . -)'   # Deprecated: prefer tmux-attach-or-new
+alias tmxvsplit='tmux split-window -h && tmux selectp -t 1 && tmux split-window -v && tmux selectp -t 0' # Legacy layout helper
+alias tmxkillall='tmux ls 2>/dev/null | cut -d: -f1 | while read -r s; do [ -n "$s" ] && tmux kill-session -t "$s"; done' # Legacy kill all
+alias tmxrename='tmux rename-window $(basename $(pwd))'         # Legacy rename
+
+#############################################################################
 # ============================================================================
 # Quick edits
 alias zshrc='${EDITOR:-vim} ~/.zshrc'
@@ -707,3 +744,18 @@ alias filesize='stat -f%z'
 
 # Show PATH in readable format
 alias show-path='echo $PATH | tr ":" "\n" | nl'
+
+# ============================================================================
+# RSS/News Reading
+# ============================================================================
+# Newsboat aliases
+alias news='newsboat'
+alias nb='newsboat'
+alias rss='newsboat'
+alias feeds='newsboat'
+
+# Newsboat quick commands
+alias news-config='${EDITOR:-vim} ~/.config/newsboat/config'
+alias news-feeds='${EDITOR:-vim} ~/.config/newsboat/urls'
+alias news-reload='newsboat -r'
+alias news-refresh='newsboat -x reload'
