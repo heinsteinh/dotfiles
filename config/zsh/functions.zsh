@@ -310,13 +310,38 @@ myiploc() {
 }
 
 # Network speed test
+# Some environments (Oh My Zsh plugins, package managers, or the official Ookla client)
+# may define an alias named 'speedtest'. That causes: "defining function based on alias"
+# and a parse error when sourcing this file. We proactively remove the alias if present.
+if alias speedtest &>/dev/null; then
+    unalias speedtest 2>/dev/null || true
+fi
 speedtest() {
+    # Prefer official speedtest-cli Python module if available
     if command -v speedtest-cli &> /dev/null; then
-        speedtest-cli
+        speedtest-cli "$@"
+        return
+    fi
+
+    # Fallback: if Ookla's binary 'speedtest' exists (different output format)
+    if command -v /usr/bin/speedtest &> /dev/null || command -v speedtest &> /dev/null; then
+        command speedtest "$@"
+        return
+    fi
+
+    # Last resort: install speedtest-cli (user-space) – avoid polluting global site-packages
+    echo "speedtest-cli not found. Attempting user install..." >&2
+    if command -v pipx &>/dev/null; then
+        pipx install speedtest-cli >/dev/null 2>&1 || pipx upgrade speedtest-cli >/dev/null 2>&1 || true
+    elif command -v pip3 &>/dev/null; then
+        pip3 install --user --quiet speedtest-cli || true
+    fi
+
+    if command -v speedtest-cli &> /dev/null; then
+        speedtest-cli "$@"
     else
-        echo "Installing speedtest-cli..."
-        pip3 install speedtest-cli
-        speedtest-cli
+        echo "Failed to install or locate speedtest-cli." >&2
+        return 1
     fi
 }
 
