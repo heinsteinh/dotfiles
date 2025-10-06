@@ -112,34 +112,87 @@ alias count-dirs='find . -type d | wc -l'
 # ============================================================================
 # Arch Linux (pacman)
 if command -v pacman &> /dev/null; then
-    # Basic operations
-    alias pac='sudo pacman -S'                 # Install
-    alias pacs='pacman -Ss'                    # Search
-    alias pacu='sudo pacman -Syu'              # Update
-    alias pacr='sudo pacman -R'               # Remove
-    alias pacrs='sudo pacman -Rs'             # Remove with deps
-    alias paci='pacman -Si'                   # Info
-    alias pacq='pacman -Q'                    # Query installed
-    alias pacqs='pacman -Qs'                  # Query installed search
-    alias pacql='pacman -Ql'                  # List files
-    alias pacqo='pacman -Qo'                  # Which package owns file
+    # ========================================
+    # Basic Operations (Short Forms)
+    # ========================================
+    alias pac='sudo pacman -S'               # Install package
+    alias pacs='pacman -Ss'                  # Search repositories
+    alias pacu='sudo pacman -Syu'            # Update system
+    alias pacr='sudo pacman -R'              # Remove package
+    alias pacrs='sudo pacman -Rs'            # Remove package with dependencies
+    alias paci='pacman -Si'                  # Package info (repository)
+    alias pacqi='pacman -Qi'                 # Package info (installed)
+    alias pacq='pacman -Q'                   # Query installed packages
+    alias pacqs='pacman -Qs'                 # Search installed packages
+    alias pacql='pacman -Ql'                 # List package files
+    alias pacqo='pacman -Qo'                 # Which package owns file
+    alias pacqdt='pacman -Qdt'               # List orphaned packages
 
-    # Advanced operations
-    alias pacorphans='sudo pacman -Rs $(pacman -Qtdq)'
-    alias pacclean='sudo pacman -Sc'
+    # ========================================
+    # Verbose Forms (Self-Documenting)
+    # ========================================
+    alias pacman-install='sudo pacman -S'
+    alias pacman-search='pacman -Ss'
+    alias pacman-update='sudo pacman -Syu'
+    alias pacman-remove='sudo pacman -R'
+    alias pacman-purge='sudo pacman -Rns'
+    alias pacman-info='pacman -Si'
+    alias pacman-query='pacman -Q'
+    alias pacman-files='pacman -Ql'
+    alias pacman-owns='pacman -Qo'
+    alias pacman-orphans='pacman -Qdt'
+    alias pacman-download='pacman -Sw'
+    alias pacman-install-file='sudo pacman -U'
+
+    # ========================================
+    # System Maintenance
+    # ========================================
+    alias pacclean='sudo pacman -Sc'                    # Clean package cache
+    alias pacclean-all='sudo pacman -Scc'               # Clean all cache
+    alias pacorphans='sudo pacman -Rs $(pacman -Qtdq)'  # Remove orphaned packages
+    alias pacunlock='sudo rm /var/lib/pacman/db.lck'    # Remove pacman lock
+    alias paclock='sudo touch /var/lib/pacman/db.lck'   # Create pacman lock
+
+    # ========================================
+    # Logs & Monitoring  
+    # ========================================
     alias paclog='tail -f /var/log/pacman.log'
+    alias paclog-color='tail -n 40 /var/log/pacman.log | ccze -A'
+
+    # ========================================
+    # Advanced Operations
+    # ========================================
+    alias pacfix='sudo pacman -Sy archlinux-keyring && sudo pacman-key --init && sudo pacman-key --populate archlinux && sudo pacman-key --refresh-keys'
+    alias packey-reset='sudo rm -r /etc/pacman.d/gnupg && sudo pacman-key --init && sudo pacman-key --populate archlinux && sudo pacman-key --refresh-keys && sudo pacman -S archlinux-keyring'
     alias pacmirror='sudo reflector --verbose --latest 5 --country US --age 6 --sort rate --save /etc/pacman.d/mirrorlist'
 
-    # AUR helpers
+    # ========================================
+    # Interactive FZF Operations
+    # ========================================
+    alias pac-install-fzf="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+    alias pac-remove-fzf="pacman -Qqe | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
+    alias pac-info-fzf="pacman -Qq | fzf --preview 'pacman -Qi {1}'"
+
+    # ========================================
+    # Maintenance Workflows
+    # ========================================
+    alias pac-maintenance='sudo pacman -Syu && sudo paccache -r && sudo paccache -ruk0'
+    alias pac-daily='sudo pacman -Syu && sudo paccache -rvk3 && sudo updatedb'
+
+    # ========================================
+    # AUR Helpers
+    # ========================================
     if command -v yay &> /dev/null; then
         alias yay-update='yay -Syu'
         alias yay-clean='yay -Sc'
         alias yay-orphans='yay -Rs $(yay -Qtdq)'
+        alias yay-install-fzf="yay -Slq --aur | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
     fi
 
     if command -v paru &> /dev/null; then
         alias paru-update='paru -Syu'
         alias paru-clean='paru -Sc'
+        alias paru-orphans='paru -Rs $(paru -Qtdq)'
     fi
 fi
 
@@ -337,15 +390,8 @@ alias curl-follow='curl -L'
 alias curl-time='curl -w "@/dev/stdin" -o /dev/null -s'
 
 # Systemd service management
-#alias sstatus="systemctl status"
-alias systemd-start="sudo systemctl start"
-alias systemd-stop="sudo systemctl stop"
-alias systemd-enable="sudo systemctl enable"
-alias systemd-disable="sudo systemctl disable"
-alias systemd-reload="sudo systemctl reload"
-alias systemd-restart="sudo systemctl restart"
-alias systemd-daemon-reload="sudo systemctl --system daemon-reload"
-alias sstatus="systemctl status"
+# System-wide services (with sudo)
+alias sstatus='sudo systemctl status'
 alias sstart="sudo systemctl start"
 alias sstop="sudo systemctl stop"
 alias senable="sudo systemctl enable"
@@ -353,6 +399,29 @@ alias sdisable="sudo systemctl disable"
 alias sreload="sudo systemctl reload"
 alias srestart="sudo systemctl restart"
 alias sdaemonreload="sudo systemctl --system daemon-reload"
+
+# User services (without sudo)
+alias sustatus="systemctl --user status"
+alias sustart="systemctl --user start"
+alias sustop="systemctl --user stop"
+alias suenable="systemctl --user enable"
+alias sudisable="systemctl --user disable"
+alias sureload="systemctl --user reload"
+alias surestart="systemctl --user restart"
+alias sudaemonreload="systemctl --user daemon-reload"
+
+# Systemctl functions with automatic status display
+start() { sudo systemctl start $1.service; sudo systemctl status $1.service; }
+sysctrl_stop() { sudo systemctl stop $1.service; sudo systemctl status $1.service; }
+sysctrl_restart() { sudo systemctl restart $1.service; sudo systemctl status $1.service; }
+sysctrl_status() { sudo systemctl status $1.service; }
+sysctrl_enabled() { cd /usr/lib/systemd/system; sudo systemctl enable $1.service; }
+sysctrl_disabled() { sudo systemctl disable $1.service; }
+
+# User systemctl functions
+sysctrl_startu() { systemctl --user start $1.service; systemctl --user status $1.service; }
+sysctrl_stopu() { systemctl --user stop $1.service; systemctl --user status $1.service; }
+sysctrl_statusu() { systemctl --user status $1.service; }
 
 # ============================================================================
 # Development Tools
