@@ -1,10 +1,10 @@
-[user]
-	name = heinsteinh
-	email = heinsteinh@gmail.com
-
 [core]
     editor = vim
     excludesfile = ~/.gitignore_global
+
+[include]
+    path = ~/.gitconfig.local
+    
 
 [init]
     defaultBranch = main
@@ -21,3 +21,8 @@
     br = branch
     ci = commit
     lg = log --oneline --graph --decorate
+[merge]
+	tool = nvimdiff
+[mergetool]
+	prompt = false
+	keepBackup = false
