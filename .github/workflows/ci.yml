@@ -34,7 +34,7 @@ jobs:
         node-version: '20'
 
     - name: Install shell dependencies
-      run: sudo apt-get update && sudo apt-get install -y zsh
+      run: sudo apt-get update && sudo apt-get install -y zsh vim tmux
 
     - name: Install linting tools
       run: |
