@@ -125,9 +125,4 @@ if [[ -f "$DOTFILES_DIR/config/newsboat/urls" ]]; then
     create_symlink "$DOTFILES_DIR/config/newsboat/urls" "$HOME/.config/newsboat/urls"
 fi
 
-# Claude configuration
-if [[ -d "$DOTFILES_DIR/claude" ]]; then
-    create_symlink "$DOTFILES_DIR/claude" "$HOME/.claude"
-fi
-
 echo "Symlinks created successfully!"
