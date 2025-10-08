@@ -1,7 +1,7 @@
-# ~/.config/zsh/distro.zsh - Distribution-Specific Aliases and Functions
+# ~/.config/zsh/distro.zsh - Distribution-Specific Configuration Loader
 
 # ============================================================================
-# Auto-Detection and Configuration Loading
+# OS Detection
 # ============================================================================
 
 # Detect operating system and distribution
@@ -34,234 +34,6 @@ detect_os() {
 }
 
 OS_TYPE=$(detect_os)
-
-# ============================================================================
-# Arch Linux Specific
-# ============================================================================
-if [[ "$OS_TYPE" == "arch" ]]; then
-    # Package management
-    alias pac-install='sudo pacman -S'
-    alias pac-search='pacman -Ss'
-    alias pac-update='sudo pacman -Syu'
-    alias pac-remove='sudo pacman -R'
-    alias pac-remove-deps='sudo pacman -Rs'
-    alias pac-info='pacman -Si'
-    alias pac-installed='pacman -Q'
-    alias pac-files='pacman -Ql'
-    alias pac-owner='pacman -Qo'
-    alias pac-orphans='sudo pacman -Rs $(pacman -Qtdq)'
-    alias pac-clean='sudo pacman -Sc'
-    alias pac-clean-all='sudo pacman -Scc'
-
-    # AUR helpers
-    if command -v yay &> /dev/null; then
-        alias yay-install='yay -S'
-        alias yay-search='yay -Ss'
-        alias yay-update='yay -Syu'
-        alias yay-clean='yay -Sc'
-        alias yay-stats='yay -Ps'
-    fi
-
-    if command -v paru &> /dev/null; then
-        alias paru-install='paru -S'
-        alias paru-search='paru -Ss'
-        alias paru-update='paru -Syu'
-        alias paru-clean='paru -Sc'
-    fi
-
-    # System management
-    alias update-system='sudo pacman -Syu'
-    alias update-mirrors='sudo reflector --verbose --latest 20 --country US --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
-    alias kernel-list='pacman -Q | grep linux'
-    alias driver-check='lspci -v | grep -A1 -e VGA -e 3D'
-
-    # Arch-specific functions
-    pac_search_install() {
-        local package
-        package=$(pacman -Ss "$1" | grep -E '^[^[:space:]]' | fzf --preview 'pacman -Si {1}' | awk '{print $1}')
-        [[ -n $package ]] && sudo pacman -S "$package"
-    }
-
-    # Check for .pacnew files
-    alias pacnew='find /etc -name "*.pacnew" 2>/dev/null'
-
-    # Service management
-    alias enable-service='sudo systemctl enable'
-    alias start-service='sudo systemctl start'
-    alias restart-service='sudo systemctl restart'
-    alias status-service='systemctl status'
-    alias failed-services='systemctl --failed'
-
-# ============================================================================
-# Ubuntu/Debian Specific
-# ============================================================================
-elif [[ "$OS_TYPE" == "ubuntu" ]] || [[ "$OS_TYPE" == "debian" ]]; then
-    # Package management
-    alias apt-install='sudo apt install'
-    alias apt-search='apt search'
-    alias apt-update='sudo apt update'
-    alias apt-upgrade='sudo apt update && sudo apt upgrade'
-    alias apt-remove='sudo apt remove'
-    alias apt-purge='sudo apt purge'
-    alias apt-autoremove='sudo apt autoremove'
-    alias apt-info='apt show'
-    alias apt-installed='apt list --installed'
-    alias apt-files='dpkg -L'
-    alias apt-owner='dpkg -S'
-    alias apt-clean='sudo apt autoclean && sudo apt autoremove'
-
-    # Repository management
-    alias add-repo='sudo add-apt-repository'
-    alias remove-repo='sudo add-apt-repository --remove'
-    alias update-sources='sudo apt update'
-
-    # System management
-    alias update-system='sudo apt update && sudo apt upgrade'
-    alias dist-upgrade='sudo apt update && sudo apt dist-upgrade'
-    alias check-updates='apt list --upgradable'
-
-    # Ubuntu-specific
-    if [[ "$OS_TYPE" == "ubuntu" ]]; then
-        alias ubuntu-version='lsb_release -a'
-        alias ubuntu-codename='lsb_release -c'
-        alias snap-list='snap list'
-        alias snap-install='sudo snap install'
-        alias snap-remove='sudo snap remove'
-        alias snap-update='sudo snap refresh'
-    fi
-
-    # Debian-specific functions
-    apt_search_install() {
-        local package
-        package=$(apt search "$1" 2>/dev/null | grep -E '^[^[:space:]]' | fzf --preview 'apt show {1}' | awk -F'/' '{print $1}')
-        [[ -n $package ]] && sudo apt install "$package"
-    }
-
-    # Service management
-    alias enable-service='sudo systemctl enable'
-    alias start-service='sudo systemctl start'
-    alias restart-service='sudo systemctl restart'
-    alias status-service='systemctl status'
-
-# ============================================================================
-# macOS Specific
-# ============================================================================
-elif [[ "$OS_TYPE" == "macos" ]]; then
-    # Homebrew management
-    alias brew-install='brew install'
-    alias brew-search='brew search'
-    alias brew-update='brew update && brew upgrade'
-    alias brew-remove='brew uninstall'
-    alias brew-info='brew info'
-    alias brew-list='brew list'
-    alias brew-clean='brew cleanup'
-    alias brew-doctor='brew doctor'
-    alias brew-cask='brew install --cask'
-    alias brew-services='brew services list'
-    alias brew-outdated='brew outdated'
-
-    # macOS system management
-    alias update-system='softwareupdate -i -a'
-    alias check-updates='softwareupdate -l'
-    alias macos-version='sw_vers'
-
-    # macOS specific utilities
-    alias show-hidden='defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder'
-    alias hide-hidden='defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder'
-    alias flush-dns='sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
-    alias rebuild-launch='sudo /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user && killall Finder'
-
-    # Quick system controls
-    alias sleep-display='pmset displaysleepnow'
-    alias prevent-sleep='caffeinate'
-    alias lock-screen='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
-
-    # Network utilities
-    alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
-    alias wifi-scan='airport -s'
-    alias wifi-info='airport -I'
-
-    # Homebrew functions
-    brew_search_install() {
-        local package
-        package=$(brew search "$1" | fzf --preview 'brew info {}')
-        [[ -n $package ]] && brew install "$package"
-    }
-
-    # Application management
-    alias app-store='mas list'
-    alias app-install='mas install'
-    alias app-search='mas search'
-
-    # Clipboard utilities
-    alias copy='pbcopy'
-    alias paste='pbpaste'
-
-# ============================================================================
-# Fedora/RHEL Specific
-# ============================================================================
-elif [[ "$OS_TYPE" == "fedora" ]] || [[ "$OS_TYPE" == "rhel" ]]; then
-    # DNF package management
-    alias dnf-install='sudo dnf install'
-    alias dnf-search='dnf search'
-    alias dnf-update='sudo dnf update'
-    alias dnf-remove='sudo dnf remove'
-    alias dnf-info='dnf info'
-    alias dnf-installed='dnf list installed'
-    alias dnf-clean='sudo dnf clean all'
-    alias dnf-history='dnf history'
-
-    # Repository management
-    alias add-repo='sudo dnf config-manager --add-repo'
-    alias enable-repo='sudo dnf config-manager --enable'
-    alias disable-repo='sudo dnf config-manager --disable'
-
-    # System management
-    alias update-system='sudo dnf update'
-    alias check-updates='dnf check-update'
-
-    # Fedora-specific
-    if [[ "$OS_TYPE" == "fedora" ]]; then
-        alias fedora-version='cat /etc/fedora-release'
-        alias flatpak-install='flatpak install'
-        alias flatpak-update='flatpak update'
-        alias flatpak-list='flatpak list'
-    fi
-
-    # Service management
-    alias enable-service='sudo systemctl enable'
-    alias start-service='sudo systemctl start'
-    alias restart-service='sudo systemctl restart'
-    alias status-service='systemctl status'
-
-# ============================================================================
-# openSUSE Specific
-# ============================================================================
-elif [[ "$OS_TYPE" == "opensuse" ]]; then
-    # Zypper package management
-    alias zyp-install='sudo zypper install'
-    alias zyp-search='zypper search'
-    alias zyp-update='sudo zypper update'
-    alias zyp-remove='sudo zypper remove'
-    alias zyp-info='zypper info'
-    alias zyp-installed='zypper search --installed-only'
-    alias zyp-clean='sudo zypper clean'
-
-    # Repository management
-    alias add-repo='sudo zypper addrepo'
-    alias remove-repo='sudo zypper removerepo'
-    alias refresh-repos='sudo zypper refresh'
-
-    # System management
-    alias update-system='sudo zypper update'
-    alias dist-upgrade='sudo zypper dup'
-
-    # Service management
-    alias enable-service='sudo systemctl enable'
-    alias start-service='sudo systemctl start'
-    alias restart-service='sudo systemctl restart'
-    alias status-service='systemctl status'
-fi
 
 # ============================================================================
 # Universal Linux Aliases (for any Linux distribution)
@@ -314,10 +86,10 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 fi
 
 # ============================================================================
-# Package Manager Detection and Universal Commands
+# Universal Package Manager Wrapper
 # ============================================================================
 
-# Universal package management functions
+# Universal package management function
 pkg() {
     case "$1" in
         install|i)
@@ -394,7 +166,10 @@ pkg() {
     esac
 }
 
-# System information function
+# ============================================================================
+# System Information Function
+# ============================================================================
+
 sysinfo() {
     echo "=== System Information ==="
     echo "OS: $OS_TYPE"
@@ -427,7 +202,6 @@ sysinfo() {
 # Distribution-Specific Help
 # ============================================================================
 
-# Show distribution-specific commands
 distro_help() {
     echo "Distribution-specific commands for $OS_TYPE:"
     echo
@@ -515,11 +289,13 @@ distro_help() {
 }
 
 # ============================================================================
-# Auto-load distribution-specific configurations
+# Load Distribution-Specific Configuration
 # ============================================================================
 
-# Load additional distribution-specific files if they exist
-[[ -f ~/.config/zsh/distro/${OS_TYPE}.zsh ]] && source ~/.config/zsh/distro/${OS_TYPE}.zsh
+# Load distro-specific file if it exists
+if [[ -f ~/.config/zsh/distro/${OS_TYPE}.zsh ]]; then
+    source ~/.config/zsh/distro/${OS_TYPE}.zsh
+fi
 
 # Export OS_TYPE for use in other scripts
 export OS_TYPE

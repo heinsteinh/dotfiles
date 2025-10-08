@@ -1,18 +1,5 @@
 #!/usr/bin/env bash
-
-if ! declare -f log_success > /dev/null 2>&1; then
-    log_success() { echo "[SUCCESS] $1"; }
-fi
-
-if ! declare -f log_warning > /dev/null 2>&1; then
-    log_warning() { echo "[WARNING] $1"; }
-fi
-
-if ! declare -f log_error > /dev/null 2>&1; then
-    log_error() { echo "[ERROR] $1"; }
-fi
-
-# Check if running Arch Linuxux-specific setup script
+# Arch Linux-specific setup script
 
 set -euo pipefail
 
@@ -22,24 +9,10 @@ DOTFILES_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 
 if [[ -f "$DOTFILES_DIR/scripts/setup/setup-common.sh" ]]; then
     source "$DOTFILES_DIR/scripts/setup/setup-common.sh"
+else
+    echo "[ERROR] Cannot find setup-common.sh"
+    exit 1
 fi
-
-# Additional logging functions if not defined
-if ! declare -f log_info > /dev/null 2>&1; then
-    log_info() { echo "[INFO] $1"; }
-fi
-
-log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
 
 # Check if running on Arch Linux
 check_arch_linux() {
