@@ -38,6 +38,13 @@ Plug 'dense-analysis/ale', { 'for': ['python','javascript','typescript','bash','
 Plug 'Yggdroot/indentLine', { 'for': ['python','javascript','typescript','yaml','json','lua','vim'] }
 Plug 'ntpeters/vim-better-whitespace'
 
+" Markdown preview (browser) - requires Node.js
+Plug 'iamcco/markdown-preview.nvim', {
+\ 'do': 'cd app && npm install',
+\ 'for': ['markdown'],
+\ 'on': ['MarkdownPreview', 'MarkdownPreviewStop', 'MarkdownPreviewToggle']
+\ }
+
 " Color schemes
 Plug 'morhetz/gruvbox'
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -184,6 +191,14 @@ let g:gitgutter_sign_modified = '~'
 let g:gitgutter_sign_removed = '-'
 let g:gitgutter_sign_removed_first_line = '^'
 let g:gitgutter_sign_modified_removed = '~'
+
+" Markdown Preview configuration
+let g:mkdp_auto_start = 0
+let g:mkdp_auto_close = 1
+let g:mkdp_refresh_slow = 1
+let g:mkdp_command_for_global = 0
+let g:mkdp_open_to_the_world = 0
+let g:mkdp_theme = 'dark'
 
 " ALE (Linting)
 let g:ale_linters = {
@@ -369,6 +384,16 @@ augroup filetype_settings
 
   " Markdown
   autocmd FileType markdown setlocal wrap linebreak
+
+  " Markdown Preview keymaps
+  autocmd FileType markdown nnoremap <buffer> <leader>mp :MarkdownPreviewToggle<CR>
+  autocmd FileType markdown nnoremap <buffer> <leader>mo :MarkdownPreview<CR>
+  autocmd FileType markdown nnoremap <buffer> <leader>ms :MarkdownPreviewStop<CR>
+
+  " Markdown editing niceties
+  autocmd FileType markdown setlocal conceallevel=2
+  autocmd FileType markdown setlocal spell
+  autocmd FileType markdown setlocal colorcolumn=
 
 augroup END
 
