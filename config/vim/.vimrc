@@ -38,12 +38,7 @@ Plug 'dense-analysis/ale', { 'for': ['python','javascript','typescript','bash','
 Plug 'Yggdroot/indentLine', { 'for': ['python','javascript','typescript','yaml','json','lua','vim'] }
 Plug 'ntpeters/vim-better-whitespace'
 
-" Markdown preview (browser) - requires Node.js
-Plug 'iamcco/markdown-preview.nvim', {
-\ 'do': 'cd app && npm install',
-\ 'for': ['markdown'],
-\ 'on': ['MarkdownPreview', 'MarkdownPreviewStop', 'MarkdownPreviewToggle']
-\ }
+" Markdown Preview: Pandoc-based (configured later in file)
 
 " Color schemes
 Plug 'morhetz/gruvbox'
@@ -385,10 +380,9 @@ augroup filetype_settings
   " Markdown
   autocmd FileType markdown setlocal wrap linebreak
 
-  " Markdown Preview keymaps
-  autocmd FileType markdown nnoremap <buffer> <leader>mp :MarkdownPreviewToggle<CR>
-  autocmd FileType markdown nnoremap <buffer> <leader>mo :MarkdownPreview<CR>
-  autocmd FileType markdown nnoremap <buffer> <leader>ms :MarkdownPreviewStop<CR>
+  " Markdown Preview keymaps (Pandoc-based)
+  autocmd FileType markdown nnoremap <buffer> <leader>mp :PandocPreview<CR>
+  autocmd FileType markdown nnoremap <buffer> <leader>mr :PandocPreviewRefresh<CR>
 
   " Markdown editing niceties
   autocmd FileType markdown setlocal conceallevel=2
@@ -396,6 +390,66 @@ augroup filetype_settings
   autocmd FileType markdown setlocal colorcolumn=
 
 augroup END
+
+" ----------------------------------------------------------------------------
+" Pandoc-based Markdown Preview (no Node.js dependency)
+" ----------------------------------------------------------------------------
+if !exists('g:pandoc_preview_dir')
+  let g:pandoc_preview_dir = '/tmp/vim-pandoc-preview'
+endif
+
+function! s:PandocPreview(open)
+  if !executable('pandoc')
+    echohl WarningMsg | echom 'Pandoc not installed. Install pandoc for Markdown preview.' | echohl None
+    return
+  endif
+  if !isdirectory(g:pandoc_preview_dir)
+    call mkdir(g:pandoc_preview_dir, 'p', 0755)
+  endif
+  if !exists('b:pandoc_preview_html')
+    let b:pandoc_preview_html = g:pandoc_preview_dir.'/'.fnamemodify(expand('%:t'), ':r').'.html'
+  endif
+  let l:base = 'pandoc --from=markdown --to=html5 --standalone'
+  let l:base .= ' --metadata title='.shellescape(expand('%:t'))
+  let l:base .= ' --highlight-style=pygments'
+  let l:cmd = l:base.' -o '.shellescape(b:pandoc_preview_html)
+
+  " If buffer has a file on disk and is not modified, let pandoc read the file directly
+  if filereadable(expand('%:p')) && !&modified
+    let l:cmd = l:cmd.' '.shellescape(expand('%:p'))
+    call system(l:cmd)
+  else
+    " For unsaved or modified buffers, pipe current buffer content to pandoc via stdin
+    let l:input = join(getline(1, '$'), "\n")."\n"
+    call system(l:cmd, l:input)
+  endif
+  if v:shell_error
+    echohl ErrorMsg | echom 'Pandoc conversion failed (exit '.v:shell_error.')' | echohl None
+    return
+  endif
+  " Ensure world-readable file for sandboxed browsers (snap/flatpak)
+  call system('chmod 0644 '.shellescape(b:pandoc_preview_html))
+  if a:open
+    if has('unix') && executable('xdg-open')
+      call system('xdg-open '.shellescape(b:pandoc_preview_html).' >/dev/null 2>&1 &')
+    elseif executable('open')
+      call system('open '.shellescape(b:pandoc_preview_html).' >/dev/null 2>&1 &')
+    else
+      echom 'Open this in your browser: '.b:pandoc_preview_html
+    endif
+  endif
+  if !exists('b:pandoc_preview_autocmd')
+    augroup PandocPreviewBuffer
+      autocmd! * <buffer>
+      autocmd BufWritePost <buffer> silent! call <SID>PandocPreview(0)
+    augroup END
+    let b:pandoc_preview_autocmd = 1
+  endif
+  echom 'Pandoc preview updated: '.b:pandoc_preview_html
+endfunction
+
+command! PandocPreview call <SID>PandocPreview(1)
+command! PandocPreviewRefresh call <SID>PandocPreview(0)
 
 " ============================================================================
 " Status Line (if airline is not loaded)
