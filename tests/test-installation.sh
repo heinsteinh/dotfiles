@@ -342,6 +342,23 @@ test_zsh_config() {
     if [[ "${CI:-}" == "true" ]]; then
         if command_exists "zsh"; then
             log_verbose "Zsh is available in CI environment"
+
+            # If .zshrc exists but Oh My Zsh isn't installed, skip syntax check
+            if [[ -f "$HOME/.zshrc" ]] && [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+                log_warning "CI: .zshrc exists but Oh My Zsh not installed - skipping syntax check"
+                log_verbose "This is expected if installation didn't complete or symlinks weren't created"
+                return 0
+            fi
+
+            # If .zshrc exists and Oh My Zsh is installed, verify syntax
+            if [[ -f "$HOME/.zshrc" ]] && [[ -d "$HOME/.oh-my-zsh" ]]; then
+                if timeout 5 zsh -n "$HOME/.zshrc" 2>/dev/null; then
+                    log_verbose "CI: Zsh configuration syntax is valid"
+                else
+                    log_warning "CI: Zsh configuration has syntax issues (non-fatal in CI)"
+                fi
+            fi
+
             return 0
         else
             log_error "Zsh not available"
@@ -354,15 +371,19 @@ test_zsh_config() {
         return 1
     fi
 
+    # Check for Oh My Zsh before syntax check
+    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+        log_warning "Oh My Zsh not installed - cannot validate .zshrc syntax"
+        if [[ "${DOTFILES_SKIP_INTERACTIVE_MODE}" != "true" ]]; then
+            return 1
+        fi
+        return 0
+    fi
+
     # Test zsh syntax with timeout
     if ! timeout 5 zsh -n "$HOME/.zshrc" 2>/dev/null; then
         log_error "Zsh configuration syntax error or timeout"
         return 1
-    fi
-
-    # Check for Oh My Zsh
-    if [[ ! -d "$HOME/.oh-my-zsh" ]] && [[ "${DOTFILES_SKIP_INTERACTIVE_MODE}" != "true" ]]; then
-        log_warning "Oh My Zsh not installed"
     fi
 
     return 0

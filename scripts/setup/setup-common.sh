@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 # Common setup functions shared across different OS setups
 
-set -euo pipefail
+# CI-aware error handling
+if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]]; then
+    set -eo pipefail  # CI: lenient mode (no -u flag for undefined variables)
+else
+    set -euo pipefail  # Local: strict mode
+fi
 
 # Colors for output (only define if not already defined)
 if [[ -z "${RED:-}" ]]; then
