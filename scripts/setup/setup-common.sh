@@ -259,6 +259,200 @@ cleanup_temp_files() {
     find "$temp_dir" -name "dotfiles-*" -type f -mtime +7 -delete 2>/dev/null || true
 }
 
+# Install modern CLI tools cross-platform
+install_modern_cli_tools() {
+    local os
+    os=$(detect_os)
+
+    log_info "Installing modern CLI tools for $os..."
+
+    case "$os" in
+        macos)
+            if ! command_exists brew; then
+                log_error "Homebrew not found. Please install it first."
+                return 1
+            fi
+
+            brew install \
+                ripgrep fd bat eza fzf jq yq \
+                lazygit bottom procs dust tokei \
+                hyperfine bandwhich gping tree htop || log_warning "Some packages failed to install"
+            ;;
+        ubuntu|debian)
+            sudo apt install -y -qq \
+                ripgrep fd-find fzf jq tree htop unzip || log_warning "Some packages from default repositories failed to install"
+
+            # Install bat (Ubuntu 20.04+)
+            sudo apt install -y -qq bat 2>/dev/null || sudo apt install -y -qq batcat || log_warning "Failed to install bat/batcat"
+
+            # Create symlinks for Ubuntu-specific naming
+            command_exists fdfind && ! command_exists fd && sudo ln -sf "$(which fdfind)" /usr/local/bin/fd
+            command_exists batcat && ! command_exists bat && sudo ln -sf "$(which batcat)" /usr/local/bin/bat
+
+            # Install eza from GitHub (if not in CI)
+            if [[ "${CI:-}" != "true" ]] && ! command_exists eza; then
+                log_info "Installing eza from GitHub releases..."
+                install_eza_github || log_warning "Failed to install eza"
+            fi
+            ;;
+        fedora)
+            sudo dnf install -y \
+                ripgrep fd-find fzf jq tree htop unzip bat || log_warning "Some packages failed to install"
+            ;;
+        arch)
+            sudo pacman -S --noconfirm \
+                ripgrep fd bat eza fzf jq tree htop unzip || log_warning "Some packages failed to install"
+            ;;
+        *)
+            log_error "Unsupported operating system: $os"
+            return 1
+            ;;
+    esac
+
+    log_success "Modern CLI tools installed"
+}
+
+# Install eza from GitHub releases (Ubuntu/Debian)
+install_eza_github() {
+    local architecture
+    case "$(uname -m)" in
+        x86_64) architecture="x86_64" ;;
+        aarch64|arm64) architecture="aarch64" ;;
+        *)
+            log_warning "Unsupported architecture for eza: $(uname -m)"
+            return 1
+            ;;
+    esac
+
+    local eza_version
+    eza_version=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o '"tag_name": "v[^"]*' | cut -d'"' -f4 | cut -d'v' -f2) || {
+        log_warning "Failed to get eza version from GitHub"
+        return 1
+    }
+
+    local temp_dir=$(mktemp -d)
+    cd "$temp_dir" || return 1
+
+    local download_url="https://github.com/eza-community/eza/releases/download/v${eza_version}/eza_${architecture}-unknown-linux-gnu.tar.gz"
+
+    if curl -L "$download_url" -o eza.tar.gz && tar -xzf eza.tar.gz; then
+        sudo mv eza /usr/local/bin/eza
+        sudo chmod +x /usr/local/bin/eza
+        cd - > /dev/null
+        rm -rf "$temp_dir"
+        log_success "eza installed successfully"
+        return 0
+    else
+        cd - > /dev/null
+        rm -rf "$temp_dir"
+        return 1
+    fi
+}
+
+# Install Docker cross-platform
+install_docker() {
+    local os
+    os=$(detect_os)
+
+    # Skip in CI
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "CI environment detected, skipping Docker installation"
+        return 0
+    fi
+
+    if command_exists docker; then
+        log_info "Docker is already installed"
+        return 0
+    fi
+
+    log_info "Installing Docker for $os..."
+
+    case "$os" in
+        macos)
+            if command_exists brew; then
+                brew install --cask docker
+            else
+                log_error "Homebrew not found"
+                return 1
+            fi
+            ;;
+        ubuntu|debian)
+            # Add Docker's official GPG key
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+            # Set up the stable repository
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+            # Install Docker Engine
+            sudo apt update
+            sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+            # Add user to docker group
+            sudo usermod -aG docker "$USER"
+            log_warning "Please log out and back in for Docker group changes to take effect"
+            ;;
+        fedora)
+            sudo dnf install -y docker docker-compose
+            sudo systemctl enable --now docker
+            sudo usermod -aG docker "$USER"
+            log_warning "Please log out and back in for Docker group changes to take effect"
+            ;;
+        arch)
+            sudo pacman -S --noconfirm docker docker-compose
+            sudo systemctl enable --now docker
+            sudo usermod -aG docker "$USER"
+            log_warning "Please log out and back in for Docker group changes to take effect"
+            ;;
+        *)
+            log_error "Unsupported operating system: $os"
+            return 1
+            ;;
+    esac
+
+    log_success "Docker installed successfully"
+}
+
+# Install Node.js cross-platform
+install_nodejs() {
+    local os
+    os=$(detect_os)
+
+    # Skip in CI
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "CI environment detected, skipping Node.js installation"
+        return 0
+    fi
+
+    if command_exists node; then
+        log_info "Node.js is already installed"
+        return 0
+    fi
+
+    log_info "Installing Node.js for $os..."
+
+    case "$os" in
+        macos)
+            brew install node
+            ;;
+        ubuntu|debian)
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            sudo apt install -y nodejs
+            ;;
+        fedora)
+            sudo dnf install -y nodejs npm
+            ;;
+        arch)
+            sudo pacman -S --noconfirm nodejs npm
+            ;;
+        *)
+            log_error "Unsupported operating system: $os"
+            return 1
+            ;;
+    esac
+
+    log_success "Node.js installed successfully"
+}
+
 # Main common setup function
 common_setup() {
     log_info "Running common setup tasks..."

@@ -380,76 +380,239 @@ augroup filetype_settings
   " Markdown
   autocmd FileType markdown setlocal wrap linebreak
 
-  " Markdown Preview keymaps (Pandoc-based)
-  autocmd FileType markdown nnoremap <buffer> <leader>mp :PandocPreview<CR>
-  autocmd FileType markdown nnoremap <buffer> <leader>mr :PandocPreviewRefresh<CR>
-
   " Markdown editing niceties
   autocmd FileType markdown setlocal conceallevel=2
   autocmd FileType markdown setlocal spell
   autocmd FileType markdown setlocal colorcolumn=
+  autocmd FileType markdown setlocal wrap linebreak
+
+  " Markdown Preview keymaps
+  autocmd FileType markdown nnoremap <buffer> <leader>mp :MarkdownPreview<CR>
+  autocmd FileType markdown nnoremap <buffer> <leader>ms :MarkdownPreviewStop<CR>
+  autocmd FileType markdown nnoremap <buffer> <leader>mt :MarkdownPreviewToggle<CR>
 
 augroup END
 
 " ----------------------------------------------------------------------------
-" Pandoc-based Markdown Preview (no Node.js dependency)
+" Markdown Preview with Pandoc
 " ----------------------------------------------------------------------------
-if !exists('g:pandoc_preview_dir')
-  let g:pandoc_preview_dir = '/tmp/vim-pandoc-preview'
+" Use /tmp for better browser access (some browsers can't read from hidden dirs)
+let g:markdown_preview_dir = '/tmp/vim-markdown-preview-' . $USER
+let g:markdown_preview_auto_update = 1
+
+" Create preview directory with world-readable permissions
+if !isdirectory(g:markdown_preview_dir)
+  call mkdir(g:markdown_preview_dir, 'p', 0755)
+  call system('chmod 755 ' . shellescape(g:markdown_preview_dir))
 endif
 
-function! s:PandocPreview(open)
+function! s:MarkdownPreview()
   if !executable('pandoc')
-    echohl WarningMsg | echom 'Pandoc not installed. Install pandoc for Markdown preview.' | echohl None
+    echohl ErrorMsg
+    echom 'ERROR: pandoc is not installed!'
+    echom 'Install with: sudo apt install pandoc (Ubuntu/Debian)'
+    echohl None
     return
   endif
-  if !isdirectory(g:pandoc_preview_dir)
-    call mkdir(g:pandoc_preview_dir, 'p', 0755)
-  endif
-  if !exists('b:pandoc_preview_html')
-    let b:pandoc_preview_html = g:pandoc_preview_dir.'/'.fnamemodify(expand('%:t'), ':r').'.html'
-  endif
-  let l:base = 'pandoc --from=markdown --to=html5 --standalone'
-  let l:base .= ' --metadata title='.shellescape(expand('%:t'))
-  let l:base .= ' --highlight-style=pygments'
-  let l:cmd = l:base.' -o '.shellescape(b:pandoc_preview_html)
 
-  " If buffer has a file on disk and is not modified, let pandoc read the file directly
-  if filereadable(expand('%:p')) && !&modified
-    let l:cmd = l:cmd.' '.shellescape(expand('%:p'))
-    call system(l:cmd)
-  else
-    " For unsaved or modified buffers, pipe current buffer content to pandoc via stdin
-    let l:input = join(getline(1, '$'), "\n")."\n"
-    call system(l:cmd, l:input)
-  endif
-  if v:shell_error
-    echohl ErrorMsg | echom 'Pandoc conversion failed (exit '.v:shell_error.')' | echohl None
+  " Generate unique HTML filename based on source file
+  let l:source_file = expand('%:p')
+  if empty(l:source_file)
+    echohl ErrorMsg | echom 'ERROR: Save the file first!' | echohl None
     return
   endif
-  " Ensure world-readable file for sandboxed browsers (snap/flatpak)
-  call system('chmod 0644 '.shellescape(b:pandoc_preview_html))
-  if a:open
-    if has('unix') && executable('xdg-open')
-      call system('xdg-open '.shellescape(b:pandoc_preview_html).' >/dev/null 2>&1 &')
-    elseif executable('open')
-      call system('open '.shellescape(b:pandoc_preview_html).' >/dev/null 2>&1 &')
-    else
-      echom 'Open this in your browser: '.b:pandoc_preview_html
-    endif
+
+  let l:html_file = g:markdown_preview_dir . '/' . expand('%:t:r') . '.html'
+  let b:markdown_preview_file = l:html_file
+
+  " Build pandoc command with GitHub-flavored markdown and styling
+  let l:pandoc_cmd = 'pandoc'
+  let l:pandoc_cmd .= ' --from=gfm'
+  let l:pandoc_cmd .= ' --to=html5'
+  let l:pandoc_cmd .= ' --standalone'
+  let l:pandoc_cmd .= ' --embed-resources'
+  let l:pandoc_cmd .= ' --highlight-style=tango'
+  let l:pandoc_cmd .= ' --metadata lang=en'
+  let l:pandoc_cmd .= ' --metadata pagetitle=' . shellescape(expand('%:t'))
+  let l:pandoc_cmd .= ' --css=' . shellescape(s:GetMarkdownCSS())
+  let l:pandoc_cmd .= ' -o ' . shellescape(l:html_file)
+  let l:pandoc_cmd .= ' ' . shellescape(l:source_file)
+
+  " Run pandoc conversion
+  let l:output = system(l:pandoc_cmd)
+  if v:shell_error != 0
+    echohl ErrorMsg
+    echom 'ERROR: Pandoc conversion failed!'
+    echom l:output
+    echohl None
+    return
   endif
-  if !exists('b:pandoc_preview_autocmd')
-    augroup PandocPreviewBuffer
-      autocmd! * <buffer>
-      autocmd BufWritePost <buffer> silent! call <SID>PandocPreview(0)
+
+  " Make file readable (ensure world-readable for browser access)
+  call system('chmod 644 ' . shellescape(l:html_file))
+
+  " Open in browser
+  call s:OpenInBrowser(l:html_file)
+
+  " Set up auto-update on save
+  if g:markdown_preview_auto_update
+    augroup MarkdownPreviewAuto
+      autocmd! BufWritePost <buffer>
+      autocmd BufWritePost <buffer> silent! call s:MarkdownPreviewUpdate()
     augroup END
-    let b:pandoc_preview_autocmd = 1
   endif
-  echom 'Pandoc preview updated: '.b:pandoc_preview_html
+
+  echom 'Markdown preview opened: ' . l:html_file
 endfunction
 
-command! PandocPreview call <SID>PandocPreview(1)
-command! PandocPreviewRefresh call <SID>PandocPreview(0)
+function! s:MarkdownPreviewUpdate()
+  if !exists('b:markdown_preview_file')
+    return
+  endif
+
+  let l:source_file = expand('%:p')
+  let l:html_file = b:markdown_preview_file
+
+  " Build pandoc command
+  let l:pandoc_cmd = 'pandoc'
+  let l:pandoc_cmd .= ' --from=gfm'
+  let l:pandoc_cmd .= ' --to=html5'
+  let l:pandoc_cmd .= ' --standalone'
+  let l:pandoc_cmd .= ' --embed-resources'
+  let l:pandoc_cmd .= ' --highlight-style=tango'
+  let l:pandoc_cmd .= ' --metadata lang=en'
+  let l:pandoc_cmd .= ' --metadata pagetitle=' . shellescape(expand('%:t'))
+  let l:pandoc_cmd .= ' --css=' . shellescape(s:GetMarkdownCSS())
+  let l:pandoc_cmd .= ' -o ' . shellescape(l:html_file)
+  let l:pandoc_cmd .= ' ' . shellescape(l:source_file)
+
+  " Run pandoc silently
+  call system(l:pandoc_cmd)
+  if v:shell_error == 0
+    echom 'Markdown preview updated'
+  endif
+endfunction
+
+function! s:MarkdownPreviewStop()
+  if exists('b:markdown_preview_file')
+    augroup MarkdownPreviewAuto
+      autocmd! BufWritePost <buffer>
+    augroup END
+    unlet b:markdown_preview_file
+    echom 'Markdown preview auto-update stopped'
+  else
+    echom 'No active markdown preview for this buffer'
+  endif
+endfunction
+
+function! s:MarkdownPreviewToggle()
+  if exists('b:markdown_preview_file')
+    call s:MarkdownPreviewStop()
+  else
+    call s:MarkdownPreview()
+  endif
+endfunction
+
+function! s:OpenInBrowser(file)
+  let l:file_url = 'file://' . a:file
+
+  if has('unix')
+    if executable('xdg-open')
+      call system('xdg-open ' . shellescape(a:file) . ' >/dev/null 2>&1 &')
+    elseif executable('firefox')
+      call system('firefox ' . shellescape(a:file) . ' >/dev/null 2>&1 &')
+    elseif executable('chromium-browser')
+      call system('chromium-browser ' . shellescape(a:file) . ' >/dev/null 2>&1 &')
+    elseif executable('google-chrome')
+      call system('google-chrome ' . shellescape(a:file) . ' >/dev/null 2>&1 &')
+    else
+      echohl WarningMsg
+      echom 'No browser found. Open manually: ' . a:file
+      echohl None
+    endif
+  elseif has('mac')
+    call system('open ' . shellescape(a:file))
+  elseif has('win32')
+    call system('start ' . shellescape(a:file))
+  else
+    echom 'Open in browser: ' . a:file
+  endif
+endfunction
+
+function! s:GetMarkdownCSS()
+  let l:css_file = g:markdown_preview_dir . '/style.css'
+
+  " Create CSS file if it doesn't exist
+  if !filereadable(l:css_file)
+    let l:css_content = [
+      \ 'body {',
+      \ '  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;',
+      \ '  font-size: 16px;',
+      \ '  line-height: 1.6;',
+      \ '  color: #333;',
+      \ '  background-color: #fff;',
+      \ '  max-width: 900px;',
+      \ '  margin: 0 auto;',
+      \ '  padding: 2rem;',
+      \ '}',
+      \ 'code {',
+      \ '  background-color: #f6f8fa;',
+      \ '  padding: 0.2em 0.4em;',
+      \ '  border-radius: 3px;',
+      \ '  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;',
+      \ '  font-size: 85%;',
+      \ '}',
+      \ 'pre {',
+      \ '  background-color: #f6f8fa;',
+      \ '  padding: 1rem;',
+      \ '  border-radius: 6px;',
+      \ '  overflow-x: auto;',
+      \ '}',
+      \ 'pre code {',
+      \ '  background-color: transparent;',
+      \ '  padding: 0;',
+      \ '}',
+      \ 'h1, h2, h3, h4, h5, h6 {',
+      \ '  margin-top: 1.5em;',
+      \ '  margin-bottom: 0.5em;',
+      \ '  font-weight: 600;',
+      \ '  line-height: 1.25;',
+      \ '}',
+      \ 'h1 { font-size: 2em; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; }',
+      \ 'h2 { font-size: 1.5em; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; }',
+      \ 'h3 { font-size: 1.25em; }',
+      \ 'a { color: #0366d6; text-decoration: none; }',
+      \ 'a:hover { text-decoration: underline; }',
+      \ 'img { max-width: 100%; }',
+      \ 'table { border-collapse: collapse; width: 100%; margin: 1em 0; }',
+      \ 'table th, table td { border: 1px solid #dfe2e5; padding: 0.6em 1em; }',
+      \ 'table th { background-color: #f6f8fa; font-weight: 600; }',
+      \ 'blockquote {',
+      \ '  margin: 0;',
+      \ '  padding: 0 1em;',
+      \ '  color: #6a737d;',
+      \ '  border-left: 0.25em solid #dfe2e5;',
+      \ '}',
+      \ '@media (prefers-color-scheme: dark) {',
+      \ '  body { background-color: #0d1117; color: #c9d1d9; }',
+      \ '  code, pre { background-color: #161b22; }',
+      \ '  h1, h2 { border-bottom-color: #21262d; }',
+      \ '  table th, table td { border-color: #30363d; }',
+      \ '  table th { background-color: #161b22; }',
+      \ '  blockquote { color: #8b949e; border-left-color: #30363d; }',
+      \ '  a { color: #58a6ff; }',
+      \ '}',
+      \ ]
+    call writefile(l:css_content, l:css_file)
+  endif
+
+  return l:css_file
+endfunction
+
+" Commands
+command! MarkdownPreview call s:MarkdownPreview()
+command! MarkdownPreviewStop call s:MarkdownPreviewStop()
+command! MarkdownPreviewToggle call s:MarkdownPreviewToggle()
 
 " ============================================================================
 " Status Line (if airline is not loaded)

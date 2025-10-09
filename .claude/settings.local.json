@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//usr/lib/**)",
+      "Bash(apt-cache:*)",
+      "Read(//tmp/vim-markdown-preview-parallels/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
