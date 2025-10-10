@@ -546,9 +546,9 @@ test_starship_prompt() {
         return 0
     fi
 
-    # Test starship configuration
-    if ! starship config >/dev/null 2>&1; then
-        log_warning "Starship configuration error"
+    # Test starship configuration with timeout to prevent hanging in CI
+    if ! timeout 3 starship config >/dev/null 2>&1; then
+        log_warning "Starship configuration error or timeout"
     fi
 
     return 0
@@ -679,10 +679,18 @@ test_cicd_compatibility() {
 
 # Test 16: Performance check
 test_performance() {
-    # Test shell startup time
+    # Test shell startup time with timeout to prevent hanging
     local startup_time
     if command_exists "zsh"; then
-        startup_time=$(time (zsh -c 'exit') 2>&1 | grep real | awk '{print $2}' || echo "unknown")
+        # Use timeout on the zsh command itself, measure with date instead of time
+        local start=$(date +%s%N)
+        if timeout 5 zsh -c 'exit' >/dev/null 2>&1; then
+            local end=$(date +%s%N)
+            local duration=$(( (end - start) / 1000000 ))
+            startup_time="${duration}ms"
+        else
+            startup_time="timeout"
+        fi
         log_verbose "Zsh startup time: $startup_time"
     fi
 
