@@ -11,7 +11,7 @@ download-retries 2
 download-timeout 10
 
 # ============================================================================
-# Display Settings  
+# Display Settings
 # ============================================================================
 show-read-feeds no
 show-read-articles no

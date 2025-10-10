@@ -16,7 +16,7 @@ Review this C++ code for:
 
 ### Qt Signals and Slots
 ```
-I need to connect a custom signal from my widget to update the UI. 
+I need to connect a custom signal from my widget to update the UI.
 My scenario: [describe your use case]
 
 Help me:

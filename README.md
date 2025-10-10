@@ -143,7 +143,7 @@ Key features:
 ### Vim & Neovim Configuration
 **Vim Configuration** (`~/.vimrc`):
 - **Enhanced search** with FZF integration
-- **File exploration** with NERDTree  
+- **File exploration** with NERDTree
 - **Git integration** with fugitive and gitgutter
 - **Code quality** with ALE linting
 - **Modern interface** with airline and devicons
@@ -160,7 +160,7 @@ Key features:
 Key bindings (Leader: Space - consistent across both):
 - `<leader>f` - Find files
 - `<leader>n` - Toggle file tree
-- `<leader>rg` - Search in files  
+- `<leader>rg` - Search in files
 - `<leader>gs` - Git status
 
 > 📖 **See `config/nvim/README.md`** for complete Neovim documentation

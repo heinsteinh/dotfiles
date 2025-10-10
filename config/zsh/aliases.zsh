@@ -163,7 +163,7 @@ if command -v pacman &> /dev/null; then
     alias paclock='sudo touch /var/lib/pacman/db.lck'   # Create pacman lock
 
     # ========================================
-    # Logs & Monitoring  
+    # Logs & Monitoring
     # ========================================
     alias paclog='tail -f /var/log/pacman.log'
     alias paclog-color='tail -n 40 /var/log/pacman.log | ccze -A'
