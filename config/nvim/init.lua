@@ -27,7 +27,7 @@ require("lazy").setup("plugins", {
     lazy = false, -- Load plugins immediately by default
     version = false, -- Always use latest git commit
   },
-  install = { colorscheme = { "gruvbox" } },
+  install = { colorscheme = { "onedark" } },
   checker = { enabled = false }, -- Don't auto-check for plugin updates
   performance = {
     rtp = {

@@ -1,21 +1,30 @@
 -- Plugin specifications for Lazy.nvim
 return {
-  -- Color scheme
+  -- Color scheme (Atom Dark)
   {
-    "ellisonleao/gruvbox.nvim",
+    "navarasu/onedark.nvim",
     priority = 1000,
     config = function()
-      require("gruvbox").setup({
-        terminal_colors = true,
-        contrast = "hard",
-        italic = {
-          strings = false,
-          comments = true,
-          operators = false,
-          folds = true,
+      require("onedark").setup({
+        style = "dark", -- dark, darker, cool, deep, warm, warmer
+        transparent = false,
+        term_colors = true,
+        ending_tildes = false,
+        cmp_itemkind_reverse = false,
+        code_style = {
+          comments = "italic",
+          keywords = "none",
+          functions = "none",
+          strings = "none",
+          variables = "none",
+        },
+        diagnostics = {
+          darker = true,
+          undercurl = true,
+          background = true,
         },
       })
-      vim.cmd("colorscheme gruvbox")
+      require("onedark").load()
     end,
   },
 
@@ -454,7 +463,7 @@ return {
     config = function()
       require("lualine").setup({
         options = {
-          theme = "gruvbox",
+          theme = "onedark",
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
         },

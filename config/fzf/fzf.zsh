@@ -13,7 +13,8 @@ fi
 # Use the same command for Ctrl-T
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# FZF options for better UI
+# FZF options for better UI (Atom Dark theme)
+# Colors from config/themes/atom-dark.sh
 export FZF_DEFAULT_OPTS="
 --height 70%
 --layout reverse
@@ -21,9 +22,10 @@ export FZF_DEFAULT_OPTS="
 --inline-info
 --preview 'bat --style=numbers --color=always --line-range :500 {}'
 --preview-window right:50%:wrap
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6ac,pointer:#f5e0dc
---color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6ac,hl+:#f38ba8
+--color=bg+:#3e4451,bg:#282c34,spinner:#56b6c2,hl:#61afef
+--color=fg:#abb2bf,header:#e06c75,info:#d19a66,pointer:#98c379
+--color=marker:#98c379,fg+:#abb2bf,prompt:#61afef,hl+:#61afef
+--color=border:#5c6370,gutter:#282c34
 "
 
 # FZF options for Ctrl-T (file selection)

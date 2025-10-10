@@ -767,3 +767,11 @@ alias news-config='${EDITOR:-vim} ~/.config/newsboat/config'
 alias news-feeds='${EDITOR:-vim} ~/.config/newsboat/urls'
 alias news-reload='newsboat -r'
 alias news-refresh='newsboat -x reload'
+
+# ============================================================================
+# Theme Management
+# ============================================================================
+# Switch theme across all CLI tools (Kitty, Tmux, Vim, Neovim, FZF, Bat)
+alias theme-switch="$HOME/.dotfiles/tools/switch-theme.sh"
+alias theme="$HOME/.dotfiles/tools/switch-theme.sh"
+

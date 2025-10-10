@@ -11,7 +11,11 @@
       "Bash(fd:*)",
       "Bash(bat:*)",
       "Read(//home/parallels/.oh-my-zsh/plugins/**)",
-      "Bash(sudo ln:*)"
+      "Bash(sudo ln:*)",
+      "Read(//home/parallels/.config/**)",
+      "Bash(test:*)",
+      "Bash(cat:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []

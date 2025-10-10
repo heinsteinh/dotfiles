@@ -41,6 +41,7 @@ Plug 'ntpeters/vim-better-whitespace'
 " Markdown Preview: Pandoc-based (configured later in file)
 
 " Color schemes
+Plug 'joshdick/onedark.vim'
 Plug 'morhetz/gruvbox'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'arcticicestudio/nord-vim'
@@ -109,8 +110,10 @@ set smartindent
 syntax enable
 set termguicolors
 set background=dark
-let g:gruvbox_contrast_dark = "hard"
-colorscheme gruvbox
+
+" Atom Dark theme (onedark.vim)
+let g:onedark_terminal_italics = 1
+colorscheme onedark
 
 " ============================================================================
 " Plugin Configuration
@@ -133,7 +136,7 @@ let g:webdevicons_enable_airline_statusline = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'dark'
+let g:airline_theme = 'onedark'
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
@@ -146,7 +149,7 @@ let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %
 let g:fzf_tags_command = 'ctags -R'
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
-" FZF Colors to match gruvbox
+" FZF Colors to match Atom Dark (onedark)
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
