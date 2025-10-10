@@ -1310,7 +1310,5 @@ This enhanced workflow guide provides comprehensive examples for:
 
 - [CPP-DEVELOPMENT.md](CPP-DEVELOPMENT.md) - Deep dive into C++ tooling
 - [VIM-NEOVIM-ADVANCED.md](VIM-NEOVIM-ADVANCED.md) - Editor mastery
-- [PACKAGE-MANAGEMENT.md](PACKAGE-MANAGEMENT.md) - Package management guide (coming soon)
-- [KUBERNETES-HOMELAB.md](KUBERNETES-HOMELAB.md) - Kubernetes workflows (coming soon)
 
 This workflow guide helps developers maximize productivity using the modern CLI tools and configurations provided by this dotfiles setup.

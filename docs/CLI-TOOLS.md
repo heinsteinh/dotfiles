@@ -3614,4 +3614,4 @@ For more dotfiles documentation, see:
 - [DEVELOPER-WORKFLOWS.md](DEVELOPER-WORKFLOWS.md) - Development workflows
 - [CPP-DEVELOPMENT.md](CPP-DEVELOPMENT.md) - C++ specific workflows
 - [VIM-NEOVIM-ADVANCED.md](VIM-NEOVIM-ADVANCED.md) - Editor workflows
-- [KUBERNETES-HOMELAB.md](KUBERNETES-HOMELAB.md) - Kubernetes workflows
+- [DEVELOPER-WORKFLOWS.md](DEVELOPER-WORKFLOWS.md) - General development workflows

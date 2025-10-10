@@ -1412,5 +1412,4 @@ echo | clang++ -E -Wp,-v -xc++ - 2>&1 | grep '^ '
 ## Next Steps
 
 - Review [VIM-NEOVIM-ADVANCED.md](VIM-NEOVIM-ADVANCED.md) for editor mastery
-- See [PACKAGE-MANAGEMENT.md](PACKAGE-MANAGEMENT.md) for dependency management
-- Check [KUBERNETES-HOMELAB.md](KUBERNETES-HOMELAB.md) for deployment workflows
+- See [DEVELOPER-WORKFLOWS.md](DEVELOPER-WORKFLOWS.md) for development workflows
