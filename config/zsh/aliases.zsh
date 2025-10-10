@@ -63,13 +63,17 @@ alias tar-list='tar -tzf'
 # ============================================================================
 # Text Processing & Search
 # ============================================================================
-# Enhanced cat
+# Enhanced cat - keep bat available but don't override cat
+# Philosophy: Don't alias core POSIX commands that scripts depend on
 if command -v bat &> /dev/null; then
-    alias cat='bat'
+    # bat is available as 'bat' command for enhanced viewing
     alias catn='bat --style=plain'
+    alias catraw='bat --decorations=never --color=never --paging=never'
+    alias catansi='cat'  # Explicit regular cat
     alias batl='bat --language'
 else
-    alias cat='cat -n'
+    alias catraw='cat'
+    alias catansi='cat'
 fi
 
 # Enhanced find - use fd/fdfind

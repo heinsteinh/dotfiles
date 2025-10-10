@@ -15,7 +15,8 @@
       "Read(//home/parallels/.config/**)",
       "Bash(test:*)",
       "Bash(cat:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Read(//usr/share/applications/**)"
     ],
     "deny": [],
     "ask": []
