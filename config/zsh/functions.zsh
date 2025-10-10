@@ -697,6 +697,72 @@ backup_dir() {
 }
 
 # ============================================================================
+# SSH Key Management
+# ============================================================================
+
+# Automatically load all SSH keys from ~/.ssh directory
+load_ssh_keys() {
+    # Skip in CI environments
+    if [[ "${CI:-}" == "true" ]] || [[ "${DOTFILES_CI_MODE:-}" == "true" ]]; then
+        return 0
+    fi
+
+    # Check if ssh-agent is running
+    if [[ -z "$SSH_AUTH_SOCK" ]]; then
+        # Start ssh-agent and capture the output
+        eval "$(ssh-agent -s)" > /dev/null
+    fi
+
+    # Find all private keys in ~/.ssh (exclude .pub, known_hosts, config, etc.)
+    local ssh_dir="$HOME/.ssh"
+    local keys_loaded=0
+    local keys_found=()
+
+    if [[ ! -d "$ssh_dir" ]]; then
+        return 0
+    fi
+
+    # Find potential private key files
+    # Private keys typically don't have extensions or have specific patterns
+    while IFS= read -r key_file; do
+        # Skip if it's a public key, known_hosts, config, or other non-key files
+        [[ "$key_file" == *.pub ]] && continue
+        [[ "$key_file" == *known_hosts* ]] && continue
+        [[ "$key_file" == *authorized_keys* ]] && continue
+        [[ "$key_file" == *config ]] && continue
+        [[ "$key_file" == *environment* ]] && continue
+        [[ "$key_file" == *.old ]] && continue
+        [[ -d "$key_file" ]] && continue
+
+        # Check if file looks like a private key (starts with typical header)
+        if head -1 "$key_file" 2>/dev/null | command grep -q "PRIVATE KEY"; then
+            keys_found+=("$key_file")
+        fi
+    done < <(find "$ssh_dir" -maxdepth 1 -type f 2>/dev/null)
+
+    # Add keys to ssh-agent
+    for key_file in "${keys_found[@]}"; do
+        # Check if key is already loaded
+        local key_fingerprint=$(ssh-keygen -lf "$key_file" 2>/dev/null | awk '{print $2}')
+
+        if ssh-add -l 2>/dev/null | command grep -q "$key_fingerprint"; then
+            # Key already loaded, skip
+            continue
+        fi
+
+        # Add the key (this will prompt for passphrase if needed)
+        if ssh-add "$key_file" 2>/dev/null; then
+            keys_loaded=$((keys_loaded + 1))
+            echo "Loaded SSH key: $(basename "$key_file")"
+        fi
+    done
+
+    if [[ $keys_loaded -gt 0 ]]; then
+        echo "Successfully loaded $keys_loaded SSH key(s)"
+    fi
+}
+
+# ============================================================================
 # Help Function
 # ============================================================================
 
