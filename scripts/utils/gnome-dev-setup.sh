@@ -156,27 +156,33 @@ customize_nautilus() {
 customize_terminal() {
     print_section "Configuring GNOME Terminal"
     
-    # Get default profile UUID
-    PROFILE=$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d "'")
-    PROFILE_PATH="org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/"
-    
-    # Font
-    dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/font "'JetBrains Mono 11'"
-    dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/use-system-font false
-    
-    # Colors - light theme with good contrast
-    dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/use-theme-colors false
-    dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/background-color "'rgb(255,255,255)'"
-    dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/foreground-color "'rgb(46,52,64)'"
-    
-    # Scrollback
-    dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/scrollback-lines 10000
-    dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/scrollback-unlimited false
-    
-    # Bell
-    dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/audible-bell false
-    
-    print_status "Terminal configured with JetBrains Mono font"
+    # Check if GNOME Terminal is installed and schema exists
+    if gsettings list-schemas | grep -q "org.gnome.Terminal.ProfilesList"; then
+        # Get default profile UUID
+        PROFILE=$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d "'")
+        PROFILE_PATH="org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/"
+        
+        # Font
+        dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/font "'JetBrains Mono 11'"
+        dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/use-system-font false
+        
+        # Colors - light theme with good contrast
+        dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/use-theme-colors false
+        dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/background-color "'rgb(255,255,255)'"
+        dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/foreground-color "'rgb(46,52,64)'"
+        
+        # Scrollback
+        dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/scrollback-lines 10000
+        dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/scrollback-unlimited false
+        
+        # Bell
+        dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/audible-bell false
+        
+        print_status "Terminal configured with JetBrains Mono font"
+    else
+        print_status "GNOME Terminal not found - skipping terminal config"
+        echo "    Install with: sudo pacman -S gnome-terminal"
+    fi
 }
 
 # 6. Power Settings
@@ -221,11 +227,8 @@ customize_privacy() {
 customize_performance() {
     print_section "Configuring Performance"
     
-    # Disable animations for snappier feel
+    # Keep animations enabled (smoother experience)
     gsettings set org.gnome.desktop.interface enable-animations true
-    
-    # Reduce animation speed (faster)
-    gsettings set org.gnome.desktop.interface gtk-enable-animations true
     
     # Disable mouse acceleration (better for precision work)
     gsettings set org.gnome.desktop.peripherals.mouse accel-profile 'flat'
