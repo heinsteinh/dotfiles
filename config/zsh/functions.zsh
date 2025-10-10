@@ -112,10 +112,13 @@ archive() {
 # Find files by name with fzf preview
 ff() {
     local selected
+    # Try fd, then fdfind (Debian/Ubuntu), then fall back to find
     if command -v fd &> /dev/null; then
-        selected=$(fd --type f --hidden --follow --exclude .git | fzf --preview 'bat --color=always {}' --preview-window 'right:60%')
+        selected=$(command fd --type f --hidden --follow --exclude .git | fzf --preview 'bat --color=always {} 2>/dev/null || cat {}' --preview-window 'right:60%')
+    elif command -v fdfind &> /dev/null; then
+        selected=$(command fdfind --type f --hidden --follow --exclude .git | fzf --preview 'bat --color=always {} 2>/dev/null || cat {}' --preview-window 'right:60%')
     else
-        selected=$(command find . -type f | fzf --preview 'cat {}' --preview-window 'right:60%')
+        selected=$(command find . -type f -not -path '*/\.git/*' 2>/dev/null | fzf --preview 'bat --color=always {} 2>/dev/null || cat {}' --preview-window 'right:60%')
     fi
     [[ -n $selected ]] && echo "$selected"
 }
@@ -123,10 +126,13 @@ ff() {
 # Find directories with fzf
 fcd() {
     local selected
+    # Try fd, then fdfind (Debian/Ubuntu), then fall back to find
     if command -v fd &> /dev/null; then
-        selected=$(fd --type d --hidden --follow --exclude .git | fzf --preview 'command ls -la {}')
+        selected=$(command fd --type d --hidden --follow --exclude .git | fzf --preview 'command ls -la {} 2>/dev/null')
+    elif command -v fdfind &> /dev/null; then
+        selected=$(command fdfind --type d --hidden --follow --exclude .git | fzf --preview 'command ls -la {} 2>/dev/null')
     else
-        selected=$(command find . -type d | fzf --preview 'command ls -la {}')
+        selected=$(command find . -type d -not -path '*/\.git/*' 2>/dev/null | fzf --preview 'command ls -la {} 2>/dev/null')
     fi
     [[ -n $selected ]] && cd "$selected"
 }

@@ -84,6 +84,11 @@ if command -v fzf &> /dev/null; then
         export FZF_DEFAULT_COMMAND='command fd --type f --hidden --follow --exclude .git'
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
         export FZF_ALT_C_COMMAND='command fd --type d --hidden --follow --exclude .git'
+    elif command -v fdfind &> /dev/null; then
+        # Debian/Ubuntu uses fdfind instead of fd
+        export FZF_DEFAULT_COMMAND='command fdfind --type f --hidden --follow --exclude .git'
+        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+        export FZF_ALT_C_COMMAND='command fdfind --type d --hidden --follow --exclude .git'
     elif command -v rg &> /dev/null; then
         export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

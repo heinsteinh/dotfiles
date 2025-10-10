@@ -6,7 +6,12 @@
       "Read(//tmp/vim-markdown-preview-parallels/**)",
       "Bash(bash:*)",
       "Bash(CI=true DOTFILES_CI_MODE=true DOTFILES_SKIP_INTERACTIVE=true VERBOSE=true bash tests/test-installation.sh --skip-interactive --verbose)",
-      "Bash(CI=true DOTFILES_CI_MODE=true bash -c 'source scripts/setup/setup-common.sh && log_info \"\"CI mode test\"\" && echo \"\"Error handling mode: $(set -o | grep pipefail)\"\"')"
+      "Bash(CI=true DOTFILES_CI_MODE=true bash -c 'source scripts/setup/setup-common.sh && log_info \"\"CI mode test\"\" && echo \"\"Error handling mode: $(set -o | grep pipefail)\"\"')",
+      "Bash(command -v:*)",
+      "Bash(fd:*)",
+      "Bash(bat:*)",
+      "Read(//home/parallels/.oh-my-zsh/plugins/**)",
+      "Bash(sudo ln:*)"
     ],
     "deny": [],
     "ask": []

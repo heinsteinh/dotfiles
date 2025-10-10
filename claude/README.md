@@ -19,7 +19,7 @@ These are specialized "personas" or expert profiles that you can use with Claude
 
 ### Method 1: Claude Projects (Recommended)
 
-1. Go to [Claude.ai](https://claude.ai)
+1. Go to [Claude.ai](https://www.anthropic.com/claude)
 2. Create a new Project
 3. Copy the relevant agent's `system_prompt` from `agents.json`
 4. Paste it into the Project's "Custom Instructions" field

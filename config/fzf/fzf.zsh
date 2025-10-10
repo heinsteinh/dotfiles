@@ -58,26 +58,23 @@ fe() {
     [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
-# Search and cd into directories
-fd() {
+# Search and cd into directories (fuzzy directory)
+# Renamed from fd() to fzd() to avoid conflict with fd binary
+fzd() {
     local dir
-    dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
-    cd "$dir"
-}
-
-# Kill processes
-fkill() {
-    local pid
-    if [ "$UID" != "0" ]; then
-        pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+    # Use tree for preview if available, otherwise ls
+    if command -v tree &> /dev/null; then
+        dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m --preview 'tree -C -L 2 {} 2>/dev/null || ls -la {} 2>/dev/null' --preview-window 'right:50%')
+    elif command -v eza &> /dev/null; then
+        dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m --preview 'eza -la --icons --git {} 2>/dev/null || ls -la {} 2>/dev/null' --preview-window 'right:50%')
     else
-        pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+        dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m --preview 'ls -la {} 2>/dev/null' --preview-window 'right:50%')
     fi
-
-    if [ "x$pid" != "x" ]; then
-        echo $pid | xargs kill -${1:-9}
-    fi
+    [[ -n $dir ]] && cd "$dir"
 }
+
+# Note: fkill() function is defined in functions.zsh
+# Removed duplicate to avoid conflicts
 
 # Git branch selection
 fgb() {

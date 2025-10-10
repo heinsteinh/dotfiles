@@ -72,12 +72,20 @@ else
     alias cat='cat -n'
 fi
 
-# Enhanced find - use command to bypass any fd function
+# Enhanced find - use fd/fdfind
+# On Debian/Ubuntu, fd is installed as fdfind to avoid conflict with fdclone package
 if command -v fd &> /dev/null; then
     alias find='command fd'
     alias findd='command fd -t d'  # directories only
     alias findf='command fd -t f'  # files only
     alias finde='command fd -e'    # by extension
+elif command -v fdfind &> /dev/null; then
+    # Create fd alias pointing to fdfind for consistent naming
+    alias fd='command fdfind'
+    alias find='command fdfind'
+    alias findd='command fdfind -t d'  # directories only
+    alias findf='command fdfind -t f'  # files only
+    alias finde='command fdfind -e'    # by extension
 fi
 
 # Enhanced grep - use rg as separate command, not as grep alias
