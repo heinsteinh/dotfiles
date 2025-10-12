@@ -16,7 +16,9 @@
       "Bash(test:*)",
       "Bash(cat:*)",
       "Bash(chmod:*)",
-      "Read(//usr/share/applications/**)"
+      "Read(//usr/share/applications/**)",
+      "Read(//home/fkheinstein/.oh-my-zsh/custom/plugins/**)",
+      "Bash(zsh:*)"
     ],
     "deny": [],
     "ask": []

@@ -216,12 +216,23 @@ fi
 # Load custom configurations
 # ============================================================================
 # Load modular configuration files with error handling
-# Load functions before aliases to avoid conflicts
+# IMPORTANT: Load functions before aliases to avoid conflicts
 [[ -f ~/.config/zsh/exports.zsh ]] && source ~/.config/zsh/exports.zsh
 [[ -f ~/.config/zsh/functions.zsh ]] && source ~/.config/zsh/functions.zsh
 [[ -f ~/.config/zsh/aliases.zsh ]] && source ~/.config/zsh/aliases.zsh
 [[ -f ~/.config/zsh/distro.zsh ]] && source ~/.config/zsh/distro.zsh
 
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# ============================================================================
+# SSH Key Management
+# ============================================================================
+# Load all SSH keys automatically (function defined in functions.zsh)
+# This is called AFTER functions.zsh is loaded so the function exists
+if typeset -f load_ssh_keys > /dev/null; then
+    load_ssh_keys
+fi
+
+# ============================================================================
+# Powerlevel10k Configuration
+# ============================================================================
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

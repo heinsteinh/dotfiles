@@ -8,14 +8,6 @@ export LANG=en_US.UTF-8
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 
-
-# SSH Agent - Load all SSH keys automatically
-# Note: load_ssh_keys function is defined in functions.zsh
-# This will be called after functions.zsh is sourced in .zshrc
-if typeset -f load_ssh_keys > /dev/null; then
-    load_ssh_keys
-fi
-
 # NVM (Node Version Manager) configuration
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
