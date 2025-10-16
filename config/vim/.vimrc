@@ -113,7 +113,9 @@ set background=dark
 
 " Atom Dark theme (onedark.vim)
 let g:onedark_terminal_italics = 1
-colorscheme onedark
+"colorscheme onedark
+
+colorscheme gruvbox
 
 " ============================================================================
 " Plugin Configuration
