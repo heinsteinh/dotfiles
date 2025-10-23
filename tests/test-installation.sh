@@ -189,7 +189,7 @@ test_essential_commands() {
 # Test 2: Modern CLI tools availability
 test_modern_cli_tools() {
     local modern_tools=(
-        "fzf" "ripgrep" "fd" "bat" "eza" "htop" "tree"
+        "fzf" "ripgrep" "fd" "bat" "eza" "htop" "tree" "okular"
     )
 
     local missing_tools=()
@@ -511,7 +511,43 @@ test_git_config() {
     return 0
 }
 
-# Test 9: Shell plugins and extensions
+# Test 9: Okular PDF viewer configuration
+test_okular_config() {
+    # In CI or minimal installations, only check if okular is available
+    if [[ "${CI:-}" == "true" ]] || [[ "${INSTALL_TYPE:-}" == "minimal" ]] || [[ "${INSTALL_TYPE:-}" == "platform" ]]; then
+        if command_exists "okular"; then
+            log_verbose "Okular is available"
+            return 0
+        else
+            log_verbose "Okular not installed (optional)"
+            return 0  # Pass anyway as Okular is optional
+        fi
+    fi
+
+    # Check if Okular is installed (optional tool)
+    if ! command_exists "okular"; then
+        log_verbose "Okular not installed (optional)"
+        return 0
+    fi
+
+    # Check main config file
+    if [[ -f "$HOME/.config/okularrc" ]] || [[ -L "$HOME/.config/okularrc" ]]; then
+        log_verbose "Okular main configuration found"
+    else
+        log_warning "Okular config file not found at ~/.config/okularrc"
+    fi
+
+    # Check keybinding files
+    if [[ -f "$HOME/.local/share/kxmlgui5/okular/part.rc" ]] || [[ -L "$HOME/.local/share/kxmlgui5/okular/part.rc" ]]; then
+        log_verbose "Okular keybindings (part.rc) found"
+    else
+        log_warning "Okular keybindings not found"
+    fi
+
+    return 0
+}
+
+# Test 10: Shell plugins and extensions
 test_shell_plugins() {
     local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
@@ -772,6 +808,7 @@ run_all_tests() {
     run_test "Vim Configuration" test_vim_config
     run_test "Tmux Configuration" test_tmux_config
     run_test "Git Configuration" test_git_config
+    run_test "Okular Configuration" test_okular_config
 
     # Feature tests
     run_test "Shell Plugins" test_shell_plugins

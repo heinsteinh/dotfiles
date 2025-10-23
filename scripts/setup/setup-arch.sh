@@ -56,7 +56,8 @@ install_essential_packages() {
         man-db \
         man-pages \
         openssh \
-        rsync
+        rsync \
+        okular
 
     log_success "Essential packages installed"
 }

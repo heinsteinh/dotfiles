@@ -125,4 +125,20 @@ if [[ -f "$DOTFILES_DIR/config/newsboat/urls" ]]; then
     create_symlink "$DOTFILES_DIR/config/newsboat/urls" "$HOME/.config/newsboat/urls"
 fi
 
+# Okular configuration (PDF viewer with Vim-like keybindings)
+if [[ -f "$DOTFILES_DIR/config/okular/okularrc" ]]; then
+    create_symlink "$DOTFILES_DIR/config/okular/okularrc" "$HOME/.config/okularrc"
+fi
+
+# Okular keybindings (KDE XML format)
+if [[ -f "$DOTFILES_DIR/config/okular/part.rc" ]]; then
+    mkdir -p "$HOME/.local/share/kxmlgui5/okular"
+    create_symlink "$DOTFILES_DIR/config/okular/part.rc" "$HOME/.local/share/kxmlgui5/okular/part.rc"
+fi
+
+if [[ -f "$DOTFILES_DIR/config/okular/shell.rc" ]]; then
+    mkdir -p "$HOME/.local/share/kxmlgui5/okular"
+    create_symlink "$DOTFILES_DIR/config/okular/shell.rc" "$HOME/.local/share/kxmlgui5/okular/shell.rc"
+fi
+
 echo "Symlinks created successfully!"

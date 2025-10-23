@@ -758,6 +758,16 @@ alias filesize='stat -f%z'
 alias show-path='echo $PATH | tr ":" "\n" | nl'
 
 # ============================================================================
+# PDF/Document Viewers
+# ============================================================================
+# Okular - PDF viewer with Vim-like keybindings
+if command -v okular &> /dev/null; then
+    alias pdf='okular'                                    # Open PDF with Okular
+    alias pdfv='okular --presentation'                   # Open PDF in presentation/fullscreen mode
+    alias pdf-viewer='okular'                            # Explicit PDF viewer
+fi
+
+# ============================================================================
 # RSS/News Reading
 # ============================================================================
 # Newsboat aliases
