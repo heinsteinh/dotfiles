@@ -95,6 +95,18 @@ install_fonts() {
     log_success "Fonts installed"
 }
 
+# Install Ghostty terminal
+install_ghostty() {
+    log_info "Installing Ghostty terminal..."
+
+    if ! command_exists ghostty; then
+        brew install --cask ghostty
+        log_success "Ghostty installed successfully"
+    else
+        log_info "Ghostty already installed"
+    fi
+}
+
 # Configure macOS settings
 configure_macos_settings() {
     log_info "Configuring macOS settings..."
@@ -182,11 +194,14 @@ main() {
         install_nodejs
         install_docker
         install_fonts
+        install_ghostty
     elif [[ "${1:-}" == "--dev" ]]; then
         install_nodejs
         install_docker
     elif [[ "${1:-}" == "--fonts" ]]; then
         install_fonts
+    elif [[ "${1:-}" == "--ghostty" ]]; then
+        install_ghostty
     fi
 
     # Configuration

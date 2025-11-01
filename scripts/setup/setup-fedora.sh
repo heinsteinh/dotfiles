@@ -407,6 +407,31 @@ install_fonts() {
     log_success "Fonts installed"
 }
 
+# Install Ghostty terminal
+install_ghostty() {
+    log_info "Installing Ghostty terminal..."
+
+    # Skip in CI environment (COPR setup can be problematic)
+    if [[ "${CI:-}" == "true" ]]; then
+        log_info "CI environment detected, skipping Ghostty installation"
+        return
+    fi
+
+    if ! command_exists ghostty; then
+        # Enable COPR repository for Ghostty
+        if ! dnf copr list | grep -q "scottames/ghostty"; then
+            log_info "Enabling Ghostty COPR repository..."
+            sudo dnf copr enable -y scottames/ghostty
+        fi
+
+        # Install Ghostty
+        sudo dnf install -y ghostty
+        log_success "Ghostty installed successfully"
+    else
+        log_info "Ghostty already installed"
+    fi
+}
+
 # Install Starship prompt
 install_starship() {
     if ! command -v starship &> /dev/null; then
@@ -622,11 +647,14 @@ main() {
         install_gui_applications_dnf
         install_gui_applications_flatpak
         install_fonts
+        install_ghostty
         install_media_codecs
         install_security_tools
     elif [[ "${1:-}" == "--dev" ]]; then
         install_development_tools
         install_fonts
+    elif [[ "${1:-}" == "--ghostty" ]]; then
+        install_ghostty
     elif [[ "${1:-}" == "--multimedia" ]]; then
         install_multimedia_packages
         install_media_codecs

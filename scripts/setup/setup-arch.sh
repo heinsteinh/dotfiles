@@ -247,6 +247,18 @@ install_multimedia_packages() {
     log_success "Multimedia packages installed"
 }
 
+# Install Ghostty terminal
+install_ghostty() {
+    log_info "Installing Ghostty terminal..."
+
+    if ! command_exists ghostty; then
+        sudo pacman -S --needed --noconfirm ghostty
+        log_success "Ghostty installed successfully"
+    else
+        log_info "Ghostty already installed"
+    fi
+}
+
 # Install fonts
 install_fonts() {
     log_info "Installing fonts..."
@@ -472,10 +484,13 @@ main() {
         install_aur_packages
         install_multimedia_packages
         install_fonts
+        install_ghostty
         install_security_tools
     elif [[ "${1:-}" == "--dev" ]]; then
         install_development_tools
         install_fonts
+    elif [[ "${1:-}" == "--ghostty" ]]; then
+        install_ghostty
     elif [[ "${1:-}" == "--security" ]]; then
         install_security_tools
     elif [[ "${1:-}" == "--multimedia" ]]; then

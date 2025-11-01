@@ -54,6 +54,7 @@ cd ~/.dotfiles
 - **📝 Vim**: Modern plugin setup with vim-plug, fuzzy finding, git integration
 - **📺 Tmux**: TPM plugin manager with productivity enhancements
 - **🖥️ Kitty**: GPU-accelerated terminal with theme support
+- **👻 Ghostty**: Fast, native terminal emulator with GPU acceleration (optional)
 - **🔀 Git**: Advanced configuration with hooks, aliases, and security
 
 ### 🚀 Modern CLI Arsenal
@@ -183,6 +184,13 @@ Key bindings (Prefix: Ctrl+a):
 - **Optimized performance** settings
 - **Cross-platform compatibility**
 
+### Ghostty Terminal (Optional)
+- **4 color themes**: Gruvbox, Nord, Dracula, One Dark
+- **Native UI**: Platform-native look (AppKit on macOS, GTK4 on Linux)
+- **GPU acceleration** for blazing fast rendering
+- **Full-featured config**: Keybindings, themes, shell integration
+- Install with `--ghostty` or `--full` flag
+
 ## Essential CLI Tools
 
 ### File Management
@@ -277,6 +285,15 @@ Ctrl+Shift+T    # New tab
 Ctrl+Shift+N    # New window
 Ctrl+Shift+C    # Copy
 Ctrl+Shift+V    # Paste
+```
+
+### Ghostty
+```bash
+Cmd+T           # New tab (macOS)
+Cmd+D           # Split right
+Cmd+Shift+D     # Split down
+Cmd+N           # New window
+Cmd++/-         # Font size
 ```
 
 ## Font Requirements

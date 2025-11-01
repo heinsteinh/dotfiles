@@ -241,6 +241,38 @@ The `tests/test-installation.sh` runs 17 validation categories with intelligent 
 - **Install plugins**: In tmux, press `Ctrl+a I` (capital I)
 - Status bar: Custom with system info and Git integration
 
+### Ghostty Terminal (Optional)
+
+- **Configuration**: `~/.config/ghostty/config`
+- **Themes**: 4 included (Gruvbox, Nord, Dracula, One Dark)
+- **Default theme**: Gruvbox (change via `theme = nord` in config)
+- **Leader key**: `Cmd` (macOS) / `Super` (Linux)
+- **Installation**: Use `--ghostty` or `--full` flag during setup
+
+**Key bindings** (macOS, using `Cmd` = Super):
+- `Cmd+T` - New tab
+- `Cmd+W` - Close tab
+- `Cmd+D` - Split right
+- `Cmd+Shift+D` - Split down
+- `Cmd+N` - New window
+- `Cmd++/-` - Increase/decrease font size
+- `Cmd+0` - Reset font size
+- `Cmd+F` - Search/quick terminal
+- `Cmd+K` - Clear screen
+
+**Customization**:
+- Local config: `~/.config/ghostty/local.conf` (not tracked in git)
+- Add machine-specific settings without modifying main config
+- Copy from `local.conf.example` template
+
+**Platform-specific installation**:
+- **macOS**: `brew install --cask ghostty` (Homebrew)
+- **Arch**: `sudo pacman -S ghostty` (official repos)
+- **Fedora**: COPR repository (`scottames/ghostty`)
+- **Ubuntu/Debian**: Build from source (requires Zig 0.13+)
+
+See `config/ghostty/README.md` for complete documentation.
+
 ### Zsh Plugins (Oh My Zsh)
 
 Essential plugins loaded in `.zshrc`:

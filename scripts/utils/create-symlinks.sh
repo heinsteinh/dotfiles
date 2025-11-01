@@ -93,6 +93,22 @@ if [[ -f "$DOTFILES_DIR/config/kitty/kitty.conf" ]]; then
     fi
 fi
 
+# Ghostty (if config exists)
+if [[ -f "$DOTFILES_DIR/config/ghostty/config" ]]; then
+    create_symlink "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
+
+    # Ghostty themes
+    if [[ -d "$DOTFILES_DIR/config/ghostty/themes" ]]; then
+        create_symlink "$DOTFILES_DIR/config/ghostty/themes" "$HOME/.config/ghostty/themes"
+    fi
+
+    # Create local.conf from example if it doesn't exist
+    if [[ ! -f "$HOME/.config/ghostty/local.conf" && -f "$DOTFILES_DIR/config/ghostty/local.conf.example" ]]; then
+        cp "$DOTFILES_DIR/config/ghostty/local.conf.example" "$HOME/.config/ghostty/local.conf"
+        echo "Created: $HOME/.config/ghostty/local.conf from example"
+    fi
+fi
+
 # Starship configuration
 if [[ -f "$DOTFILES_DIR/config/starship/starship.toml" ]]; then
     create_symlink "$DOTFILES_DIR/config/starship/starship.toml" "$HOME/.config/starship.toml"

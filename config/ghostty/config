@@ -1,0 +1,183 @@
+# Ghostty Terminal Configuration
+# Documentation: https://ghostty.org/docs
+
+# ============================================================================
+# THEME & APPEARANCE
+# ============================================================================
+
+# Theme (can be overridden with -e theme=name)
+# Available: gruvbox, nord, dracula, one-dark
+# Theme files are in ~/.config/ghostty/themes/
+theme = gruvbox
+
+# Background opacity (0.0 - 1.0)
+background-opacity = 0.95
+
+# Window decorations
+window-decoration = true
+
+# Window padding
+window-padding-x = 4
+window-padding-y = 4
+
+# ============================================================================
+# FONT CONFIGURATION
+# ============================================================================
+
+# Font family (requires Nerd Font for icons)
+font-family = "JetBrainsMono Nerd Font"
+
+# Font size
+font-size = 13
+
+# Font features
+# font-feature = -calt  # Disable ligatures
+# font-feature = +ss01  # Enable stylistic set 1
+
+# Bold/Italic variants
+font-family-bold = "JetBrainsMono Nerd Font"
+font-family-italic = "JetBrainsMono Nerd Font"
+font-family-bold-italic = "JetBrainsMono Nerd Font"
+
+# Font thickness
+font-thicken = true
+
+# ============================================================================
+# CURSOR
+# ============================================================================
+
+# Cursor style: block, bar, underline
+cursor-style = block
+
+# Cursor blink
+cursor-style-blink = false
+
+# Cursor color (uses theme by default)
+# cursor-color = #ffffff
+
+# ============================================================================
+# MOUSE & CLIPBOARD
+# ============================================================================
+
+# Mouse hide while typing
+mouse-hide-while-typing = true
+
+# Clipboard access
+clipboard-read = allow
+clipboard-write = allow
+
+# Click to open URLs
+link-url = true
+
+# Copy on select
+copy-on-select = true
+
+# ============================================================================
+# SCROLLBACK
+# ============================================================================
+
+# Scrollback lines
+scrollback-limit = 10000
+
+# ============================================================================
+# SHELL & COMMAND
+# ============================================================================
+
+# Shell program (defaults to user shell)
+# command = /bin/zsh
+
+# Shell integration
+shell-integration = detect
+
+# Login shell
+# shell-integration-features = cursor,sudo,title
+
+# ============================================================================
+# PERFORMANCE
+# ============================================================================
+
+# GPU renderer (auto, opengl, metal, vulkan)
+renderer = auto
+
+# VSync
+# vsync = true
+
+# ============================================================================
+# KEYBINDINGS
+# ============================================================================
+
+# Keybindings follow the format: keybind = trigger=action
+# Modifiers: ctrl, shift, alt/opt, super/cmd
+
+# Copy/Paste
+keybind = super+c=copy_to_clipboard
+keybind = super+v=paste_from_clipboard
+
+# Font size
+keybind = super+plus=increase_font_size:1
+keybind = super+minus=decrease_font_size:1
+keybind = super+0=reset_font_size
+
+# Tabs
+keybind = super+t=new_tab
+keybind = super+w=close_surface
+keybind = super+shift+left_bracket=previous_tab
+keybind = super+shift+right_bracket=next_tab
+keybind = super+1=goto_tab:1
+keybind = super+2=goto_tab:2
+keybind = super+3=goto_tab:3
+keybind = super+4=goto_tab:4
+keybind = super+5=goto_tab:5
+keybind = super+6=goto_tab:6
+keybind = super+7=goto_tab:7
+keybind = super+8=goto_tab:8
+keybind = super+9=goto_tab:9
+
+# Splits
+keybind = super+d=new_split:right
+keybind = super+shift+d=new_split:down
+keybind = super+shift+w=close_surface
+keybind = super+shift+h=goto_split:left
+keybind = super+shift+l=goto_split:right
+keybind = super+shift+k=goto_split:top
+keybind = super+shift+j=goto_split:bottom
+
+# Window management
+keybind = super+n=new_window
+keybind = super+q=quit
+
+# Fullscreen
+keybind = super+enter=toggle_fullscreen
+
+# Clear screen
+keybind = super+k=clear_screen
+
+# Search
+keybind = super+f=toggle_quick_terminal
+
+# Scrollback
+keybind = super+up=scroll_page_up
+keybind = super+down=scroll_page_down
+keybind = super+home=scroll_to_top
+keybind = super+end=scroll_to_bottom
+
+# ============================================================================
+# ADVANCED
+# ============================================================================
+
+# Confirm before closing with running programs
+confirm-close-surface = true
+
+# Auto-update (macOS only)
+auto-update = check
+
+# Title format
+window-title-font-family = "JetBrainsMono Nerd Font"
+
+# ============================================================================
+# LOCAL OVERRIDES
+# ============================================================================
+
+# Include local configuration (not tracked in git)
+# Create ~/.config/ghostty/local.conf for machine-specific settings
+config-file = ~/.config/ghostty/local.conf

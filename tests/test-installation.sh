@@ -547,6 +547,33 @@ test_okular_config() {
     return 0
 }
 
+# Test 9b: Ghostty terminal configuration
+test_ghostty_config() {
+    # Ghostty is always optional
+    if ! command_exists "ghostty"; then
+        log_verbose "Ghostty not installed (optional)"
+        return 0
+    fi
+
+    log_verbose "Ghostty is installed"
+
+    # Check main config file
+    if [[ -f "$HOME/.config/ghostty/config" ]] || [[ -L "$HOME/.config/ghostty/config" ]]; then
+        log_verbose "Ghostty main configuration found"
+    else
+        log_warning "Ghostty installed but config file not found at ~/.config/ghostty/config"
+    fi
+
+    # Check themes directory
+    if [[ -d "$HOME/.config/ghostty/themes" ]] || [[ -L "$HOME/.config/ghostty/themes" ]]; then
+        log_verbose "Ghostty themes directory found"
+    else
+        log_warning "Ghostty themes directory not found"
+    fi
+
+    return 0
+}
+
 # Test 10: Shell plugins and extensions
 test_shell_plugins() {
     local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
@@ -809,6 +836,7 @@ run_all_tests() {
     run_test "Tmux Configuration" test_tmux_config
     run_test "Git Configuration" test_git_config
     run_test "Okular Configuration" test_okular_config
+    run_test "Ghostty Configuration" test_ghostty_config
 
     # Feature tests
     run_test "Shell Plugins" test_shell_plugins
