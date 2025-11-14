@@ -57,7 +57,7 @@ cursor-style = block
 cursor-style-blink = false
 
 # Cursor color (uses theme by default)
-# cursor-color = #ffffff
+cursor-color = #ffffff
 
 # ============================================================================
 # MOUSE & CLIPBOARD
