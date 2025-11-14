@@ -1,0 +1,80 @@
+{
+  "fonts": [
+    {
+      "name": "MesloLGS NF",
+      "description": "Meslo Nerd Font - Customized version of Apple's Menlo font",
+      "variants": [
+        "MesloLGS NF Regular.ttf",
+        "MesloLGS NF Bold.ttf",
+        "MesloLGS NF Italic.ttf",
+        "MesloLGS NF Bold Italic.ttf"
+      ],
+      "url": "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip",
+      "recommended": true,
+      "terminal_compatible": true
+    },
+    {
+      "name": "Fira Code",
+      "description": "Fira Code Nerd Font - Monospaced font with programming ligatures",
+      "variants": [
+        "Fira Code Regular Nerd Font Complete.ttf",
+        "Fira Code Bold Nerd Font Complete.ttf",
+        "Fira Code Light Nerd Font Complete.ttf"
+      ],
+      "url": "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip",
+      "recommended": true,
+      "ligatures": true
+    },
+    {
+      "name": "JetBrains Mono",
+      "description": "JetBrains Mono Nerd Font - Designed specifically for developers",
+      "variants": [
+        "JetBrains Mono Regular Nerd Font Complete.ttf",
+        "JetBrains Mono Bold Nerd Font Complete.ttf",
+        "JetBrains Mono Italic Nerd Font Complete.ttf"
+      ],
+      "url": "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip",
+      "recommended": true,
+      "ligatures": true
+    },
+    {
+      "name": "Hack",
+      "description": "Hack Nerd Font - Designed for source code",
+      "variants": [
+        "Hack Regular Nerd Font Complete.ttf",
+        "Hack Bold Nerd Font Complete.ttf",
+        "Hack Italic Nerd Font Complete.ttf"
+      ],
+      "url": "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip",
+      "recommended": false,
+      "ligatures": false
+    }
+  ],
+  "installation": {
+    "macos": {
+      "method": "copy",
+      "destination": "~/Library/Fonts/",
+      "command": "cp"
+    },
+    "linux": {
+      "method": "copy",
+      "destination": "~/.local/share/fonts/",
+      "command": "fc-cache -fv"
+    },
+    "windows": {
+      "method": "install",
+      "destination": "C:/Windows/Fonts/",
+      "note": "Right-click and select 'Install'"
+    }
+  },
+  "verification": {
+    "command": "fc-list | grep -i 'nerd\\|powerline'",
+    "macos_command": "system_profiler SPFontsDataType | grep -i 'nerd\\|powerline'"
+  },
+  "configuration": {
+    "kitty": "font_family MesloLGS NF",
+    "alacritty": "family: MesloLGS NF",
+    "vscode": "\"editor.fontFamily\": \"'MesloLGS NF', monospace\"",
+    "terminal_app": "Set in Preferences > Profiles > Text > Font"
+  }
+}

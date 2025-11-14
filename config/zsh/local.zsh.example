@@ -1,0 +1,50 @@
+# Local Zsh Configuration Template
+# Copy this file to local.zsh and customize as needed
+# This file is sourced after the main .zshrc configuration
+
+# Example local customizations:
+
+# Custom aliases
+# alias myproject="cd ~/Projects/my-important-project"
+# alias serve="python -m http.server 8000"
+# alias weather="curl wttr.in"
+
+# Custom functions
+# function mkcd() {
+#     mkdir -p "$1" && cd "$1"
+# }
+
+# Custom environment variables
+# export CUSTOM_VAR="value"
+# export PROJECT_HOME="$HOME/Projects"
+
+# Custom PATH additions
+# export PATH="$HOME/custom-tools/bin:$PATH"
+
+# Custom prompt modifications
+# PROMPT="%F{blue}%n@%m%f:%F{cyan}%~%f$ "
+
+# Plugin configurations
+# zstyle ':completion:*' menu select
+# zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+# Custom key bindings
+# bindkey '^R' history-incremental-search-backward
+# bindkey '^[[A' history-search-backward
+# bindkey '^[[B' history-search-forward
+
+# Work-specific configurations
+# if [[ "$(pwd)" =~ "/work/" ]]; then
+#     export WORK_MODE=true
+#     # Work-specific settings
+# fi
+
+# Time-based configurations
+# if [[ $(date +%H) -gt 18 ]]; then
+#     echo "Good evening! 🌙"
+# else
+#     echo "Good day! ☀️"
+# fi
+
+# Load additional local configurations
+# [[ -f "$HOME/.zsh.local.secret" ]] && source "$HOME/.zsh.local.secret"

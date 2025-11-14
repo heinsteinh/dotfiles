@@ -1,0 +1,44 @@
+" Local Vim Configuration Template
+" Copy this file to local.vim and customize as needed
+" This file is sourced after the main .vimrc configuration
+
+" Example local customizations:
+
+" Custom key mappings
+" nnoremap <leader>w :w<CR>
+" nnoremap <leader>q :q<CR>
+
+" Custom settings
+" set relativenumber
+" set wrap
+" set textwidth=80
+
+" Custom color scheme override
+" colorscheme dracula
+" colorscheme nord
+
+" Project-specific settings
+" autocmd BufRead,BufNewFile *.py setlocal tabstop=4 shiftwidth=4
+" autocmd BufRead,BufNewFile *.js setlocal tabstop=2 shiftwidth=2
+
+" Custom functions
+" function! MyCustomFunction()
+"   " Your custom function here
+" endfunction
+
+" Plugin-specific overrides
+" let g:airline_theme = 'dracula'
+" let g:NERDTreeShowHidden = 0
+
+" Language-specific configurations
+" let g:python3_host_prog = '/usr/local/bin/python3'
+" let g:node_host_prog = '/usr/local/bin/node'
+
+" Custom commands
+" command! ReloadVimrc source $MYVIMRC
+" command! EditVimrc edit $MYVIMRC
+
+" Workspace-specific settings
+" if getcwd() =~ '/path/to/specific/project'
+"   " Project-specific configurations
+" endif

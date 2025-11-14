@@ -1,0 +1,59 @@
+[Core Presentation]
+SlidesShowProgress=true
+SlidesTransition=Replace
+
+[Desktop Entry]
+FullScreen=false
+
+[Document]
+RenderMode=0
+
+[General]
+LockSidebar=true
+ObeyDRM=false
+ShowOSD=true
+ShowSidebar=true
+WatchFile=true
+
+[Main View]
+ShowLeftPanel=true
+SplitterSizes=210,780
+TrimMargins=false
+
+[PageView]
+BackgroundColor=255,255,255
+EditToolBarPlacement=Top
+MouseMode=Browse
+RenderMode=0
+ScrollMode=0
+ShowScrollBars=true
+SmoothScrolling=true
+SyncThumbnailsViewport=true
+TrimMargins=false
+ViewColumns=1
+ViewContinuous=true
+ViewMode=0
+ZoomMode=1
+
+[Recent Files]
+File1[$e]=$HOME/Projects/Deuta/qdmi-doc.pdf
+File2[$e]=$HOME/Downloads/ERA_ERTMS_015560 v360 (1).pdf
+File3[$e]=$HOME/VMShared/Proj-Deuta/QESBO-New/qdmi-doc/README.md
+File4[$e]=$HOME/Downloads/mermaid-diagram (1).svg
+File5[$e]=$HOME/Documents/Deuta/WG__Velaro_MS_-_Referenzdokumente/TR_Display Hauptheft_PZB_LZB_GAP-DE_A6Z00046261158_B.pdf
+Name1[$e]=qdmi-doc.pdf
+Name2[$e]=ERA_ERTMS_015560 v360 (1).pdf
+Name3[$e]=README.md
+Name4[$e]=mermaid-diagram (1).svg
+Name5[$e]=TR_Display Hauptheft_PZB_LZB_GAP-DE_A6Z00046261158_B.pdf
+
+[Reviews]
+AnnotationTools=<tool id="1" name="Yellow Highlighter" type="highlight" opacity="0.8" color="#ffff00" /><tool id="2" name="Green Highlighter" type="highlight" opacity="0.8" color="#00ff00" /><tool id="3" name="Inline Note" type="note-inline" color="#ffffff" hoverIcon="help-hint" notifyIcon="note" /><tool id="4" name="Underline" type="underline" color="#ff0000" /><tool id="5" name="Straight Line" type="straight-line" color="#00ff00" width="2" /><tool id="6" name="Rectangle" type="polygon" color="#ff0000" width="2" /><tool id="7" name="Ellipse" type="ellipse" color="#0000ff" width="2" />
+QuickAnnotationTools=<tool id="1" name="Yellow Highlighter" type="highlight" opacity="0.8" color="#ffff00" />,<tool id="2" name="Green Highlighter" type="highlight" opacity="0.8" color="#00ff00" />,<tool id="3" name="Inline Note" type="note-inline" color="#ffffff" hoverIcon="help-hint" notifyIcon="note" />
+
+[dlgPresentationBase]
+advancedEnabled=true
+advancedSlideTransition=5
+advancedSlidesBackground=0,0,0
+advancedSlidesBackgroundEnabled=false
+advancedSlidesTransitionEnabled=false

@@ -1,0 +1,112 @@
+# Configuration file for bat (https://github.com/sharkdp/bat)
+
+# Set the theme to "OneHalfDark" (Atom Dark variant) to match our overall color scheme
+# Other good options: "Dracula", "Nord", "Monokai Extended", "Sublime Snazzy"
+# Run `bat --list-themes` to see all available themes
+--theme="OneHalfDark"
+
+# Show line numbers, Git modifications, file header, and rule separators
+# Available components: auto, full, plain, changes, header, header-filename,
+# header-filesize, grid, rule, numbers, snip
+--style="header-filename,header-filesize,rule,numbers,changes"
+
+# Use italic text on the terminal (not supported on all terminals)
+--italic-text=always
+
+# ============================================================================
+# Syntax Mappings
+# ============================================================================
+
+# Programming Languages
+--map-syntax "*.h:C++"
+--map-syntax "*.hpp:C++"
+--map-syntax "*.c++:C++"
+--map-syntax "*.cc:C++"
+--map-syntax "*.cxx:C++"
+
+# Configuration Files
+--map-syntax ".gitignore:Git Ignore"
+--map-syntax "*.gitignore:Git Ignore"
+--map-syntax ".eslintrc:JSON"
+--map-syntax ".babelrc:JSON"
+--map-syntax ".prettierrc:JSON"
+--map-syntax "*.toml:TOML"
+
+# Docker & Container Files
+--map-syntax "*docker-compose*.yml:YAML"
+--map-syntax "*docker-compose*.yaml:YAML"
+--map-syntax "Dockerfile*:Dockerfile"
+--map-syntax "*.dockerfile:Dockerfile"
+
+# Shell & Script Files
+--map-syntax "*.zsh:Bash"
+--map-syntax "*.fish:Fish"
+--map-syntax "*.zshrc:Bash"
+--map-syntax "*.bashrc:Bash"
+--map-syntax "*.bash_profile:Bash"
+--map-syntax "*.profile:Bash"
+
+# Environment & Config Files
+--map-syntax ".env*:INI"
+--map-syntax "*.env*:INI"
+--map-syntax "*.conf:INI"
+--map-syntax "*.cfg:INI"
+--map-syntax "*.ini:INI"
+
+# Build & Project Files
+--map-syntax "Makefile*:Makefile"
+--map-syntax "*.mk:Makefile"
+--map-syntax "CMakeLists.txt:CMake"
+--map-syntax "*.cmake:CMake"
+
+# Web & Markup Files
+--map-syntax "*.vue:HTML"
+--map-syntax "*.svelte:HTML"
+--map-syntax "*.jsx:JavaScript (Babel)"
+--map-syntax "*.tsx:TypeScript"
+
+# Documentation Files
+--map-syntax "*.md:Markdown"
+--map-syntax "*.markdown:Markdown"
+--map-syntax "*.rst:reStructuredText"
+
+# ============================================================================
+# Display & Paging Options
+# ============================================================================
+
+# Set the pager to 'less' with options for better navigation
+# -F: quit if entire file fits on first screen
+# -R: output "raw" control characters (for colors)
+# -X: don't use termcap init/deinit strings
+# -S: chop long lines instead of wrapping
+--pager="less -FRX"
+
+# Enable colored output even when piping to another program
+--color=always
+
+# Show decorations (line numbers, etc.) even when output is not a terminal
+--decorations=always
+
+# Set tab width to 2 for better readability
+--tabs=2
+
+# Wrap long lines instead of using horizontal scrolling
+--wrap=auto
+
+# Set the terminal width (0 means auto-detect, commented out to use default)
+# --terminal-width=0
+
+# ============================================================================
+# Advanced Options
+# ============================================================================
+
+# Show non-printable characters like space, tab, newline
+# Uncomment if you want to see whitespace characters
+# --show-all
+
+# Disable automatic paging for short files
+# Uncomment to always use pager
+# --paging=always
+
+# Use plain style when output is not interactive
+# --style="plain"
