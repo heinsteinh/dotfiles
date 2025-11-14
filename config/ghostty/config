@@ -8,13 +8,17 @@
 # Theme (can be overridden with -e theme=name)
 # Available: gruvbox, nord, dracula, one-dark
 # Theme files are in ~/.config/ghostty/themes/
-theme = gruvbox
+theme = nord
 
 # Background opacity (0.0 - 1.0)
 background-opacity = 0.95
 
 # Window decorations
 window-decoration = true
+
+# Window size
+window-width = 180
+window-height = 40
 
 # Window padding
 window-padding-x = 4
@@ -28,7 +32,7 @@ window-padding-y = 4
 font-family = "JetBrainsMono Nerd Font"
 
 # Font size
-font-size = 13
+font-size = 15
 
 # Font features
 # font-feature = -calt  # Disable ligatures
@@ -95,9 +99,6 @@ shell-integration = detect
 # ============================================================================
 # PERFORMANCE
 # ============================================================================
-
-# GPU renderer (auto, opengl, metal, vulkan)
-renderer = auto
 
 # VSync
 # vsync = true
