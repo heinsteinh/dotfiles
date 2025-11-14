@@ -204,8 +204,8 @@ okular --unique document.pdf#src:123document.tex
 ## Further Reading
 
 - [Okular Handbook](https://docs.kde.org/stable5/en/okular/okular/)
-- [KDE Keyboard Shortcuts](https://userbase.kde.org/Keyboard_Shortcuts)
-- [Okular Features](https://okular.kde.org/features/)
+- [KDE Documentation](https://docs.kde.org/)
+- [Okular Homepage](https://okular.kde.org/)
 
 ## Contributing
 
