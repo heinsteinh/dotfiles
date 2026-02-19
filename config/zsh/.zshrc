@@ -257,3 +257,6 @@ path=(
 export PATH
 unalias rm
 export PATH="$PATH:/opt/flutter/bin"
+
+
+export KUBECONFIG=~/.kube/config-prod
