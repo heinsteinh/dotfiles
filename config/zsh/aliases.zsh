@@ -1,5 +1,9 @@
 # ~/.config/zsh/aliases.zsh - Comprehensive Aliases
 
+# Keep core commands native, even if framework/system aliases predefine them
+(( $+aliases[find] )) && unalias find
+(( $+aliases[grep] )) && unalias grep
+
 # ============================================================================
 # Enhanced File Operations
 # ============================================================================
@@ -76,17 +80,17 @@ else
     alias catansi='cat'
 fi
 
-# Enhanced find - use fd/fdfind
+# Enhanced find helpers (keep native `find` unchanged)
 # On Debian/Ubuntu, fd is installed as fdfind to avoid conflict with fdclone package
 if command -v fd &> /dev/null; then
-    alias find='command fd'
-    alias findd='command fd -t d'  # directories only
-    alias findf='command fd -t f'  # files only
-    alias finde='command fd -e'    # by extension
+    alias fda='command fd'          # fd all
+    alias findd='command fd -t d'   # directories only
+    alias findf='command fd -t f'   # files only
+    alias finde='command fd -e'     # by extension
 elif command -v fdfind &> /dev/null; then
-    # Create fd alias pointing to fdfind for consistent naming
+    # Provide a consistent fd command name on Debian/Ubuntu
     alias fd='command fdfind'
-    alias find='command fdfind'
+    alias fda='command fdfind'      # fd all
     alias findd='command fdfind -t d'  # directories only
     alias findf='command fdfind -t f'  # files only
     alias finde='command fdfind -e'    # by extension
@@ -101,8 +105,8 @@ if command -v rg &> /dev/null; then
     alias rgw='rg -w'
     alias rgn='rg -n'
 fi
-# Keep grep as grep with color
-alias grep='command grep --color=auto'
+# Keep grep native; expose colorized grep via explicit alias
+alias grepc='command grep --color=auto'
 alias grepi='command grep -i --color=auto'
 alias grepr='command grep -r --color=auto'
 alias grepv='command grep -v --color=auto'

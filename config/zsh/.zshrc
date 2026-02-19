@@ -236,3 +236,24 @@ fi
 # ============================================================================
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# opencode
+export PATH=/home/fkheinstein/.opencode/bin:$PATH
+export PATH=/home/fkheinstein/Qt/6.9.3/gcc_64/bin:$PATH
+export VCPKG_ROOT="$HOME/vcpkg"
+export PATH="$HOME/vcpkg:$PATH"
+
+# PATH setup (deduplicated, predictable)
+typeset -U path
+path=(
+  /usr/local/bin
+  $HOME/.local/bin
+  $HOME/bin
+  $HOME/vcpkg
+  $HOME/Qt/6.9.3/gcc_64/bin
+  $HOME/.opencode/bin
+  $path
+)
+export PATH
+unalias rm
+export PATH="$PATH:/opt/flutter/bin"

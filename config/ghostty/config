@@ -8,7 +8,7 @@
 # Theme (can be overridden with -e theme=name)
 # Available: gruvbox, nord, dracula, one-dark
 # Theme files are in ~/.config/ghostty/themes/
-theme = nord
+theme = one-dark
 
 # Background opacity (0.0 - 1.0)
 background-opacity = 0.95

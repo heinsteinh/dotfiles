@@ -46,6 +46,10 @@ Plug 'morhetz/gruvbox'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'arcticicestudio/nord-vim'
 
+Plug 'xolox/vim-colorscheme-switcher'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-session'
+
 call plug#end()
 
 " ============================================================================
@@ -115,7 +119,16 @@ set background=dark
 let g:onedark_terminal_italics = 1
 "colorscheme onedark
 
-colorscheme gruvbox
+let s:vimrc_dir = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+let s:herald_file = s:vimrc_dir . '/herald.vim'
+
+if filereadable(s:herald_file)
+  execute 'source ' . fnameescape(s:herald_file)
+else
+  colorscheme gruvbox
+endif
+
+unlet s:vimrc_dir s:herald_file
 
 " ============================================================================
 " Plugin Configuration
@@ -362,6 +375,8 @@ augroup vimrc_autocmds
   autocmd WinEnter * setlocal cursorline
   autocmd WinLeave * setlocal nocursorline
 
+  autocmd VimEnter * nested call s:OpenNerdTreeOnStartup()
+
 augroup END
 
 " ============================================================================
@@ -396,7 +411,19 @@ augroup filetype_settings
   autocmd FileType markdown nnoremap <buffer> <leader>ms :MarkdownPreviewStop<CR>
   autocmd FileType markdown nnoremap <buffer> <leader>mt :MarkdownPreviewToggle<CR>
 
+
 augroup END
+
+
+" Auto-open NERDTree on startup and go back to the main window
+function! s:OpenNerdTreeOnStartup() abort
+  " Only run if NERDTree is installed
+  if exists('*nerdtree#ui_glue#NERDTree')
+    call nerdtree#ui_glue#NERDTree()
+    wincmd p
+  endif
+endfunction
+
 
 " ----------------------------------------------------------------------------
 " Markdown Preview with Pandoc
@@ -658,6 +685,11 @@ function! s:StopProfile()
   profile pause
   unlet g:profiling_active
   echom 'Profiling paused (inspect ~/.vim/profile.log)'
+endfunction
+
+function! s:OpenNerdTree()
+  execute "NERDTree"
+  wincmd p
 endfunction
 
 command! ProfileStart call s:StartProfile()

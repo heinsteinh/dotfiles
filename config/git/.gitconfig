@@ -1,6 +1,7 @@
 [core]
     editor = vim
     excludesfile = ~/.gitignore_global
+	pager = less -FRSX
 
 [include]
     path = ~/.gitconfig.local
@@ -26,3 +27,5 @@
 [mergetool]
 	prompt = false
 	keepBackup = false
+[url "https://github.com/"]
+	insteadOf = git@github.com:
