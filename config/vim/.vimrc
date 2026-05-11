@@ -59,7 +59,7 @@ set nocompatible
 set encoding=utf-8
 set number
 set relativenumber
-set cursorline
+"set cursorline
 set showmatch
 set hlsearch
 set incsearch
@@ -112,8 +112,13 @@ set smartindent
 " Color Scheme
 " ============================================================================
 syntax enable
-set termguicolors
+
+set encoding=utf8
+"let base16colorspace=256  " Access colors present in 256 colorspace"
+set t_Co=256 " Explicitly tell vim that the terminal supports 256 colors"
+set term =screen-256color
 set background=dark
+
 
 " Atom Dark theme (onedark.vim)
 let g:onedark_terminal_italics = 1
