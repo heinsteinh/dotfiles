@@ -242,6 +242,7 @@ export PATH=/home/fkheinstein/.opencode/bin:$PATH
 export PATH=/home/fkheinstein/Qt/6.9.3/gcc_64/bin:$PATH
 export VCPKG_ROOT="$HOME/vcpkg"
 export PATH="$HOME/vcpkg:$PATH"
+export PATH="$PATH:/opt/flutter/bin"
 
 # PATH setup (deduplicated, predictable)
 typeset -U path
@@ -255,8 +256,10 @@ path=(
   $path
 )
 export PATH
-unalias rm
-export PATH="$PATH:/opt/flutter/bin"
 
 
 export KUBECONFIG=~/.kube/config-prod
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
