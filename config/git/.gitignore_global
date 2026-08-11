@@ -26,3 +26,5 @@ pids
 
 # Dependency directories
 node_modules/
+
+**/.claude/settings.local.json
