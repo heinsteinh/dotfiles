@@ -142,6 +142,9 @@ bindkey '^s' history-incremental-search-forward
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 
+
+fpath=(~/.zsh/completions $fpath)
+
 # ============================================================================
 # Completion
 # ============================================================================
@@ -271,3 +274,8 @@ export NVM_DIR="$HOME/.config/nvm"
 if [[ -z "$GITHUB_PAT" ]] && command -v gh >/dev/null 2>&1; then
   export GITHUB_PAT="$(gh auth token 2>/dev/null)"
 fi
+
+
+
+
+eval "$(zoxide init zsh)"
