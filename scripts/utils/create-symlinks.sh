@@ -55,6 +55,7 @@ create_symlink "$DOTFILES_DIR/config/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
 # Zsh
 create_symlink "$DOTFILES_DIR/config/zsh/.zshrc" "$HOME/.zshrc"
+create_symlink "$DOTFILES_DIR/config/zsh/.zshenv" "$HOME/.zshenv"
 create_symlink "$DOTFILES_DIR/config/zsh/.zprofile" "$HOME/.zprofile"
 
 # Zsh modular configuration files

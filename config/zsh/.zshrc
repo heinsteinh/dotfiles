@@ -267,10 +267,5 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# GitHub MCP server auth. Read from the gh keyring at shell start so the token
-# is never stored in a dotfile; consumed as ${GITHUB_PAT} by the Authorization
-# header in ~/.claude.json -> mcpServers.github. The guard keeps nested shells
-# from paying the ~46ms keyring lookup again.
-if [[ -z "$GITHUB_PAT" ]] && command -v gh >/dev/null 2>&1; then
-  export GITHUB_PAT="$(gh auth token 2>/dev/null)"
-fi
+# GITHUB_PAT moved to config/zsh/.zshenv so non-interactive shells and tmux
+# panes export it too -- see the comment there.
