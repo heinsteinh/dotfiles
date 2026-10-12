@@ -37,7 +37,6 @@ export NODE_PATH="/usr/local/lib/node_modules"
 export PYTHONPATH="$HOME/.local/lib/python3.9/site-packages:$PYTHONPATH"
 
 # Rust
-export PATH="$HOME/.cargo/bin:$PATH"
 
 # Java
 if [[ -d "/usr/lib/jvm/default-java" ]]; then
