@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <!DOCTYPE gui SYSTEM 'kpartgui.dtd'>
-<gui name="okular_part" version="55">
+<gui name="okular_part" version="56">
  <MenuBar>
   <Menu name="file">
    <text>&amp;File</text>
@@ -23,6 +23,8 @@
    <Action name="edit_redo"/>
    <Separator/>
    <Action name="edit_copy"/>
+   <Action name="edit_copy_without_line_breaks"/>
+   <Action name="annotation_paste"/>
    <Separator/>
    <Action name="edit_select_all"/>
    <Action name="edit_select_all_current_page"/>
@@ -108,6 +110,35 @@
    <Action group="about_merge" name="help_about_backend"/>
   </Menu>
  </MenuBar>
+ <ToolBar hidden="true" iconSize="32" iconText="icononly" name="quickAnnotationToolBar" newline="true" position="right">
+  <text>Quick Annotation Toolbar</text>
+  <Action name="quick_annotation_action_bar"/>
+ </ToolBar>
+ <ToolBar hidden="true" iconText="icononly" name="annotationToolBar" newline="true">
+  <text>Annotation Toolbar</text>
+  <Action name="annotation_highlighter"/>
+  <Action name="annotation_underline"/>
+  <Action name="annotation_squiggle"/>
+  <Action name="annotation_strike_out"/>
+  <Action name="annotation_typewriter"/>
+  <Action name="annotation_inline_note"/>
+  <Action name="annotation_popup_note"/>
+  <Action name="annotation_freehand_line"/>
+  <Action name="annotation_geometrical_shape"/>
+  <Action name="annotation_stamp"/>
+  <Separator/>
+  <Action name="annotation_settings_width"/>
+  <Action name="annotation_settings_color"/>
+  <Action name="annotation_settings_inner_color"/>
+  <Action name="annotation_settings_opacity"/>
+  <Action name="annotation_settings_font"/>
+  <Action name="annotation_settings_advanced"/>
+  <Separator/>
+  <Action name="annotation_bookmark"/>
+  <Action name="annotation_settings_pin"/>
+  <Spacer/>
+  <Action name="hide_annotation_toolbar"/>
+ </ToolBar>
  <ToolBar name="mainToolBar">
   <text>Main Toolbar</text>
   <Action name="go_previous"/>
@@ -154,33 +185,4 @@
   <Action name="view_zoom_in" shortcut="+; =; Ctrl++"/>
   <Action name="view_zoom_out" shortcut="-; Ctrl+-"/>
  </ActionProperties>
- <ToolBar hidden="true" iconText="icononly" name="annotationToolBar" newline="true">
-  <text>Annotation Toolbar</text>
-  <Action name="annotation_highlighter"/>
-  <Action name="annotation_underline"/>
-  <Action name="annotation_squiggle"/>
-  <Action name="annotation_strike_out"/>
-  <Action name="annotation_typewriter"/>
-  <Action name="annotation_inline_note"/>
-  <Action name="annotation_popup_note"/>
-  <Action name="annotation_freehand_line"/>
-  <Action name="annotation_geometrical_shape"/>
-  <Action name="annotation_stamp"/>
-  <Separator/>
-  <Action name="annotation_settings_width"/>
-  <Action name="annotation_settings_color"/>
-  <Action name="annotation_settings_inner_color"/>
-  <Action name="annotation_settings_opacity"/>
-  <Action name="annotation_settings_font"/>
-  <Action name="annotation_settings_advanced"/>
-  <Separator/>
-  <Action name="annotation_bookmark"/>
-  <Action name="annotation_settings_pin"/>
-  <Spacer/>
-  <Action name="hide_annotation_toolbar"/>
- </ToolBar>
- <ToolBar hidden="true" iconSize="32" iconText="icononly" name="quickAnnotationToolBar" newline="true" position="right">
-  <text>Quick Annotation Toolbar</text>
-  <Action name="quick_annotation_action_bar"/>
- </ToolBar>
 </gui>
