@@ -261,7 +261,27 @@ path=(
 export PATH
 
 
+# --- Kubernetes contexts -------------------------------------------------------
+# Three clusters, all originally carrying kubeadm's default context name. They are
+# kept as separate files on purpose: merging them would collapse identical context,
+# cluster and user names and leave no way to tell which cluster is selected.
+#
+# Default is prod, by deliberate choice: it is the cluster in daily use, and dev at
+# 10.128.1.20 is not currently reachable. The trade-off is that a forgotten `kc`
+# leaves you pointed at production — so keep the context visible in the prompt.
 export KUBECONFIG=~/.kube/config-prod
+
+kc() {
+  case "$1" in
+    prod)    export KUBECONFIG=~/.kube/config-prod ;;
+    dev)     export KUBECONFIG=~/.kube/config-dev ;;
+    homelab) export KUBECONFIG=~/Projects/DevOps/homelab-platform/kubeconfig ;;
+    "")      echo "KUBECONFIG=$KUBECONFIG"
+             kubectl config current-context 2>/dev/null ;;
+    *)       echo "kc: unknown context '$1' (prod|dev|homelab)" >&2; return 1 ;;
+  esac
+  kubectl config current-context 2>/dev/null
+}
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -269,3 +289,9 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # GITHUB_PAT moved to config/zsh/.zshenv so non-interactive shells and tmux
 # panes export it too -- see the comment there.
+
+# kimi-code
+export PATH="/home/fkheinstein/.kimi-code/bin:$PATH"
+
+# Added by codebase-memory-mcp install
+export PATH="/home/fkheinstein/.local/bin:$PATH"
