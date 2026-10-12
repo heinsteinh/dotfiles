@@ -11,4 +11,4 @@
 if [[ -z "$GITHUB_PAT" ]] && command -v gh >/dev/null 2>&1; then
   export GITHUB_PAT="$(gh auth token 2>/dev/null)"
 fi
-. "$HOME/.cargo/env"
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"

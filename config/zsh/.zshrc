@@ -241,8 +241,8 @@ fi
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # opencode
-export PATH=/home/fkheinstein/.opencode/bin:$PATH
-export PATH=/home/fkheinstein/Qt/6.9.3/gcc_64/bin:$PATH
+export PATH=$HOME/.opencode/bin:$PATH
+export PATH=$HOME/Qt/6.9.3/gcc_64/bin:$PATH
 export VCPKG_ROOT="$HOME/vcpkg"
 export PATH="$HOME/vcpkg:$PATH"
 export PATH="$PATH:/opt/flutter/bin"
@@ -291,7 +291,7 @@ export NVM_DIR="$HOME/.config/nvm"
 # panes export it too -- see the comment there.
 
 # kimi-code
-export PATH="/home/fkheinstein/.kimi-code/bin:$PATH"
+export PATH="$HOME/.kimi-code/bin:$PATH"
 
 # Added by codebase-memory-mcp install
-export PATH="/home/fkheinstein/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
