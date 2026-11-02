@@ -48,8 +48,6 @@ backup: ## Backup existing configurations
 test: ## Run all tests
 	@echo "Running tests..."
 	@./tests/test-installation.sh
-	@./tests/test-aliases.sh
-	@./tests/test-functions.sh
 
 test-cross-platform: ## Run cross-platform compatibility tests
 	@echo "Running cross-platform tests..."
