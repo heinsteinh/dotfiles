@@ -20,8 +20,6 @@ export FZF_DEFAULT_OPTS="
 --layout reverse
 --border
 --inline-info
---preview 'bat --style=numbers --color=always --line-range :500 {}'
---preview-window right:50%:wrap
 --color=bg+:#3e4451,bg:#282c34,spinner:#56b6c2,hl:#61afef
 --color=fg:#abb2bf,header:#e06c75,info:#d19a66,pointer:#98c379
 --color=marker:#98c379,fg+:#abb2bf,prompt:#61afef,hl+:#61afef
@@ -34,6 +32,14 @@ export FZF_CTRL_T_OPTS="
 --preview-window right:50%:wrap
 --bind 'ctrl-/:change-preview-window(down|hidden|)'
 "
+
+# Use fd for Alt-C (directory selection) when available
+if command -v fd &> /dev/null; then
+    export FZF_ALT_C_COMMAND='command fd --type d --hidden --follow --exclude .git'
+elif command -v fdfind &> /dev/null; then
+    # Debian/Ubuntu ships fd as fdfind
+    export FZF_ALT_C_COMMAND='command fdfind --type d --hidden --follow --exclude .git'
+fi
 
 # FZF options for Alt-C (directory selection)
 export FZF_ALT_C_OPTS="

@@ -24,7 +24,6 @@ plugins=(
     python
     virtualenv
     tmux
-    fzf
     systemd
     ssh-agent
     gpg-agent
@@ -76,30 +75,6 @@ setopt HIST_REDUCE_BLANKS
 # ============================================================================
 # Tool Initializations
 # ============================================================================
-# FZF configuration
-if command -v fzf &> /dev/null; then
-    export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-
-    if command -v fd &> /dev/null; then
-        export FZF_DEFAULT_COMMAND='command fd --type f --hidden --follow --exclude .git'
-        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-        export FZF_ALT_C_COMMAND='command fd --type d --hidden --follow --exclude .git'
-    elif command -v fdfind &> /dev/null; then
-        # Debian/Ubuntu uses fdfind instead of fd
-        export FZF_DEFAULT_COMMAND='command fdfind --type f --hidden --follow --exclude .git'
-        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-        export FZF_ALT_C_COMMAND='command fdfind --type d --hidden --follow --exclude .git'
-    elif command -v rg &> /dev/null; then
-        export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-    fi
-
-    # Key bindings and completion
-    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-    [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
-    [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
-fi
-
 # Zoxide (better cd)
 if command -v zoxide &> /dev/null; then
     eval "$(zoxide init zsh)"
@@ -134,13 +109,23 @@ zle -N edit-command-line
 bindkey '^xe' edit-command-line
 bindkey '^x^e' edit-command-line
 
-# Search history
-bindkey '^r' history-incremental-search-backward
+# Search history (Ctrl-R is provided by fzf below)
 bindkey '^s' history-incremental-search-forward
 
 # Move by words
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
+
+# FZF: load after `bindkey -v` so Ctrl-R, Ctrl-T, Alt-C and **<TAB>
+# are bound in vi insert mode. Settings live in config/fzf/fzf.zsh.
+if command -v fzf &> /dev/null; then
+    if [[ -f ~/.fzf.zsh ]]; then
+        source ~/.fzf.zsh
+    else
+        [[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
+        [[ -f /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
+    fi
+fi
 
 
 fpath=(~/.zsh/completions $fpath)
