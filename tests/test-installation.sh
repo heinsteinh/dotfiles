@@ -407,8 +407,9 @@ test_vim_config() {
         return 1
     fi
 
-    # Test vim configuration (with timeout for headless environments)
-    if ! timeout 5 vim -u "$HOME/.vimrc" -T dumb -c 'syntax on' -c 'quit' >/dev/null 2>&1; then
+    # Test vim configuration (with timeout for headless environments).
+    # -N: `-u` keeps vi-compatible mode on, which rejects line continuations.
+    if ! timeout 5 vim -N -u "$HOME/.vimrc" -T dumb -c 'syntax on' -c 'quit' >/dev/null 2>&1; then
         if is_headless; then
             log_warning "Vim configuration test skipped in headless environment"
         else
