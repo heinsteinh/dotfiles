@@ -47,12 +47,23 @@ export FZF_ALT_C_OPTS="
 --preview-window right:50%:wrap
 "
 
+# Clipboard command for Ctrl-Y in history search (macOS, Wayland, X11)
+if command -v pbcopy &> /dev/null; then
+    _fzf_clip='pbcopy'
+elif command -v wl-copy &> /dev/null; then
+    _fzf_clip='wl-copy'
+elif command -v xclip &> /dev/null; then
+    _fzf_clip='xclip -selection clipboard'
+else
+    _fzf_clip='cat > /dev/null'
+fi
+
 # FZF options for Ctrl-R (history search)
 export FZF_CTRL_R_OPTS="
 --preview 'echo {}'
 --preview-window down:3:hidden:wrap
 --bind 'ctrl-/:toggle-preview'
---bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+--bind 'ctrl-y:execute-silent(echo -n {2..} | $_fzf_clip)+abort'
 --color header:italic
 --header 'Press CTRL-Y to copy command into clipboard'
 "
@@ -134,6 +145,21 @@ fi
 # Key bindings will be loaded by system FZF installation or oh-my-zsh plugin
 # Don't manually bind here to avoid conflicts
 
-# Load system FZF completion if available (not this file)
-[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
-[[ -f /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
+# Load fzf key bindings (Ctrl-R, Ctrl-T, Alt-C) and **<TAB> completion.
+# Each platform installs the shell scripts in a different place, so use the
+# first directory that has them. `fzf --zsh` is not used because the fzf
+# shipped by Ubuntu 22.04/24.04 is too old to support it.
+for _fzf_shell_dir in \
+    "${HOMEBREW_PREFIX:-/opt/homebrew}/opt/fzf/shell" \
+    /usr/local/opt/fzf/shell \
+    "$HOME/.fzf/shell" \
+    /usr/share/fzf \
+    /usr/share/fzf/shell \
+    /usr/share/doc/fzf/examples; do
+    if [[ -f "$_fzf_shell_dir/key-bindings.zsh" ]]; then
+        source "$_fzf_shell_dir/key-bindings.zsh"
+        [[ -f "$_fzf_shell_dir/completion.zsh" ]] && source "$_fzf_shell_dir/completion.zsh"
+        break
+    fi
+done
+unset _fzf_shell_dir _fzf_clip
