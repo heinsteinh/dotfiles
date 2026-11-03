@@ -72,3 +72,7 @@ esac
 
 # Load local profile if it exists
 [[ -f "$HOME/.zprofile.local" ]] && source "$HOME/.zprofile.local"
+
+# >>> Codex installer >>>
+export PATH="$HOME/.local/bin:$PATH"
+# <<< Codex installer <<<

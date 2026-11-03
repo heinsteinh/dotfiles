@@ -280,3 +280,9 @@ export PATH="$HOME/.kimi-code/bin:$PATH"
 
 # Added by codebase-memory-mcp install
 export PATH="$HOME/.local/bin:$PATH"
+
+# LM Studio CLI (lms)
+[[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$PATH:$HOME/.lmstudio/bin"
+
+# uv / installer env script
+[[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
