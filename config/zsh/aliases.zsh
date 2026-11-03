@@ -311,8 +311,8 @@ fi
 alias cpu-info='lscpu'
 alias mem-info='free -h'
 alias disk-info='df -h'
-alias disk-usage='du -sh'
-alias disk-usage-sort='du -sh * | sort -hr'
+alias disk-usage='command du -sh'
+alias disk-usage-sort='command du -sh * | sort -hr'
 
 # Hardware info
 alias hardware='sudo lshw -short'
@@ -345,13 +345,15 @@ alias log-boot='sudo journalctl -b | ccze -A'
 # Disk space
 alias df='df -h'
 alias du='du -h'
-alias du-summary='du -sh'
-alias du-top='du -sh * | sort -hr | head -10'
-alias du-depth='du -h --max-depth=1'
+# These call the real du (not the dust alias below) and use -d, which
+# works with both GNU du (Linux) and BSD du (macOS)
+alias du-summary='command du -sh'
+alias du-top='command du -sh * | sort -hr | head -10'
+alias du-depth='command du -h -d 1'
 
 # Improved disk usage and drive aliases
-alias dusub1='du -h --max-depth=1 | sort -hr'
-alias dusub2='du -h --max-depth=2 | sort -hr'
+alias dusub1='command du -h -d 1 | sort -hr'
+alias dusub2='command du -h -d 2 | sort -hr'
 alias disks-info='echo "╓───── m o u n t . p o i n t s"; echo "╙────────────────────────────────────── ─ ─ "; lsblk -a; echo ""; echo "╓───── d i s k . u s a g e"; echo "╙────────────────────────────────────── ─ ─ "; df -h; echo ""; echo "╓───── U.U.I.D.s"; echo "╙────────────────────────────────────── ─ ─ "; lsblk -f;'
 alias drives-list="echo -n '\e[1;32mListing connected drives:\e[0m'  | pv -qL 10 && lsblk -f"
 
